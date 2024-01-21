@@ -81,10 +81,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private int[] masArtikul, masSort, masUsluga, masPNom;
     
     private String sIspolnitel, sPostavchik;
-    private String[] masPas;      // Массив с паролями пользователей
-    private String[] masNameIsp;  // Массив с исполнительями
-    private String[] masNameKKT;  // Массив с именем кассира для ККТ
-    private String[] masTowarKKT; // Массив json с позициями товаров для ККТ
+    private String[] masPas;      // РњР°СЃСЃРёРІ СЃ РїР°СЂРѕР»СЏРјРё РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
+    private String[] masNameIsp;  // РњР°СЃСЃРёРІ СЃ РёСЃРїРѕР»РЅРёС‚РµР»СЊСЏРјРё
+    private String[] masNameKKT;  // РњР°СЃСЃРёРІ СЃ РёРјРµРЅРµРј РєР°СЃСЃРёСЂР° РґР»СЏ РљРљРў
+    private String[] masTowarKKT; // РњР°СЃСЃРёРІ json СЃ РїРѕР·РёС†РёСЏРјРё С‚РѕРІР°СЂРѕРІ РґР»СЏ РљРљРў
     private String aktPolName, aktPolLogin;
     private int kolTowZak;
 
@@ -93,8 +93,8 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private String textJSON, sessionKey;
 
     private String sDumpDirLocal, sDumpDirHost, sDumpFileExe, sWixod, sDirNewVersion;
-    private String sSession;   // Признак сессии: open - сессия открыта close - сессия закрыта none - сессия неопределена в результате операции закрытия сессии
-    private String sSmena;     // Признак смены: Открыта - смена открыта Закрыта - смена закрыта
+    private String sSession;   // РџСЂРёР·РЅР°Рє СЃРµСЃСЃРёРё: open - СЃРµСЃСЃРёСЏ РѕС‚РєСЂС‹С‚Р° close - СЃРµСЃСЃРёСЏ Р·Р°РєСЂС‹С‚Р° none - СЃРµСЃСЃРёСЏ РЅРµРѕРїСЂРµРґРµР»РµРЅР° РІ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РѕРїРµСЂР°С†РёРё Р·Р°РєСЂС‹С‚РёСЏ СЃРµСЃСЃРёРё
+    private String sSmena;     // РџСЂРёР·РЅР°Рє СЃРјРµРЅС‹: РћС‚РєСЂС‹С‚Р° - СЃРјРµРЅР° РѕС‚РєСЂС‹С‚Р° Р—Р°РєСЂС‹С‚Р° - СЃРјРµРЅР° Р·Р°РєСЂС‹С‚Р°
 
     public static String userNameBD, passwordBD, urlHostBD;
     public static String httpKKM, sKKMmercComPort, sKKMmercModel, sKKMkassirINN, aktPolKKT;    
@@ -103,7 +103,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     public NewJFrameMainMyservisProg() {
         initComponents();
 
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //  Это было до вставки подтверждения закрытия программы
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //  Р­С‚Рѕ Р±С‹Р»Рѕ РґРѕ РІСЃС‚Р°РІРєРё РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ Р·Р°РєСЂС‹С‚РёСЏ РїСЂРѕРіСЂР°РјРјС‹
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);    
         
@@ -115,7 +115,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 if ("yes".equals(sWixod)) {
                 String ObjButtons[] = {"Yes", "No"};
                 int PromptResult = JOptionPane.showOptionDialog(null,
-                        "Закрыть программу?", "Подтверждение закрытия программы",
+                        "Р—Р°РєСЂС‹С‚СЊ РїСЂРѕРіСЂР°РјРјСѓ?", "РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ Р·Р°РєСЂС‹С‚РёСЏ РїСЂРѕРіСЂР°РјРјС‹",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
                         ObjButtons, ObjButtons[1]);
                 if (PromptResult == 0) {
@@ -133,35 +133,35 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 sFileLog=progDir+"temp\\log_kkt_merkuriy_tot.txt";
                 sFileLogHost=sDumpDirHost+sDate+sTime+"log_kkt_merkuriy_tot.txt";
                                 
-                sTextFileBat1="copy "+sFileLog+" "+sFileLogHost+"\n";  // копируем на внешний диск файл лога ККТ 
-                // Организуется копирование на внешний диск предыдущего дампа, т.к. новый дамп создается некоторое время, поэтому копируем предыдущий дамп 
-                sTextFileBat1+="copy "+sDumpDirLocal+"dumpdate.sql "+sDumpDirLocal+sDate+"dumpdate_pred.sql"+"\n";              // копируем файл дампа если есть в предыдущий файл дампа
-                sTextFileBat1+="copy "+sDumpDirLocal+sDate+"dumpdate_pred.sql "+sDumpDirHost+sDate+sTime+"dumpdat.sql"+"\n";    // копируем файл предыдущего дампа БД на внешний диск
+                sTextFileBat1="copy "+sFileLog+" "+sFileLogHost+"\n";  // РєРѕРїРёСЂСѓРµРј РЅР° РІРЅРµС€РЅРёР№ РґРёСЃРє С„Р°Р№Р» Р»РѕРіР° РљРљРў 
+                // РћСЂРіР°РЅРёР·СѓРµС‚СЃСЏ РєРѕРїРёСЂРѕРІР°РЅРёРµ РЅР° РІРЅРµС€РЅРёР№ РґРёСЃРє РїСЂРµРґС‹РґСѓС‰РµРіРѕ РґР°РјРїР°, С‚.Рє. РЅРѕРІС‹Р№ РґР°РјРї СЃРѕР·РґР°РµС‚СЃСЏ РЅРµРєРѕС‚РѕСЂРѕРµ РІСЂРµРјСЏ, РїРѕСЌС‚РѕРјСѓ РєРѕРїРёСЂСѓРµРј РїСЂРµРґС‹РґСѓС‰РёР№ РґР°РјРї 
+                sTextFileBat1+="copy "+sDumpDirLocal+"dumpdate.sql "+sDumpDirLocal+sDate+"dumpdate_pred.sql"+"\n";              // РєРѕРїРёСЂСѓРµРј С„Р°Р№Р» РґР°РјРїР° РµСЃР»Рё РµСЃС‚СЊ РІ РїСЂРµРґС‹РґСѓС‰РёР№ С„Р°Р№Р» РґР°РјРїР°
+                sTextFileBat1+="copy "+sDumpDirLocal+sDate+"dumpdate_pred.sql "+sDumpDirHost+sDate+sTime+"dumpdat.sql"+"\n";    // РєРѕРїРёСЂСѓРµРј С„Р°Р№Р» РїСЂРµРґС‹РґСѓС‰РµРіРѕ РґР°РјРїР° Р‘Р” РЅР° РІРЅРµС€РЅРёР№ РґРёСЃРє
                                                 
-                sTextFileBat2="cd "+sDumpFileExe+"\nmysqldump -uroot -padmin myservis -h localhost > "+sDumpDirLocal+"dumpdate.sql"+"\n";   // создаем дамп
+                sTextFileBat2="cd "+sDumpFileExe+"\nmysqldump -uroot -padmin myservis -h localhost > "+sDumpDirLocal+"dumpdate.sql"+"\n";   // СЃРѕР·РґР°РµРј РґР°РјРї
                                 
-                // Создаем bat1 файл
+                // РЎРѕР·РґР°РµРј bat1 С„Р°Р№Р»
                 try {
                     Path fileName = Paths.get(sNameFileBat1);
                     Files.write(fileName, sTextFileBat1.getBytes(), StandardOpenOption.CREATE);
                 } catch (IOException e) {e.printStackTrace();}
                 
-                // Запускаем bat1 файл
+                // Р—Р°РїСѓСЃРєР°РµРј bat1 С„Р°Р№Р»
                 try {Process child = Runtime.getRuntime().exec(sNameFileBat1);}
                 catch (IOException ex) {Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);}
                 
-                // Задержка 1 сек, между копированием файлов и созданием дампа
-                // почему-то зависает программа - поэтому убрал
+                // Р—Р°РґРµСЂР¶РєР° 1 СЃРµРє, РјРµР¶РґСѓ РєРѕРїРёСЂРѕРІР°РЅРёРµРј С„Р°Р№Р»РѕРІ Рё СЃРѕР·РґР°РЅРёРµРј РґР°РјРїР°
+                // РїРѕС‡РµРјСѓ-С‚Рѕ Р·Р°РІРёСЃР°РµС‚ РїСЂРѕРіСЂР°РјРјР° - РїРѕСЌС‚РѕРјСѓ СѓР±СЂР°Р»
                 //try {TimeUnit.SECONDS.sleep(1000);}
                 //catch (InterruptedException ex) {Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);}                
                                 
-                // Создаем bat2 файл
+                // РЎРѕР·РґР°РµРј bat2 С„Р°Р№Р»
                 try {
                     Path fileName = Paths.get(sNameFileBat2);
                     Files.write(fileName, sTextFileBat2.getBytes(), StandardOpenOption.CREATE);
                 } catch (IOException e) {e.printStackTrace();}
                                                   
-                // Запускаем bat2 файл
+                // Р—Р°РїСѓСЃРєР°РµРј bat2 С„Р°Р№Р»
                 try {Process child = Runtime.getRuntime().exec(sNameFileBat2);}
                 catch (IOException ex) {Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);}
                   
@@ -380,6 +380,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         panBDprihodTop = new javax.swing.JPanel();
         bbBDprihod = new javax.swing.JButton();
         bbBDprihodCSV = new javax.swing.JButton();
+        bbBDprihodXLS = new javax.swing.JButton();
         panBDtop = new javax.swing.JPanel();
         lbBDzakazDate = new javax.swing.JLabel();
         tfBDZakazDat = new javax.swing.JTextField();
@@ -480,7 +481,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         panLogDop = new javax.swing.JPanel();
         bbNewFrame = new javax.swing.JButton();
 
-        imOpenZakaz.setText("Открыть заказ");
+        imOpenZakaz.setText("РћС‚РєСЂС‹С‚СЊ Р·Р°РєР°Р·");
         imOpenZakaz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 imOpenZakazActionPerformed(evt);
@@ -488,7 +489,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         });
         ppZakazItem.add(imOpenZakaz);
 
-        imOpenPrihod.setText("Открыть приход");
+        imOpenPrihod.setText("РћС‚РєСЂС‹С‚СЊ РїСЂРёС…РѕРґ");
         imOpenPrihod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 imOpenPrihodActionPerformed(evt);
@@ -542,15 +543,15 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel27.setForeground(new java.awt.Color(0, 0, 153));
-        jLabel27.setText("Логин");
+        jLabel27.setText("Р›РѕРіРёРЅ");
 
         jLabel28.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel28.setForeground(new java.awt.Color(0, 0, 153));
-        jLabel28.setText("Пароль:");
+        jLabel28.setText("РџР°СЂРѕР»СЊ:");
 
         bbLogin.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         bbLogin.setForeground(new java.awt.Color(0, 0, 153));
-        bbLogin.setText("Ок");
+        bbLogin.setText("РћРє");
         bbLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbLoginActionPerformed(evt);
@@ -567,7 +568,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbPolInfo.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         lbPolInfo.setForeground(new java.awt.Color(0, 0, 153));
-        lbPolInfo.setText("Пользователь:");
+        lbPolInfo.setText("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ:");
 
         tfIsp.setEditable(false);
         tfIsp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -580,19 +581,19 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbNameKKT.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbNameKKT.setForeground(new java.awt.Color(102, 0, 102));
-        lbNameKKT.setText("Кассир ККТ: ");
+        lbNameKKT.setText("РљР°СЃСЃРёСЂ РљРљРў: ");
 
         lbIsp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbIsp.setForeground(new java.awt.Color(0, 102, 0));
-        lbIsp.setText("Исполнитель док: ");
+        lbIsp.setText("РСЃРїРѕР»РЅРёС‚РµР»СЊ РґРѕРє: ");
 
         lbMainDateTime.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lbMainDateTime.setForeground(new java.awt.Color(0, 102, 51));
-        lbMainDateTime.setText("Текущая дата");
+        lbMainDateTime.setText("РўРµРєСѓС‰Р°СЏ РґР°С‚Р°");
 
         lbKKTsmenaInfo.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lbKKTsmenaInfo.setForeground(new java.awt.Color(102, 0, 102));
-        lbKKTsmenaInfo.setText("Смена:");
+        lbKKTsmenaInfo.setText("РЎРјРµРЅР°:");
 
         lbKKTsmena.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lbKKTsmena.setForeground(new java.awt.Color(102, 102, 0));
@@ -609,7 +610,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel29.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel29.setText("Версия:");
+        jLabel29.setText("Р’РµСЂСЃРёСЏ:");
 
         javax.swing.GroupLayout panPolzovatelTopLayout = new javax.swing.GroupLayout(panPolzovatelTop);
         panPolzovatelTop.setLayout(panPolzovatelTopLayout);
@@ -709,7 +710,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTopenSmenaTot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKKTopenSmenaTot.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTopenSmenaTot.setText("Открыть смену");
+        bbKKTopenSmenaTot.setText("РћС‚РєСЂС‹С‚СЊ СЃРјРµРЅСѓ");
         bbKKTopenSmenaTot.setEnabled(false);
         bbKKTopenSmenaTot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -719,7 +720,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTcloseSmenaTot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKKTcloseSmenaTot.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTcloseSmenaTot.setText("Закрыть смену");
+        bbKKTcloseSmenaTot.setText("Р—Р°РєСЂС‹С‚СЊ СЃРјРµРЅСѓ");
         bbKKTcloseSmenaTot.setEnabled(false);
         bbKKTcloseSmenaTot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -729,7 +730,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTprovStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKKTprovStatus.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTprovStatus.setText("Проверка статуса");
+        bbKKTprovStatus.setText("РџСЂРѕРІРµСЂРєР° СЃС‚Р°С‚СѓСЃР°");
         bbKKTprovStatus.setEnabled(false);
         bbKKTprovStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -739,7 +740,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTprintText.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKKTprintText.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTprintText.setText("Добрый день!");
+        bbKKTprintText.setText("Р”РѕР±СЂС‹Р№ РґРµРЅСЊ!");
         bbKKTprintText.setEnabled(false);
         bbKKTprintText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -830,7 +831,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap(130, Short.MAX_VALUE))
         );
 
-        tabPanMain.addTab("Пользователи", panPolzovatel);
+        tabPanMain.addTab("РџРѕР»СЊР·РѕРІР°С‚РµР»Рё", panPolzovatel);
 
         panKlient.setPreferredSize(new java.awt.Dimension(1200, 600));
         panKlient.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -845,7 +846,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel1.setText("Телефон:");
+        jLabel1.setText("РўРµР»РµС„РѕРЅ:");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 0, 102));
@@ -894,15 +895,15 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel3.setText("Фамилия");
+        jLabel3.setText("Р¤Р°РјРёР»РёСЏ");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel4.setText("Имя");
+        jLabel4.setText("РРјСЏ");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel5.setText("Отчество");
+        jLabel5.setText("РћС‚С‡РµСЃС‚РІРѕ");
 
         tfKlientFam.setEditable(false);
         tfKlientFam.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
@@ -915,7 +916,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKlientZakaz.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKlientZakaz.setForeground(new java.awt.Color(0, 0, 153));
-        bbKlientZakaz.setText("Сформировать заказ");
+        bbKlientZakaz.setText("РЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ Р·Р°РєР°Р·");
         bbKlientZakaz.setEnabled(false);
         bbKlientZakaz.setHideActionText(true);
         bbKlientZakaz.addActionListener(new java.awt.event.ActionListener() {
@@ -926,7 +927,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel17.setText("Город:");
+        jLabel17.setText("Р“РѕСЂРѕРґ:");
 
         tfKlientGorod.setEditable(false);
         tfKlientGorod.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -939,7 +940,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel19.setText("Индекс:");
+        jLabel19.setText("РРЅРґРµРєСЃ:");
 
         tfKlientIndex.setEditable(false);
         tfKlientIndex.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -952,7 +953,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel22.setText("Адрес (улица, дом, квартира):");
+        jLabel22.setText("РђРґСЂРµСЃ (СѓР»РёС†Р°, РґРѕРј, РєРІР°СЂС‚РёСЂР°):");
 
         tfKlientAdres.setEditable(false);
         tfKlientAdres.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -979,11 +980,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel25.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel25.setText("№ Учёта");
+        jLabel25.setText("в„– РЈС‡С‘С‚Р°");
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel26.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel26.setText("Id Клиента");
+        jLabel26.setText("Id РљР»РёРµРЅС‚Р°");
 
         tfKlientLCod.setEditable(false);
         tfKlientLCod.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
@@ -996,7 +997,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbUchetUslug.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbUchetUslug.setForeground(new java.awt.Color(0, 0, 153));
-        bbUchetUslug.setText("Учёт посещений ");
+        bbUchetUslug.setText("РЈС‡С‘С‚ РїРѕСЃРµС‰РµРЅРёР№ ");
         bbUchetUslug.setEnabled(false);
         bbUchetUslug.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1095,7 +1096,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Фамилия", "Имя", "Отчество", "Телефон", "Id Клиента", "Город"
+                "Р¤Р°РјРёР»РёСЏ", "РРјСЏ", "РћС‚С‡РµСЃС‚РІРѕ", "РўРµР»РµС„РѕРЅ", "Id РљР»РёРµРЅС‚Р°", "Р“РѕСЂРѕРґ"
             }
         ) {
             Class[] types = new Class [] {
@@ -1176,7 +1177,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbFindLCod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbFindLCod.setForeground(new java.awt.Color(0, 0, 153));
-        bbFindLCod.setText("Поиск по номеру Клиента");
+        bbFindLCod.setText("РџРѕРёСЃРє РїРѕ РЅРѕРјРµСЂСѓ РљР»РёРµРЅС‚Р°");
         bbFindLCod.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bbFindLCod.setEnabled(false);
         bbFindLCod.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -1188,7 +1189,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbFindFIO.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbFindFIO.setForeground(new java.awt.Color(0, 0, 153));
-        bbFindFIO.setText("Поиск по Фамилии");
+        bbFindFIO.setText("РџРѕРёСЃРє РїРѕ Р¤Р°РјРёР»РёРё");
         bbFindFIO.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bbFindFIO.setEnabled(false);
         bbFindFIO.addActionListener(new java.awt.event.ActionListener() {
@@ -1199,7 +1200,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jtFindFIO.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jtFindFIO.setForeground(new java.awt.Color(0, 0, 153));
-        jtFindFIO.setText("Хисматуллина");
+        jtFindFIO.setText("РҐРёСЃРјР°С‚СѓР»Р»РёРЅР°");
         jtFindFIO.setMinimumSize(new java.awt.Dimension(70, 3130));
         jtFindFIO.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1214,7 +1215,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chKlientTot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         chKlientTot.setForeground(new java.awt.Color(0, 0, 153));
-        chKlientTot.setText("Все клиенты");
+        chKlientTot.setText("Р’СЃРµ РєР»РёРµРЅС‚С‹");
         chKlientTot.setBorderPaintedFlat(true);
         chKlientTot.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         chKlientTot.addActionListener(new java.awt.event.ActionListener() {
@@ -1254,7 +1255,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKlientRedakt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKlientRedakt.setForeground(new java.awt.Color(0, 0, 153));
-        bbKlientRedakt.setText("Редактировать Клиента");
+        bbKlientRedakt.setText("Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РљР»РёРµРЅС‚Р°");
         bbKlientRedakt.setEnabled(false);
         bbKlientRedakt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1264,7 +1265,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKlientSave.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKlientSave.setForeground(new java.awt.Color(0, 0, 153));
-        bbKlientSave.setText("Сохранить справочник");
+        bbKlientSave.setText("РЎРѕС…СЂР°РЅРёС‚СЊ СЃРїСЂР°РІРѕС‡РЅРёРє");
         bbKlientSave.setEnabled(false);
         bbKlientSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1274,15 +1275,15 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbDateRog.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbDateRog.setForeground(new java.awt.Color(102, 0, 102));
-        lbDateRog.setText("Дата рождения:");
+        lbDateRog.setText("Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ:");
 
         pbKlientPrim.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         pbKlientPrim.setForeground(new java.awt.Color(102, 0, 102));
-        pbKlientPrim.setText("Примечание:");
+        pbKlientPrim.setText("РџСЂРёРјРµС‡Р°РЅРёРµ:");
 
         jLabel38.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel38.setForeground(new java.awt.Color(0, 0, 153));
-        jLabel38.setText("  День     Месяц          Год");
+        jLabel38.setText("  Р”РµРЅСЊ     РњРµСЃСЏС†          Р“РѕРґ");
 
         tfKlientGod.setEditable(false);
         tfKlientGod.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
@@ -1331,7 +1332,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKlientCSVtot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKlientCSVtot.setForeground(new java.awt.Color(0, 0, 153));
-        bbKlientCSVtot.setText("Csv (полный)");
+        bbKlientCSVtot.setText("Csv (РїРѕР»РЅС‹Р№)");
         bbKlientCSVtot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKlientCSVtotActionPerformed(evt);
@@ -1340,7 +1341,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKlientExcelTot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKlientExcelTot.setForeground(new java.awt.Color(0, 0, 153));
-        bbKlientExcelTot.setText("Excel (полный)");
+        bbKlientExcelTot.setText("Excel (РїРѕР»РЅС‹Р№)");
         bbKlientExcelTot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKlientExcelTotActionPerformed(evt);
@@ -1349,7 +1350,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKlientCSV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKlientCSV.setForeground(new java.awt.Color(0, 0, 153));
-        bbKlientCSV.setText("Csv (выборка)");
+        bbKlientCSV.setText("Csv (РІС‹Р±РѕСЂРєР°)");
         bbKlientCSV.setEnabled(false);
         bbKlientCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1463,7 +1464,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tabPanMain.addTab("Клиент", panKlient);
+        tabPanMain.addTab("РљР»РёРµРЅС‚", panKlient);
 
         panNewKlient.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -1499,15 +1500,15 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel12.setText("Фамилия");
+        jLabel12.setText("Р¤Р°РјРёР»РёСЏ");
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel13.setText("Имя");
+        jLabel13.setText("РРјСЏ");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel14.setText("Отчество");
+        jLabel14.setText("РћС‚С‡РµСЃС‚РІРѕ");
 
         tfFamNew.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfFamNew.setForeground(new java.awt.Color(0, 0, 153));
@@ -1521,11 +1522,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(102, 0, 102));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel16.setText("Id Клиента");
+        jLabel16.setText("Id РљР»РёРµРЅС‚Р°");
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel15.setText("№ Учёта");
+        jLabel15.setText("в„– РЈС‡С‘С‚Р°");
 
         tfSCodNew.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfSCodNew.setForeground(new java.awt.Color(0, 0, 153));
@@ -1605,14 +1606,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         taPrimNew.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         taPrimNew.setForeground(new java.awt.Color(0, 102, 0));
         taPrimNew.setRows(5);
-        taPrimNew.setText("Это пример заполнения поля примечание для нового клиента Оздоровительного Центра Наиля");
+        taPrimNew.setText("Р­С‚Рѕ РїСЂРёРјРµСЂ Р·Р°РїРѕР»РЅРµРЅРёСЏ РїРѕР»СЏ РїСЂРёРјРµС‡Р°РЅРёРµ РґР»СЏ РЅРѕРІРѕРіРѕ РєР»РёРµРЅС‚Р° РћР·РґРѕСЂРѕРІРёС‚РµР»СЊРЅРѕРіРѕ Р¦РµРЅС‚СЂР° РќР°РёР»СЏ");
         taPrimNew.setWrapStyleWord(true);
         taPrimNew.setEnabled(false);
         jScrollPane4.setViewportView(taPrimNew);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel8.setText("Телефон:");
+        jLabel8.setText("РўРµР»РµС„РѕРЅ:");
 
         tfTelNew.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         tfTelNew.setForeground(new java.awt.Color(0, 0, 153));
@@ -1643,7 +1644,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel21.setText("Адрес (улица, дом, квартира):");
+        jLabel21.setText("РђРґСЂРµСЃ (СѓР»РёС†Р°, РґРѕРј, РєРІР°СЂС‚РёСЂР°):");
 
         tfAdresNew.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         tfAdresNew.setForeground(new java.awt.Color(0, 0, 153));
@@ -1656,11 +1657,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel23.setText("Примечание:");
+        jLabel23.setText("РџСЂРёРјРµС‡Р°РЅРёРµ:");
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel18.setText("Город:");
+        jLabel18.setText("Р“РѕСЂРѕРґ:");
 
         tfGorodNew.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         tfGorodNew.setForeground(new java.awt.Color(0, 0, 153));
@@ -1673,7 +1674,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel20.setText("Индекс:");
+        jLabel20.setText("РРЅРґРµРєСЃ:");
 
         tfIndexNew.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         tfIndexNew.setForeground(new java.awt.Color(0, 0, 153));
@@ -1691,7 +1692,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbNewKlientReg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbNewKlientReg.setForeground(new java.awt.Color(0, 0, 153));
-        bbNewKlientReg.setText("Зарегистрировать нового Клиента");
+        bbNewKlientReg.setText("Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РЅРѕРІРѕРіРѕ РљР»РёРµРЅС‚Р°");
         bbNewKlientReg.setEnabled(false);
         bbNewKlientReg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1701,11 +1702,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel35.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel35.setForeground(new java.awt.Color(102, 0, 102));
-        jLabel35.setText("Дата рождения:");
+        jLabel35.setText("Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ:");
 
         jLabel36.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel36.setForeground(new java.awt.Color(0, 0, 153));
-        jLabel36.setText(" День      Месяц         Год");
+        jLabel36.setText(" Р”РµРЅСЊ      РњРµСЃСЏС†         Р“РѕРґ");
 
         tfGod.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tfGod.setForeground(new java.awt.Color(0, 0, 153));
@@ -1834,7 +1835,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbNewKlient.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbNewKlient.setForeground(new java.awt.Color(0, 0, 153));
-        bbNewKlient.setText("Начать регистрацию нового Клиента");
+        bbNewKlient.setText("РќР°С‡Р°С‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РЅРѕРІРѕРіРѕ РљР»РёРµРЅС‚Р°");
         bbNewKlient.setEnabled(false);
         bbNewKlient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1866,7 +1867,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tabPanMain.addTab("Новый Клиент", panNewKlient);
+        tabPanMain.addTab("РќРѕРІС‹Р№ РљР»РёРµРЅС‚", panNewKlient);
 
         panFormZakaz.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -1880,7 +1881,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbZagruz.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbZagruz.setForeground(new java.awt.Color(0, 0, 153));
-        bbZagruz.setText("Загрузить");
+        bbZagruz.setText("Р—Р°РіСЂСѓР·РёС‚СЊ");
         bbZagruz.setEnabled(false);
         bbZagruz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1890,7 +1891,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbObsl.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbObsl.setForeground(new java.awt.Color(0, 0, 153));
-        bbObsl.setText("Обслужить");
+        bbObsl.setText("РћР±СЃР»СѓР¶РёС‚СЊ");
         bbObsl.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbObslActionPerformed(evt);
@@ -1911,7 +1912,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbRaschet.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbRaschet.setForeground(new java.awt.Color(0, 0, 153));
-        bbRaschet.setText("Посчитать");
+        bbRaschet.setText("РџРѕСЃС‡РёС‚Р°С‚СЊ");
         bbRaschet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbRaschetActionPerformed(evt);
@@ -1921,7 +1922,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(102, 0, 102));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Сумма заказа");
+        jLabel6.setText("РЎСѓРјРјР° Р·Р°РєР°Р·Р°");
 
         tfKlientPriseLCod.setEditable(false);
         tfKlientPriseLCod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -1945,7 +1946,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 153));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Скидка-%");
+        jLabel10.setText("РЎРєРёРґРєР°-%");
 
         cbSkidka.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         cbSkidka.setForeground(new java.awt.Color(102, 0, 102));
@@ -1977,11 +1978,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         jLabel33.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel33.setForeground(new java.awt.Color(102, 0, 102));
         jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel33.setText("Группа:");
+        jLabel33.setText("Р“СЂСѓРїРїР°:");
 
         chZakazWib.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         chZakazWib.setForeground(new java.awt.Color(0, 0, 153));
-        chZakazWib.setText("Выбрать");
+        chZakazWib.setText("Р’С‹Р±СЂР°С‚СЊ");
         chZakazWib.setBorderPaintedFlat(true);
         chZakazWib.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2067,7 +2068,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "№ пп", "Артикул", "Наименование", "Цена", "Остаток", "Кол", "Кол.Услуг"
+                "в„– РїРї", "РђСЂС‚РёРєСѓР»", "РќР°РёРјРµРЅРѕРІР°РЅРёРµ", "Р¦РµРЅР°", "РћСЃС‚Р°С‚РѕРє", "РљРѕР»", "РљРѕР».РЈСЃР»СѓРі"
             }
         ) {
             Class[] types = new Class [] {
@@ -2151,7 +2152,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tabPanMain.addTab("Формирование заказа", panFormZakaz);
+        tabPanMain.addTab("Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ Р·Р°РєР°Р·Р°", panFormZakaz);
 
         jfEmail.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jfEmail.setForeground(new java.awt.Color(0, 0, 153));
@@ -2165,7 +2166,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chKKT.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         chKKT.setForeground(new java.awt.Color(0, 0, 153));
-        chKKT.setText("Печатать Чек на ККТ");
+        chKKT.setText("РџРµС‡Р°С‚Р°С‚СЊ Р§РµРє РЅР° РљРљРў");
         chKKT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chKKTActionPerformed(evt);
@@ -2174,7 +2175,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chOFD.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         chOFD.setForeground(new java.awt.Color(0, 0, 153));
-        chOFD.setText("Оформить в ОФД");
+        chOFD.setText("РћС„РѕСЂРјРёС‚СЊ РІ РћР¤Р”");
         chOFD.setBorderPaintedFlat(true);
         chOFD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2185,11 +2186,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 153));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Сумма заказа");
+        jLabel7.setText("РЎСѓРјРјР° Р·Р°РєР°Р·Р°");
 
         chEmail.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         chEmail.setForeground(new java.awt.Color(0, 0, 153));
-        chEmail.setText("Отправить Чек на e-mail");
+        chEmail.setText("РћС‚РїСЂР°РІРёС‚СЊ Р§РµРє РЅР° e-mail");
         chEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chEmailActionPerformed(evt);
@@ -2209,7 +2210,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         lbZakazPrSk.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         lbZakazPrSk.setForeground(new java.awt.Color(153, 0, 0));
         lbZakazPrSk.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbZakazPrSk.setText("Скидка-%");
+        lbZakazPrSk.setText("РЎРєРёРґРєР°-%");
 
         tfKlientZakazSkidPr.setEditable(false);
         tfKlientZakazSkidPr.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -2223,7 +2224,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chNal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         chNal.setForeground(new java.awt.Color(0, 0, 153));
-        chNal.setText("Наличными");
+        chNal.setText("РќР°Р»РёС‡РЅС‹РјРё");
         chNal.setBorderPaintedFlat(true);
         chNal.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         chNal.addActionListener(new java.awt.event.ActionListener() {
@@ -2234,7 +2235,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chQR.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         chQR.setForeground(new java.awt.Color(0, 0, 153));
-        chQR.setText("QR-код");
+        chQR.setText("QR-РєРѕРґ");
         chQR.setBorderPaintedFlat(true);
         chQR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2245,7 +2246,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         lbZakazPrSk1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         lbZakazPrSk1.setForeground(new java.awt.Color(153, 0, 0));
         lbZakazPrSk1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbZakazPrSk1.setText("Id Клиента               № Учёта                  ФИО");
+        lbZakazPrSk1.setText("Id РљР»РёРµРЅС‚Р°               в„– РЈС‡С‘С‚Р°                  Р¤РРћ");
         lbZakazPrSk1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -2311,7 +2312,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbZakaz.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbZakaz.setForeground(new java.awt.Color(0, 0, 153));
-        bbZakaz.setText("Оформить заказ");
+        bbZakaz.setText("РћС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р·");
         bbZakaz.setEnabled(false);
         bbZakaz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2409,7 +2410,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "№ пп", "Артикул", "Наименование", "Цена", "Кол", "Сумма", "Кол.Услуг"
+                "в„– РїРї", "РђСЂС‚РёРєСѓР»", "РќР°РёРјРµРЅРѕРІР°РЅРёРµ", "Р¦РµРЅР°", "РљРѕР»", "РЎСѓРјРјР°", "РљРѕР».РЈСЃР»СѓРі"
             }
         ) {
             Class[] types = new Class [] {
@@ -2446,20 +2447,20 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             tabZakaz.getColumnModel().getColumn(2).setPreferredWidth(340);
             tabZakaz.getColumnModel().getColumn(3).setResizable(false);
             tabZakaz.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tabZakaz.getColumnModel().getColumn(3).setHeaderValue("Цена");
+            tabZakaz.getColumnModel().getColumn(3).setHeaderValue("Р¦РµРЅР°");
             tabZakaz.getColumnModel().getColumn(4).setResizable(false);
             tabZakaz.getColumnModel().getColumn(4).setPreferredWidth(50);
-            tabZakaz.getColumnModel().getColumn(4).setHeaderValue("Кол");
+            tabZakaz.getColumnModel().getColumn(4).setHeaderValue("РљРѕР»");
             tabZakaz.getColumnModel().getColumn(5).setResizable(false);
             tabZakaz.getColumnModel().getColumn(5).setPreferredWidth(80);
-            tabZakaz.getColumnModel().getColumn(5).setHeaderValue("Сумма");
+            tabZakaz.getColumnModel().getColumn(5).setHeaderValue("РЎСѓРјРјР°");
             tabZakaz.getColumnModel().getColumn(6).setResizable(false);
             tabZakaz.getColumnModel().getColumn(6).setPreferredWidth(40);
         }
 
         bbZakazZak.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbZakazZak.setForeground(new java.awt.Color(0, 0, 153));
-        bbZakazZak.setText("Закрыть");
+        bbZakazZak.setText("Р—Р°РєСЂС‹С‚СЊ");
         bbZakazZak.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bbZakazZak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2494,7 +2495,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tabPanMain.addTab("Заказ", panZakaz);
+        tabPanMain.addTab("Р—Р°РєР°Р·", panZakaz);
 
         pznPrise.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -2508,7 +2509,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbPriseZagruz.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbPriseZagruz.setForeground(new java.awt.Color(0, 0, 153));
-        bbPriseZagruz.setText("Загрузить Прайс-Лист");
+        bbPriseZagruz.setText("Р—Р°РіСЂСѓР·РёС‚СЊ РџСЂР°Р№СЃ-Р›РёСЃС‚");
         bbPriseZagruz.setEnabled(false);
         bbPriseZagruz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2518,7 +2519,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbNewTowar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbNewTowar.setForeground(new java.awt.Color(0, 0, 153));
-        bbNewTowar.setText("Новый товар");
+        bbNewTowar.setText("РќРѕРІС‹Р№ С‚РѕРІР°СЂ");
         bbNewTowar.setEnabled(false);
         bbNewTowar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2528,7 +2529,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbPriseSave.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbPriseSave.setForeground(new java.awt.Color(0, 0, 153));
-        bbPriseSave.setText("Сохранить");
+        bbPriseSave.setText("РЎРѕС…СЂР°РЅРёС‚СЊ");
         bbPriseSave.setEnabled(false);
         bbPriseSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2566,11 +2567,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         lbInfoNewTowar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         lbInfoNewTowar.setForeground(new java.awt.Color(0, 0, 153));
         lbInfoNewTowar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbInfoNewTowar.setText("Группа                                                         Артикул                               Наименование нового товара                                          Цена         Сорт.    Услуга");
+        lbInfoNewTowar.setText("Р“СЂСѓРїРїР°                                                         РђСЂС‚РёРєСѓР»                               РќР°РёРјРµРЅРѕРІР°РЅРёРµ РЅРѕРІРѕРіРѕ С‚РѕРІР°СЂР°                                          Р¦РµРЅР°         РЎРѕСЂС‚.    РЈСЃР»СѓРіР°");
 
         bbPrisePrihod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbPrisePrihod.setForeground(new java.awt.Color(0, 0, 153));
-        bbPrisePrihod.setText("Приходовать Товар");
+        bbPrisePrihod.setText("РџСЂРёС…РѕРґРѕРІР°С‚СЊ РўРѕРІР°СЂ");
         bbPrisePrihod.setEnabled(false);
         bbPrisePrihod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2580,7 +2581,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chPriseRedakt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         chPriseRedakt.setForeground(new java.awt.Color(102, 0, 102));
-        chPriseRedakt.setText("Редактировать Цену, Название, Сортировка");
+        chPriseRedakt.setText("Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р¦РµРЅСѓ, РќР°Р·РІР°РЅРёРµ, РЎРѕСЂС‚РёСЂРѕРІРєР°");
         chPriseRedakt.setEnabled(false);
         chPriseRedakt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2635,7 +2636,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         tfPrihodPrim.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         tfPrihodPrim.setForeground(new java.awt.Color(0, 0, 153));
-        tfPrihodPrim.setText("Примечание");
+        tfPrihodPrim.setText("РџСЂРёРјРµС‡Р°РЅРёРµ");
         tfPrihodPrim.setEnabled(false);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -2726,7 +2727,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "№ пп", "Артикул", "Наименование", "Цена", "Приход", "Остаток", "Приход М", "Реализация", "Сортировка"
+                "в„– РїРї", "РђСЂС‚РёРєСѓР»", "РќР°РёРјРµРЅРѕРІР°РЅРёРµ", "Р¦РµРЅР°", "РџСЂРёС…РѕРґ", "РћСЃС‚Р°С‚РѕРє", "РџСЂРёС…РѕРґ Рњ", "Р РµР°Р»РёР·Р°С†РёСЏ", "РЎРѕСЂС‚РёСЂРѕРІРєР°"
             }
         ) {
             Class[] types = new Class [] {
@@ -2834,7 +2835,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addGap(4, 4, 4))
         );
 
-        tabPanMain.addTab("Прайс-Листа", pznPrise);
+        tabPanMain.addTab("РџСЂР°Р№СЃ-Р›РёСЃС‚Р°", pznPrise);
 
         panBD.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -2867,7 +2868,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbBDzakaz.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbBDzakaz.setForeground(new java.awt.Color(0, 0, 153));
-        bbBDzakaz.setText("Сформировать отчёт по заказам");
+        bbBDzakaz.setText("РЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ РѕС‚С‡С‘С‚ РїРѕ Р·Р°РєР°Р·Р°Рј");
         bbBDzakaz.setEnabled(false);
         bbBDzakaz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2877,7 +2878,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbBDzakazCSV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbBDzakazCSV.setForeground(new java.awt.Color(0, 0, 153));
-        bbBDzakazCSV.setText("Сохранить в csv");
+        bbBDzakazCSV.setText("РЎРѕС…СЂР°РЅРёС‚СЊ РІ csv");
         bbBDzakazCSV.setEnabled(false);
         bbBDzakazCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2887,7 +2888,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbBDzakazXLS.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbBDzakazXLS.setForeground(new java.awt.Color(0, 0, 153));
-        bbBDzakazXLS.setText("Сохранить в xls");
+        bbBDzakazXLS.setText("РЎРѕС…СЂР°РЅРёС‚СЊ РІ xls");
         bbBDzakazXLS.setEnabled(false);
         bbBDzakazXLS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2923,7 +2924,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "№ пп", "Дата", "№ заказа", "Id Клиента", "ФИО Клиента", "Сумма", "Скидка %", "Нал/QR", "Чек", "Исполнитель"
+                "в„– РїРї", "Р”Р°С‚Р°", "в„– Р·Р°РєР°Р·Р°", "Id РљР»РёРµРЅС‚Р°", "Р¤РРћ РљР»РёРµРЅС‚Р°", "РЎСѓРјРјР°", "РЎРєРёРґРєР° %", "РќР°Р»/QR", "Р§РµРє", "РСЃРїРѕР»РЅРёС‚РµР»СЊ"
             }
         ) {
             Class[] types = new Class [] {
@@ -3008,7 +3009,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbBDzakazSumma.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lbBDzakazSumma.setForeground(new java.awt.Color(0, 102, 0));
-        lbBDzakazSumma.setText("Сумма Итого:");
+        lbBDzakazSumma.setText("РЎСѓРјРјР° РС‚РѕРіРѕ:");
 
         tfBDZakazNal.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfBDZakazNal.setForeground(new java.awt.Color(0, 0, 153));
@@ -3022,11 +3023,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbBDzakazNal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazNal.setForeground(new java.awt.Color(0, 0, 153));
-        lbBDzakazNal.setText("Наличные");
+        lbBDzakazNal.setText("РќР°Р»РёС‡РЅС‹Рµ");
 
         lbBDzakazQR.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazQR.setForeground(new java.awt.Color(102, 0, 102));
-        lbBDzakazQR.setText("QR-код");
+        lbBDzakazQR.setText("QR-РєРѕРґ");
 
         tfBDZakazQR.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfBDZakazQR.setForeground(new java.awt.Color(102, 0, 102));
@@ -3113,7 +3114,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addGap(10, 10, 10))
         );
 
-        tpBD.addTab("Заказы клиентов", panBDzakaz);
+        tpBD.addTab("Р—Р°РєР°Р·С‹ РєР»РёРµРЅС‚РѕРІ", panBDzakaz);
 
         tfBDprihodSumma.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfBDprihodSumma.setForeground(new java.awt.Color(102, 0, 102));
@@ -3126,7 +3127,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbBDzakazSumma4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lbBDzakazSumma4.setForeground(new java.awt.Color(0, 0, 102));
-        lbBDzakazSumma4.setText("Сумма приходов:");
+        lbBDzakazSumma4.setText("РЎСѓРјРјР° РїСЂРёС…РѕРґРѕРІ:");
 
         javax.swing.GroupLayout panBDprihodBottomLayout = new javax.swing.GroupLayout(panBDprihodBottom);
         panBDprihodBottom.setLayout(panBDprihodBottomLayout);
@@ -3156,7 +3157,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "№ пп", "Дата", "№ прихода", "№ поставщика", "Поставщик", "Сумма", "Исполнитель", "Примечание"
+                "в„– РїРї", "Р”Р°С‚Р°", "в„– РїСЂРёС…РѕРґР°", "в„– РїРѕСЃС‚Р°РІС‰РёРєР°", "РџРѕСЃС‚Р°РІС‰РёРє", "РЎСѓРјРјР°", "РСЃРїРѕР»РЅРёС‚РµР»СЊ", "РџСЂРёРјРµС‡Р°РЅРёРµ"
             }
         ) {
             Class[] types = new Class [] {
@@ -3228,7 +3229,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbBDprihod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbBDprihod.setForeground(new java.awt.Color(0, 0, 153));
-        bbBDprihod.setText("Сформировать отчёт по приходам");
+        bbBDprihod.setText("РЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ РѕС‚С‡С‘С‚ РїРѕ РїСЂРёС…РѕРґР°Рј");
         bbBDprihod.setEnabled(false);
         bbBDprihod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3238,11 +3239,21 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbBDprihodCSV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbBDprihodCSV.setForeground(new java.awt.Color(0, 0, 153));
-        bbBDprihodCSV.setText("Сохранить в csv");
+        bbBDprihodCSV.setText("РЎРѕС…СЂР°РЅРёС‚СЊ РІ csv");
         bbBDprihodCSV.setEnabled(false);
         bbBDprihodCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbBDprihodCSVActionPerformed(evt);
+            }
+        });
+
+        bbBDprihodXLS.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        bbBDprihodXLS.setForeground(new java.awt.Color(0, 0, 153));
+        bbBDprihodXLS.setText("РЎРѕС…СЂР°РЅРёС‚СЊ РІ xls");
+        bbBDprihodXLS.setEnabled(false);
+        bbBDprihodXLS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bbBDprihodXLSActionPerformed(evt);
             }
         });
 
@@ -3255,13 +3266,16 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addComponent(bbBDprihod)
                 .addGap(500, 500, 500)
                 .addComponent(bbBDprihodCSV)
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(bbBDprihodXLS)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panBDprihodTopLayout.setVerticalGroup(
             panBDprihodTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panBDprihodTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(bbBDprihod)
-                .addComponent(bbBDprihodCSV))
+                .addComponent(bbBDprihodCSV)
+                .addComponent(bbBDprihodXLS))
         );
 
         javax.swing.GroupLayout panBDprihodLayout = new javax.swing.GroupLayout(panBDprihod);
@@ -3281,18 +3295,18 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             .addGroup(panBDprihodLayout.createSequentialGroup()
                 .addComponent(panBDprihodTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panBDprihodBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
 
-        tpBD.addTab("Оприходование товаров", panBDprihod);
+        tpBD.addTab("РћРїСЂРёС…РѕРґРѕРІР°РЅРёРµ С‚РѕРІР°СЂРѕРІ", panBDprihod);
 
         lbBDzakazDate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazDate.setForeground(new java.awt.Color(0, 102, 0));
         lbBDzakazDate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbBDzakazDate.setText("Дата");
+        lbBDzakazDate.setText("Р”Р°С‚Р°");
 
         tfBDZakazDat.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfBDZakazDat.setForeground(new java.awt.Color(102, 0, 102));
@@ -3310,7 +3324,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbBDzakazMon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazMon.setForeground(new java.awt.Color(0, 102, 0));
-        lbBDzakazMon.setText("Месяц");
+        lbBDzakazMon.setText("РњРµСЃСЏС†");
 
         cbBDzakazMon.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         cbBDzakazMon.setForeground(new java.awt.Color(0, 0, 153));
@@ -3324,7 +3338,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         lbBDzakazGod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazGod.setForeground(new java.awt.Color(0, 102, 0));
         lbBDzakazGod.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbBDzakazGod.setText("Год");
+        lbBDzakazGod.setText("Р“РѕРґ");
 
         tfBDZakazGod.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfBDZakazGod.setForeground(new java.awt.Color(102, 0, 102));
@@ -3357,7 +3371,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chBDzakazLCod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         chBDzakazLCod.setForeground(new java.awt.Color(0, 0, 153));
-        chBDzakazLCod.setText("С учётом Клиента");
+        chBDzakazLCod.setText("РЎ СѓС‡С‘С‚РѕРј РљР»РёРµРЅС‚Р°");
         chBDzakazLCod.setBorderPaintedFlat(true);
         chBDzakazLCod.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         chBDzakazLCod.addActionListener(new java.awt.event.ActionListener() {
@@ -3369,7 +3383,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         lbBDzakazGod1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazGod1.setForeground(new java.awt.Color(0, 102, 0));
         lbBDzakazGod1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbBDzakazGod1.setText("Id Клиента");
+        lbBDzakazGod1.setText("Id РљР»РёРµРЅС‚Р°");
 
         javax.swing.GroupLayout panBDtopLayout = new javax.swing.GroupLayout(panBDtop);
         panBDtop.setLayout(panBDtopLayout);
@@ -3434,9 +3448,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tpBD.getAccessibleContext().setAccessibleName("Просмотр БД");
+        tpBD.getAccessibleContext().setAccessibleName("РџСЂРѕСЃРјРѕС‚СЂ Р‘Р”");
 
-        tabPanMain.addTab("Просмотр операций", panBD);
+        tabPanMain.addTab("РџСЂРѕСЃРјРѕС‚СЂ РѕРїРµСЂР°С†РёР№", panBD);
 
         panKassa.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -3450,7 +3464,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKassaOtchet.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKassaOtchet.setForeground(new java.awt.Color(0, 0, 153));
-        bbKassaOtchet.setText("Отчёт");
+        bbKassaOtchet.setText("РћС‚С‡С‘С‚");
         bbKassaOtchet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bbKassaOtchet.setEnabled(false);
         bbKassaOtchet.addActionListener(new java.awt.event.ActionListener() {
@@ -3461,7 +3475,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKassaRashod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKassaRashod.setForeground(new java.awt.Color(0, 0, 153));
-        bbKassaRashod.setText("Расход");
+        bbKassaRashod.setText("Р Р°СЃС…РѕРґ");
         bbKassaRashod.setEnabled(false);
         bbKassaRashod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3471,7 +3485,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbBDzakazSumma5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazSumma5.setForeground(new java.awt.Color(0, 102, 0));
-        lbBDzakazSumma5.setText("Дата");
+        lbBDzakazSumma5.setText("Р”Р°С‚Р°");
 
         tfKassaDat.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfKassaDat.setForeground(new java.awt.Color(102, 0, 102));
@@ -3489,7 +3503,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbBDzakazSumma6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazSumma6.setForeground(new java.awt.Color(0, 102, 0));
-        lbBDzakazSumma6.setText("Месяц");
+        lbBDzakazSumma6.setText("РњРµСЃСЏС†");
 
         cbKassaMon.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         cbKassaMon.setForeground(new java.awt.Color(0, 0, 153));
@@ -3502,7 +3516,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbBDzakazSumma7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbBDzakazSumma7.setForeground(new java.awt.Color(0, 102, 0));
-        lbBDzakazSumma7.setText("Год");
+        lbBDzakazSumma7.setText("Р“РѕРґ");
 
         tfKassaGod.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         tfKassaGod.setForeground(new java.awt.Color(102, 0, 102));
@@ -3521,7 +3535,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKassaPrihod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKassaPrihod.setForeground(new java.awt.Color(0, 0, 153));
-        bbKassaPrihod.setText("Приход");
+        bbKassaPrihod.setText("РџСЂРёС…РѕРґ");
         bbKassaPrihod.setEnabled(false);
         bbKassaPrihod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3541,7 +3555,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         chKassaOtchetMon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         chKassaOtchetMon.setForeground(new java.awt.Color(0, 0, 153));
-        chKassaOtchetMon.setText("Отчёт за месяц");
+        chKassaOtchetMon.setText("РћС‚С‡С‘С‚ Р·Р° РјРµСЃСЏС†");
         chKassaOtchetMon.setBorderPaintedFlat(true);
         chKassaOtchetMon.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         chKassaOtchetMon.addActionListener(new java.awt.event.ActionListener() {
@@ -3621,7 +3635,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "№", "Дата", "Id Клиента", "ФИО Клиента", "Сумма Чек", "QR-код", "Чек", " № нак.", "Исполнитель", "Прим"
+                "в„–", "Р”Р°С‚Р°", "Id РљР»РёРµРЅС‚Р°", "Р¤РРћ РљР»РёРµРЅС‚Р°", "РЎСѓРјРјР° Р§РµРє", "QR-РєРѕРґ", "Р§РµРє", " в„– РЅР°Рє.", "РСЃРїРѕР»РЅРёС‚РµР»СЊ", "РџСЂРёРј"
             }
         ) {
             Class[] types = new Class [] {
@@ -3709,11 +3723,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel30.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel30.setForeground(new java.awt.Color(0, 0, 102));
-        jLabel30.setText("Сумма Расход");
+        jLabel30.setText("РЎСѓРјРјР° Р Р°СЃС…РѕРґ");
 
         jLabel31.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel31.setForeground(new java.awt.Color(0, 0, 102));
-        jLabel31.setText("Сумма на Начало          Сумма в Кассе                                              Сумма приход            Сумма QR-код    ");
+        jLabel31.setText("РЎСѓРјРјР° РЅР° РќР°С‡Р°Р»Рѕ          РЎСѓРјРјР° РІ РљР°СЃСЃРµ                                              РЎСѓРјРјР° РїСЂРёС…РѕРґ            РЎСѓРјРјР° QR-РєРѕРґ    ");
 
         javax.swing.GroupLayout panKasBottomLayout = new javax.swing.GroupLayout(panKasBottom);
         panKasBottom.setLayout(panKasBottomLayout);
@@ -3764,7 +3778,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "№ пп", "Дата", "Id Клиента", "ФИО", "Сумма", "Исполнитель", "Примечание"
+                "в„– РїРї", "Р”Р°С‚Р°", "Id РљР»РёРµРЅС‚Р°", "Р¤РРћ", "РЎСѓРјРјР°", "РСЃРїРѕР»РЅРёС‚РµР»СЊ", "РџСЂРёРјРµС‡Р°РЅРёРµ"
             }
         ) {
             Class[] types = new Class [] {
@@ -3853,7 +3867,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tabPanMain.addTab("Касса", panKassa);
+        tabPanMain.addTab("РљР°СЃСЃР°", panKassa);
 
         tfUslugaLCod.setEditable(false);
         tfUslugaLCod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -3941,7 +3955,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbUslugaZak.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbUslugaZak.setForeground(new java.awt.Color(0, 0, 153));
-        bbUslugaZak.setText("Учесть посещение Клиента");
+        bbUslugaZak.setText("РЈС‡РµСЃС‚СЊ РїРѕСЃРµС‰РµРЅРёРµ РљР»РёРµРЅС‚Р°");
         bbUslugaZak.setEnabled(false);
         bbUslugaZak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3951,7 +3965,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbUslugaOtchet.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbUslugaOtchet.setForeground(new java.awt.Color(0, 0, 153));
-        bbUslugaOtchet.setText("Отчёт по посещениям");
+        bbUslugaOtchet.setText("РћС‚С‡С‘С‚ РїРѕ РїРѕСЃРµС‰РµРЅРёСЏРј");
         bbUslugaOtchet.setEnabled(false);
         bbUslugaOtchet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3961,7 +3975,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbOstatok.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lbOstatok.setForeground(new java.awt.Color(0, 0, 153));
-        lbOstatok.setText("Остаток:");
+        lbOstatok.setText("РћСЃС‚Р°С‚РѕРє:");
 
         tfUslugaOstatok.setEditable(false);
         tfUslugaOstatok.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -3985,7 +3999,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbOstatok1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         lbOstatok1.setForeground(new java.awt.Color(0, 0, 153));
-        lbOstatok1.setText("Всего использовано:");
+        lbOstatok1.setText("Р’СЃРµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРѕ:");
 
         bbUslugaCSV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbUslugaCSV.setForeground(new java.awt.Color(0, 0, 153));
@@ -4050,7 +4064,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "№ заказа", "Дата оплаты", "Артикул", "Наименование", "Опл.Услуг", "Использ.", "Использ..Всего", "Дата использования", "Остаток", "Исп."
+                "в„– Р·Р°РєР°Р·Р°", "Р”Р°С‚Р° РѕРїР»Р°С‚С‹", "РђСЂС‚РёРєСѓР»", "РќР°РёРјРµРЅРѕРІР°РЅРёРµ", "РћРїР».РЈСЃР»СѓРі", "РСЃРїРѕР»СЊР·.", "РСЃРїРѕР»СЊР·..Р’СЃРµРіРѕ", "Р”Р°С‚Р° РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ", "РћСЃС‚Р°С‚РѕРє", "РСЃРї."
             }
         ) {
             Class[] types = new Class [] {
@@ -4140,14 +4154,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addComponent(panUslugi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tabPanMain.addTab("Посещение", panPosechenie);
+        tabPanMain.addTab("РџРѕСЃРµС‰РµРЅРёРµ", panPosechenie);
 
         jPanel9.setForeground(new java.awt.Color(0, 0, 153));
         jPanel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         bbKKTdraiverTest.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbKKTdraiverTest.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTdraiverTest.setText("Соединение с драйвером");
+        bbKKTdraiverTest.setText("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ РґСЂР°Р№РІРµСЂРѕРј");
         bbKKTdraiverTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTdraiverTestActionPerformed(evt);
@@ -4160,11 +4174,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         lbComPort.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbComPort.setForeground(new java.awt.Color(0, 0, 153));
-        lbComPort.setText("Сом порт:");
+        lbComPort.setText("РЎРѕРј РїРѕСЂС‚:");
 
         lbComPort1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbComPort1.setForeground(new java.awt.Color(0, 0, 153));
-        lbComPort1.setText("Модель:");
+        lbComPort1.setText("РњРѕРґРµР»СЊ:");
 
         tfKKTmodel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfKKTmodel.setForeground(new java.awt.Color(0, 0, 153));
@@ -4177,7 +4191,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         jLabel34.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel34.setForeground(new java.awt.Color(102, 0, 0));
-        jLabel34.setText("На данной вкаладке ничего не нажимаем");
+        jLabel34.setText("РќР° РґР°РЅРЅРѕР№ РІРєР°Р»Р°РґРєРµ РЅРёС‡РµРіРѕ РЅРµ РЅР°Р¶РёРјР°РµРј");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -4237,7 +4251,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTdobriyTest.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbKKTdobriyTest.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTdobriyTest.setText("Добрый день - Тест");
+        bbKKTdobriyTest.setText("Р”РѕР±СЂС‹Р№ РґРµРЅСЊ - РўРµСЃС‚");
         bbKKTdobriyTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTdobriyTestActionPerformed(evt);
@@ -4261,7 +4275,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         tfKKTtext.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tfKKTtext.setForeground(new java.awt.Color(0, 0, 153));
-        tfKKTtext.setText("Добрый день!");
+        tfKKTtext.setText("Р”РѕР±СЂС‹Р№ РґРµРЅСЊ!");
         tfKKTtext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfKKTtextActionPerformed(evt);
@@ -4270,7 +4284,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTpostTest.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbKKTpostTest.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTpostTest.setText("POST-запрос");
+        bbKKTpostTest.setText("POST-Р·Р°РїСЂРѕСЃ");
         bbKKTpostTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTpostTestActionPerformed(evt);
@@ -4279,7 +4293,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTzapusk.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbKKTzapusk.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTzapusk.setText("Запуск внешний");
+        bbKKTzapusk.setText("Р—Р°РїСѓСЃРє РІРЅРµС€РЅРёР№");
         bbKKTzapusk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTzapuskActionPerformed(evt);
@@ -4297,7 +4311,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTpythonTest.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbKKTpythonTest.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTpythonTest.setText("Запуск Python");
+        bbKKTpythonTest.setText("Р—Р°РїСѓСЃРє Python");
         bbKKTpythonTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTpythonTestActionPerformed(evt);
@@ -4306,7 +4320,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTpreobrazovanieTest.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbKKTpreobrazovanieTest.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTpreobrazovanieTest.setText("Преобразование-Тестирование");
+        bbKKTpreobrazovanieTest.setText("РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ-РўРµСЃС‚РёСЂРѕРІР°РЅРёРµ");
         bbKKTpreobrazovanieTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTpreobrazovanieTestActionPerformed(evt);
@@ -4324,7 +4338,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTdobriyDen.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbKKTdobriyDen.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTdobriyDen.setText("Добрый день!");
+        bbKKTdobriyDen.setText("Р”РѕР±СЂС‹Р№ РґРµРЅСЊ!");
         bbKKTdobriyDen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTdobriyDenActionPerformed(evt);
@@ -4378,7 +4392,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         bbKKTtowar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         bbKKTtowar.setForeground(new java.awt.Color(0, 0, 153));
-        bbKKTtowar.setText("Обслуживание товара");
+        bbKKTtowar.setText("РћР±СЃР»СѓР¶РёРІР°РЅРёРµ С‚РѕРІР°СЂР°");
         bbKKTtowar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bbKKTtowarActionPerformed(evt);
@@ -4411,7 +4425,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tabPanKKT.addTab("Логи", tpanKKTlog);
+        tabPanKKT.addTab("Р›РѕРіРё", tpanKKTlog);
 
         tpanKKTtowar.setForeground(new java.awt.Color(0, 0, 153));
         tpanKKTtowar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -4439,7 +4453,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tabPanKKT.addTab("Товар", tpanKKTtowar);
+        tabPanKKT.addTab("РўРѕРІР°СЂ", tpanKKTtowar);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -4554,14 +4568,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tabPanMain.addTab("Параметры ККТ", panKKT);
+        tabPanMain.addTab("РџР°СЂР°РјРµС‚СЂС‹ РљРљРў", panKKT);
 
         taLog.setColumns(20);
         taLog.setRows(5);
         jScrollPane5.setViewportView(taLog);
 
         bbNewFrame.setForeground(new java.awt.Color(0, 0, 153));
-        bbNewFrame.setText("Сформировать отдельный фрейм программно");
+        bbNewFrame.setText("РЎС„РѕСЂРјРёСЂРѕРІР°С‚СЊ РѕС‚РґРµР»СЊРЅС‹Р№ С„СЂРµР№Рј РїСЂРѕРіСЂР°РјРјРЅРѕ");
         bbNewFrame.setEnabled(false);
         bbNewFrame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -4610,7 +4624,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                         .addGap(10, 10, 10))))
         );
 
-        tabPanMain.addTab("Логи", panLog);
+        tabPanMain.addTab("Р›РѕРіРё", panLog);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -4635,13 +4649,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private void tabPanMainAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tabPanMainAncestorAdded
         /*
         sVerProg = "2024.12.15";
-        bbVerProg.setText("Версия: "+sVerProg);
+        bbVerProg.setText("Р’РµСЂСЃРёСЏ: "+sVerProg);
         
         masArtikul = new int[50];
         masSort = new int[50];
         masUsluga = new int[50];
         masPNom = new int[1000];
-        sPostavchik = "Поставщик";
+        sPostavchik = "РџРѕСЃС‚Р°РІС‰РёРє";
                 
         httpKKM = "http://localhost:50010/api.json";        
         sKKMkassirINN = "00000000000000000000";
@@ -4663,7 +4677,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         taKKTlog.setText(null);
         taKKTlog.append(sTire99);
         String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-        taKKTlog.append("Дата: " + sDateTimeTek + "    Настройки программы.:\n");
+        taKKTlog.append("Р”Р°С‚Р°: " + sDateTimeTek + "    РќР°СЃС‚СЂРѕР№РєРё РїСЂРѕРіСЂР°РјРјС‹.:\n");
         taKKTlog.append(sTire99);
         
         lbMainDateTime.setText("");
@@ -4677,7 +4691,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         urlHostBD = "jdbc:MySQL://localhost";            
         String redHostBD = "";
         
-        // Читаем файл с настройками
+        // Р§РёС‚Р°РµРј С„Р°Р№Р» СЃ РЅР°СЃС‚СЂРѕР№РєР°РјРё
         try {
             
             try (BufferedReader reader = new BufferedReader(new FileReader("myServisProg.ini"))) {
@@ -4699,13 +4713,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             
         } catch (IOException e) {
         }
-        taKKTlog.append("COM порт: "+sKKMmercComPort+"\n");
-        taKKTlog.append("Тип ККТ: "+sKKMmercModel+"\n");
-        taKKTlog.append("Папка для ежденевных дампов: "+sDumpDirLocal+"\n");
-        taKKTlog.append("Папка для копирования ежденевных дампов: "+sDumpDirHost+"\n");
-        taKKTlog.append("Папка с командой mysqldump (папка установки mySQL): "+sDumpFileExe+"\n");
-        taKKTlog.append("Запрашивать подтверждение выхода из программы: "+sWixod+"\n");
-        taKKTlog.append("Host БД : "+urlHostBD+"\n");
+        taKKTlog.append("COM РїРѕСЂС‚: "+sKKMmercComPort+"\n");
+        taKKTlog.append("РўРёРї РљРљРў: "+sKKMmercModel+"\n");
+        taKKTlog.append("РџР°РїРєР° РґР»СЏ РµР¶РґРµРЅРµРІРЅС‹С… РґР°РјРїРѕРІ: "+sDumpDirLocal+"\n");
+        taKKTlog.append("РџР°РїРєР° РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ РµР¶РґРµРЅРµРІРЅС‹С… РґР°РјРїРѕРІ: "+sDumpDirHost+"\n");
+        taKKTlog.append("РџР°РїРєР° СЃ РєРѕРјР°РЅРґРѕР№ mysqldump (РїР°РїРєР° СѓСЃС‚Р°РЅРѕРІРєРё mySQL): "+sDumpFileExe+"\n");
+        taKKTlog.append("Р—Р°РїСЂР°С€РёРІР°С‚СЊ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РІС‹С…РѕРґР° РёР· РїСЂРѕРіСЂР°РјРјС‹: "+sWixod+"\n");
+        taKKTlog.append("Host Р‘Р” : "+urlHostBD+"\n");
                     
         tfKKTComPort.setText(sKKMmercComPort);
         tfKKTmodel.setText(sKKMmercModel);
@@ -4748,18 +4762,18 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private void tpBDAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tpBDAncestorAdded
         // TODO add your handling code here:
         cbBDzakazMon.removeAllItems();
-        cbBDzakazMon.addItem("Январь");
-        cbBDzakazMon.addItem("Февраль");
-        cbBDzakazMon.addItem("Март");
-        cbBDzakazMon.addItem("Апрель");
-        cbBDzakazMon.addItem("Май");
-        cbBDzakazMon.addItem("Июнь");
-        cbBDzakazMon.addItem("Июль");
-        cbBDzakazMon.addItem("Август");
-        cbBDzakazMon.addItem("Сентябрь");
-        cbBDzakazMon.addItem("Октябрь");
-        cbBDzakazMon.addItem("Ноябрь");
-        cbBDzakazMon.addItem("Декабрь");
+        cbBDzakazMon.addItem("РЇРЅРІР°СЂСЊ");
+        cbBDzakazMon.addItem("Р¤РµРІСЂР°Р»СЊ");
+        cbBDzakazMon.addItem("РњР°СЂС‚");
+        cbBDzakazMon.addItem("РђРїСЂРµР»СЊ");
+        cbBDzakazMon.addItem("РњР°Р№");
+        cbBDzakazMon.addItem("РСЋРЅСЊ");
+        cbBDzakazMon.addItem("РСЋР»СЊ");
+        cbBDzakazMon.addItem("РђРІРіСѓСЃС‚");
+        cbBDzakazMon.addItem("РЎРµРЅС‚СЏР±СЂСЊ");
+        cbBDzakazMon.addItem("РћРєС‚СЏР±СЂСЊ");
+        cbBDzakazMon.addItem("РќРѕСЏР±СЂСЊ");
+        cbBDzakazMon.addItem("Р”РµРєР°Р±СЂСЊ");
         cbBDzakazMon.setMaximumRowCount(12);
 
         String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
@@ -4779,18 +4793,18 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbBDzakazActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbBDzakazActionPerformed
         // TODO add your handling code here:
-        //Загружаем заказы
+        //Р—Р°РіСЂСѓР¶Р°РµРј Р·Р°РєР°Р·С‹
         bbBDzakaz.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Соединение с БД для zakaz прошло успешно ...\n");
+            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ zakaz РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ ...\n");
 
             DefaultTableModel dtm = (DefaultTableModel) tabBDzakaz.getModel();
 
-            //dtm.removeRow(0); //  Удаляем первую  строчку
-            dtm.getDataVector().removeAllElements(); // удаляем все строки
+            //dtm.removeRow(0); //  РЈРґР°Р»СЏРµРј РїРµСЂРІСѓСЋ  СЃС‚СЂРѕС‡РєСѓ
+            dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
             String sGod = tfBDZakazGod.getText();
             String sDat = tfBDZakazDat.getText();
@@ -4810,7 +4824,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 String sDat2 = Integer.toString(mDat2 + 1);
                 sDate2 = sGod + "-" + sMon + "-" + sDat2;
 
-                taLog.append("(Дата) ...\n");
+                taLog.append("(Р”Р°С‚Р°) ...\n");
                 taLog.append("sDate1:" + sDate1 + " ...\n");
                 taLog.append("sDate2:" + sDate2 + " ...\n");
 
@@ -4858,12 +4872,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             tfBDZakazNal.setText(Integer.toString(sumNal));
             tfBDZakazQR.setText(Integer.toString(sumQR));
             
-            taLog.append("Запрос к zakaz - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ Рє zakaz - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
             if (i == 0) {
-                dtm.getDataVector().removeAllElements(); // удаляем все строки
+                dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
                 dtm.addRow(new Object[]{"", "", "", "", "", "", "", "", "", ""});
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Заказов не обнаружено!");
+                JOptionPane.showMessageDialog(jfInfo, "Р—Р°РєР°Р·РѕРІ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅРѕ!");
                 bbBDzakazCSV.setEnabled(false);
                 bbBDzakazXLS.setEnabled(false);
             } else {
@@ -4876,7 +4890,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД zakaz \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” zakaz \n");
                     taLog.append("-------------------------------------------------\n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -4954,7 +4968,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_tfKlientZakazID_zakActionPerformed
 
     private void bbZakazActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbZakazActionPerformed
-        // Оформление заказа
+        // РћС„РѕСЂРјР»РµРЅРёРµ Р·Р°РєР°Р·Р°
         bbZakaz.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
@@ -4970,7 +4984,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         if (LCod <= 0) {
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Необходимо обязательно выбрать покупателя!");
+            JOptionPane.showMessageDialog(jfInfo, "РќРµРѕР±С…РѕРґРёРјРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РІС‹Р±СЂР°С‚СЊ РїРѕРєСѓРїР°С‚РµР»СЏ!");
         } else {
 
             try {
@@ -4978,7 +4992,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                 conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
 
-                taLog.append("Запуск соединения с БД для insert в zakaz и zakaz_item ... \n");
+                taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” РґР»СЏ insert РІ zakaz Рё zakaz_item ... \n");
 
                 stmt = conn.createStatement();
 
@@ -4989,12 +5003,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     tfKlientZakazSC.setText(rs.getString("sc"));
                 }
                 rs.close();
-                taLog.append("Запрос select для nastroi - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ select РґР»СЏ nastroi - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 String query2 = "update myservis.nastroi set id_zak=id_zak+1";
                 stmt.executeUpdate(query2);
 
-                taLog.append("Запрос update для nastroi - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ nastroi - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 int kod_sc = Integer.parseInt(tfKlientZakazSC.getText());
                 int id_zak = Integer.parseInt(tfKlientZakazID_zak.getText());
@@ -5002,7 +5016,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 id_zak++;
 
                 String sFIO = "\"" + tfKlientZakazFIO.getText() + "\"";
-                int tip_zak = 1; // Обычный заказ
+                int tip_zak = 1; // РћР±С‹С‡РЅС‹Р№ Р·Р°РєР°Р·
                 int tip_nal;
                 int tip_chek;
                 int tip_kas = 1;
@@ -5019,7 +5033,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 } else {
                     sum_nal = 0;
                     sum_gr = Integer.parseInt(tfSummaZak.getText());
-                    tip_nal = 2;  // QR-код
+                    tip_nal = 2;  // QR-РєРѕРґ
                 }
 
                 if (chOFD.isSelected()) {
@@ -5038,7 +5052,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                         + "," + tfKlientZakazSkidPr.getText() + "," + sDateTimeTek + "," + sIspolnitel
                         + ");";
                 stmt.executeUpdate(query3);
-                taLog.append("Запрос inset для zakaz - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ inset РґР»СЏ zakaz - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 String query6 = "insert ignore into myservis.kassa (id_zak,date_kas,tip_kas,lcod,sum_nal,sum_gr,sum_chek,sum_bchek,tip_nal,tip_chek,fio,isp) values ("
                         + id_zak + "," + sDateTimeTek + "," + tip_kas + "," + tfKlientZakazLCod.getText() + "," + sum_nal + "," + sum_gr + "," + sum_chek + "," + sum_bchek + "," + tip_nal + "," + tip_chek
@@ -5046,7 +5060,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                         + ");";
 
                 stmt.executeUpdate(query6);
-                taLog.append("Запрос inset для kassa - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ inset РґР»СЏ kassa - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 taKKTtowar.setText(null);
 
@@ -5081,11 +5095,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     int ssSekciya;
                     int ssPredmet;
                     if (((artikul > 5000) & (artikul < 6000)) | ((artikul > 9000) & (artikul < 10000))) {
-                        // Это товары
+                        // Р­С‚Рѕ С‚РѕРІР°СЂС‹
                         ssSekciya = 2;
                         ssPredmet = 1;
                     } else {
-                        // Это услуги
+                        // Р­С‚Рѕ СѓСЃР»СѓРіРё
                         ssSekciya = 1;
                         ssPredmet = 4;
                     }
@@ -5098,7 +5112,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     stmt.executeUpdate(query4);
                 }
 
-                taLog.append("Запрос inset для zakaz_item - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ inset РґР»СЏ zakaz_item - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 for (int i = 0; i < tabZakaz.getRowCount(); i++) {
                     int artikul = Integer.parseInt(tabZakaz.getValueAt(i, 1).toString());
@@ -5110,22 +5124,22 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     stmt.executeUpdate(query5);
                 }
 
-                taLog.append("Запрос update для prise - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ prise - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 stmt.close();
 
                 if (chOFD.isSelected()) {
-                    bbKKTtowarActionPerformed(evt);  // Отправка кассового чека в ОФД
+                    bbKKTtowarActionPerformed(evt);  // РћС‚РїСЂР°РІРєР° РєР°СЃСЃРѕРІРѕРіРѕ С‡РµРєР° РІ РћР¤Р”
                 }
                 
                 if ( (wibUsluga == 0) | (LCod == 1000) | (LCod == 1001) | (LCod == 2000) | (LCod == 2001)  ){
-                    JOptionPane.showMessageDialog(new JFrame(), "Заказ обслужен успешно!");                                            
+                    JOptionPane.showMessageDialog(new JFrame(), "Р—Р°РєР°Р· РѕР±СЃР»СѓР¶РµРЅ СѓСЃРїРµС€РЅРѕ!");                                            
                 }else{
                     int showConfirmDialog;
                 
                     showConfirmDialog = JOptionPane.showConfirmDialog(new JFrame(),
-                    "В заказе использова услуга с Абонементом на несколько посещений.\n\nУчесть использование услуги в Абонементе?",
-                    "В заказе использова услуга с Абонементом на несколько посещений.",
+                    "Р’ Р·Р°РєР°Р·Рµ РёСЃРїРѕР»СЊР·РѕРІР° СѓСЃР»СѓРіР° СЃ РђР±РѕРЅРµРјРµРЅС‚РѕРј РЅР° РЅРµСЃРєРѕР»СЊРєРѕ РїРѕСЃРµС‰РµРЅРёР№.\n\nРЈС‡РµСЃС‚СЊ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СѓСЃР»СѓРіРё РІ РђР±РѕРЅРµРјРµРЅС‚Рµ?",
+                    "Р’ Р·Р°РєР°Р·Рµ РёСЃРїРѕР»СЊР·РѕРІР° СѓСЃР»СѓРіР° СЃ РђР±РѕРЅРµРјРµРЅС‚РѕРј РЅР° РЅРµСЃРєРѕР»СЊРєРѕ РїРѕСЃРµС‰РµРЅРёР№.",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE);
                     
@@ -5139,7 +5153,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             } finally {
                 if (conn != null) {
                     try {
-                        taLog.append("Завершение запроса к БД после оформления заказа \n");
+                        taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РїРѕСЃР»Рµ РѕС„РѕСЂРјР»РµРЅРёСЏ Р·Р°РєР°Р·Р° \n");
                         taLog.append("------------------------------------------------- \n");
                         System.out.println("n***** Let terminate the Connection *****");
                         conn.close();
@@ -5253,7 +5267,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         for (int i = 0; i < kolTow; i++) {
             String sCena = tabTowar.getValueAt(i, 3).toString();
             String sKol = tabTowar.getValueAt(i, 5).toString();
-            //jTextArea1.append("Цена: " + sCena + "\n");
+            //jTextArea1.append("Р¦РµРЅР°: " + sCena + "\n");
             if (!"".equals(sCena)) {
                 if (!"".equals(sKol)) {
                     if (!"0".equals(sKol)) {
@@ -5274,10 +5288,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_tfWibZakSummaActionPerformed
 
     private void bbObslActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbObslActionPerformed
-        // Обслуживание заказа
+        // РћР±СЃР»СѓР¶РёРІР°РЅРёРµ Р·Р°РєР°Р·Р°
         if ("".equals(tfKlientPriseLCod.getText())) {
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Необходимо обязательно выбрать Клиента");
+            JOptionPane.showMessageDialog(jfInfo, "РќРµРѕР±С…РѕРґРёРјРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РІС‹Р±СЂР°С‚СЊ РљР»РёРµРЅС‚Р°");
         } else {
 
             chNal.setSelected(true);
@@ -5294,7 +5308,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 chQR.setSelected(true);
             }
             
-            if ("Открыта".equals(sSmena)) {
+            if ("РћС‚РєСЂС‹С‚Р°".equals(sSmena)) {
                 chOFD.setSelected(true);
                 chKKT.setSelected(true);                
             }else{
@@ -5310,7 +5324,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             tfKlientZakazFIO.setText(tfKlientPriseFIO.getText());
 
             DefaultTableModel dtm2 = (DefaultTableModel) tabZakaz.getModel();
-            dtm2.getDataVector().removeAllElements(); // удаляем все строки
+            dtm2.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
             int SummaZak = 0;
             int SummaTow;
@@ -5321,7 +5335,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 String sCena = tabTowar.getValueAt(i, 3).toString();
                 String sKol = tabTowar.getValueAt(i, 5).toString();
 
-                //jTextArea1.append("Цена: " + sCena + "\n");
+                //jTextArea1.append("Р¦РµРЅР°: " + sCena + "\n");
                 if (!"".equals(sCena)) {
                     if (!"".equals(sKol)) {
                         if (!"0".equals(sKol)) {
@@ -5353,13 +5367,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 bbZakaz.setEnabled(true);
             } else {
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Не выбран товар для оформления заказа!");
+                JOptionPane.showMessageDialog(jfInfo, "РќРµ РІС‹Р±СЂР°РЅ С‚РѕРІР°СЂ РґР»СЏ РѕС„РѕСЂРјР»РµРЅРёСЏ Р·Р°РєР°Р·Р°!");
             }
         }
     }//GEN-LAST:event_bbObslActionPerformed
 
     private void bbZagruzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbZagruzActionPerformed
-        // Загрузка Прайс-Листа для формирования заказа
+        // Р—Р°РіСЂСѓР·РєР° РџСЂР°Р№СЃ-Р›РёСЃС‚Р° РґР»СЏ С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РєР°Р·Р°
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         bbZagruz.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         cbZakazGroup.setMaximumRowCount(16);
@@ -5370,11 +5384,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
             System.out.println("Database Connection Established...");
-            taLog.append("Соединение с БД для prise прошло успешно ...\n");
+            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ prise РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ ...\n");
 
             DefaultTableModel dtm = (DefaultTableModel) tabTowar.getModel();
-            //dtm.removeRow(0); //  Удаляем первую  строчку
-            dtm.getDataVector().removeAllElements(); // удаляем все строки
+            //dtm.removeRow(0); //  РЈРґР°Р»СЏРµРј РїРµСЂРІСѓСЋ  СЃС‚СЂРѕС‡РєСѓ
+            dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
             stmt = conn.createStatement();
 
@@ -5406,14 +5420,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             rs.close();
             stmt.close();
 
-            taLog.append("Запрос к prise - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ Рє prise - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.err.println("Cannot connect to database server");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД prise \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” prise \n");
                     taLog.append("------------------------------------------------- \n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -5433,13 +5447,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_panNewKlientAncestorAdded
 
     private void bbNewKlientRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbNewKlientRegActionPerformed
-        // Регистрация нового покупателя
+        // Р РµРіРёСЃС‚СЂР°С†РёСЏ РЅРѕРІРѕРіРѕ РїРѕРєСѓРїР°С‚РµР»СЏ
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
 
-            taLog.append("Запуск соединения с БД client для insert ... \n");
+            taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” client РґР»СЏ insert ... \n");
 
             String sFam = "\"" + tfFamNew.getText() + "\"";
             String sNam = "\"" + tfNamNew.getText() + "\"";
@@ -5479,17 +5493,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             stmt.executeUpdate(query);
             stmt.close();
 
-            taLog.append("Запрос insert для client - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ insert РґР»СЏ client - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Новый покупатель зарегистрирован успешно!");
+            JOptionPane.showMessageDialog(jfInfo, "РќРѕРІС‹Р№ РїРѕРєСѓРїР°С‚РµР»СЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ СѓСЃРїРµС€РЅРѕ!");
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.err.println("Cannot connect to database server");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД для inser for client \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РґР»СЏ inser for client \n");
                     taLog.append("-------------------------------------------------\n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -5586,13 +5600,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbKlientSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKlientSaveActionPerformed
         // TODO add your handling code here:
-        // Сохранение данных после редактирвоания покупателя
+        // РЎРѕС…СЂР°РЅРµРЅРёРµ РґР°РЅРЅС‹С… РїРѕСЃР»Рµ СЂРµРґР°РєС‚РёСЂРІРѕР°РЅРёСЏ РїРѕРєСѓРїР°С‚РµР»СЏ
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
 
-            taLog.append("Запуск соединения с БД для update client ... \n");
+            taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” РґР»СЏ update client ... \n");
 
             stmt = conn.createStatement();
 
@@ -5629,14 +5643,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             stmt.executeUpdate(query2);
             stmt.close();
 
-            taLog.append("Запрос update для client - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ client - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.err.println("Cannot connect to database server");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД update для client \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” update РґР»СЏ client \n");
                     taLog.append("------------------------------------------------- \n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -5663,13 +5677,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         //jbLCod.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         JFrame jfInfo = new JFrame();
-        JOptionPane.showMessageDialog(jfInfo, "Сохранение произведено успешно!");
+        JOptionPane.showMessageDialog(jfInfo, "РЎРѕС…СЂР°РЅРµРЅРёРµ РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbKlientSaveActionPerformed
 
     private void bbKlientRedaktActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKlientRedaktActionPerformed
         // TODO add your handling code here:
         JFrame jfInfo = new JFrame();
-        JOptionPane.showMessageDialog(jfInfo, "Включен режим редактирования Клиента!");
+        JOptionPane.showMessageDialog(jfInfo, "Р’РєР»СЋС‡РµРЅ СЂРµР¶РёРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РљР»РёРµРЅС‚Р°!");
         tfKlientSCod.setEditable(true);
         tfKlientFam.setEditable(true);
         tfKlientName.setEditable(true);
@@ -5709,15 +5723,15 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_jtFindFIOFocusGained
 
     private void bbFindFIOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbFindFIOActionPerformed
-        // Поиск покупателя по ФИО
+        // РџРѕРёСЃРє РїРѕРєСѓРїР°С‚РµР»СЏ РїРѕ Р¤РРћ
         int kDlin = jtFindFIO.getText().length();
         
         if ((kDlin > 1) | chKlientTot.isSelected()) {
             bbFindFIO.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
             DefaultTableModel dtm = (DefaultTableModel) tabFIO.getModel();
-            dtm.removeRow(0); //  Удаляем первую  строчку
-            dtm.getDataVector().removeAllElements(); // удаляем все строки
+            dtm.removeRow(0); //  РЈРґР°Р»СЏРµРј РїРµСЂРІСѓСЋ  СЃС‚СЂРѕС‡РєСѓ
+            dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
             conn = null;
             try {
@@ -5725,11 +5739,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                 conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
                 System.out.println("Database Connection Established...");
-                taLog.append("Соединение прошло с БД для client успешно ... \n");
+                taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ РїСЂРѕС€Р»Рѕ СЃ Р‘Р” РґР»СЏ client СѓСЃРїРµС€РЅРѕ ... \n");
 
                 String sFam = jtFindFIO.getText();
 
-                taLog.append("Запуск запроса к БД client ... \n");
+                taLog.append("Р—Р°РїСѓСЃРє Р·Р°РїСЂРѕСЃР° Рє Р‘Р” client ... \n");
                 stmt = conn.createStatement();
                 //String query = "select lcod,scod,f,i,o,tel,email from myservis.client where LOWER(f)=\"" + sFam + "\"";
                 String query;
@@ -5758,7 +5772,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             } finally {
                 if (conn != null) {
                     try {
-                        taLog.append("Завершение запроса к БД cleent ... \n");
+                        taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” cleent ... \n");
                         taLog.append("------------------------------------------------- \n");
                         System.out.println("n***** Let terminate the Connection *****");
                         conn.close();
@@ -5771,12 +5785,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             bbKlientCSV.setEnabled(true);
             bbFindFIO.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         } else {
-            JOptionPane.showMessageDialog(new JFrame(), "Фамилия не может быть меньше 2 символов!");
+            JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°РјРёР»РёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РјРµРЅСЊС€Рµ 2 СЃРёРјРІРѕР»РѕРІ!");
         }
     }//GEN-LAST:event_bbFindFIOActionPerformed
 
     private void bbFindLCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbFindLCodActionPerformed
-        // поиск покупателя по номеру
+        // РїРѕРёСЃРє РїРѕРєСѓРїР°С‚РµР»СЏ РїРѕ РЅРѕРјРµСЂСѓ
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         bbFindLCod.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -5788,7 +5802,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Соединение с БД для client успешно ... \n");
+            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ client СѓСЃРїРµС€РЅРѕ ... \n");
 
             tfKlientLCod.setText("");
             tfKlientSCod.setText("");
@@ -5807,7 +5821,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             
             String sLcod = tfKlientFind.getText();
 
-            taLog.append("Запуск запроса к БД для client ... \n");
+            taLog.append("Р—Р°РїСѓСЃРє Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РґР»СЏ client ... \n");
             stmt = conn.createStatement();
             String query = "select lcod,scod,f,i,o,tel,email,gorod_name,poch_index,adres,prim,date_rog from myservis.client where lcod=" + sLcod;
             rs = stmt.executeQuery(query);
@@ -5872,7 +5886,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             if ("".equals(tfKlientLCod.getText())) {
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Клиент не найден!");
+                JOptionPane.showMessageDialog(jfInfo, "РљР»РёРµРЅС‚ РЅРµ РЅР°Р№РґРµРЅ!");
                 bbKlientZakaz.setEnabled(false);
                 bbKlientRedakt.setEnabled(false);
                 bbUchetUslug.setEnabled(false);
@@ -5886,17 +5900,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             bbKlientSave.setEnabled(false);
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
-            System.err.println("Cannot connect to database server для client");
+            System.err.println("Cannot connect to database server РґР»СЏ client");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД для client\n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РґР»СЏ client\n");
                     taLog.append("-------------------------------------------------\n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
-                    System.out.println("Database connection terminated для client... ");
+                    System.out.println("Database connection terminated РґР»СЏ client... ");
                 } catch (SQLException ex) {
-                    System.out.println("Error in connection termination для client!");
+                    System.out.println("Error in connection termination РґР»СЏ client!");
                 }
             }
         }
@@ -5958,12 +5972,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbKlientZakazActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKlientZakazActionPerformed
         int showConfirmDialog;
-        if ("Открыта".equals(sSmena)) {
+        if ("РћС‚РєСЂС‹С‚Р°".equals(sSmena)) {
             showConfirmDialog =0;
         } else {
             showConfirmDialog = JOptionPane.showConfirmDialog(new JFrame(),
-                "На Кассовом аппарате Смена не открыта!\nПродолжить с Закрытой сменой?",
-                "Проверка Смены на Кассовом аппарате.",
+                "РќР° РљР°СЃСЃРѕРІРѕРј Р°РїРїР°СЂР°С‚Рµ РЎРјРµРЅР° РЅРµ РѕС‚РєСЂС‹С‚Р°!\nРџСЂРѕРґРѕР»Р¶РёС‚СЊ СЃ Р—Р°РєСЂС‹С‚РѕР№ СЃРјРµРЅРѕР№?",
+                "РџСЂРѕРІРµСЂРєР° РЎРјРµРЅС‹ РЅР° РљР°СЃСЃРѕРІРѕРј Р°РїРїР°СЂР°С‚Рµ.",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
         }
@@ -5973,7 +5987,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             if ("".equals(sLCod)) {
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Необходимо обязательно выбрать клиента");
+                JOptionPane.showMessageDialog(jfInfo, "РќРµРѕР±С…РѕРґРёРјРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РІС‹Р±СЂР°С‚СЊ РєР»РёРµРЅС‚Р°");
             } else {
                 tfKlientPriseLCod.setText(tfKlientLCod.getText());
                 tfKlientPriseSCod.setText(tfKlientSCod.getText());
@@ -6026,14 +6040,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Соединение с БД для prihod прошло успешно ...\n");
+            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ prihod РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ ...\n");
             stmt = conn.createStatement();
 
             int SumZak = 0;
             DefaultTableModel dtm = (DefaultTableModel) tabBDprihod.getModel();
 
-            //dtm.removeRow(0); //  Удаляем первую  строчку
-            dtm.getDataVector().removeAllElements(); // удаляем все строки
+            //dtm.removeRow(0); //  РЈРґР°Р»СЏРµРј РїРµСЂРІСѓСЋ  СЃС‚СЂРѕС‡РєСѓ
+            dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
             String sGod = tfBDZakazGod.getText();
             String sDat = tfBDZakazDat.getText();
@@ -6053,7 +6067,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 String sDat2 = Integer.toString(mDat2 + 1);
                 sDate2 = sGod + "-" + sMon + "-" + sDat2;
 
-                taLog.append("(Дата) ...\n");
+                taLog.append("(Р”Р°С‚Р°) ...\n");
                 taLog.append("sDate1:" + sDate1 + " ...\n");
                 taLog.append("sDate2:" + sDate2 + " ...\n");
             }
@@ -6082,15 +6096,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             String sZak = Integer.toString(SumZak);
             tfBDprihodSumma.setText(sZak);
-            taLog.append("Запрос к prihod - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ Рє prihod - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
             if (i == 0) {
-                dtm.getDataVector().removeAllElements(); // удаляем все строки
+                dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
                 dtm.addRow(new Object[]{"", "", "", "", "", "", "", "", "", "", ""});
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Приходов не обнаружено!");
+                JOptionPane.showMessageDialog(jfInfo, "РџСЂРёС…РѕРґРѕРІ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅРѕ!");
                 bbBDprihodCSV.setEnabled(false);
+                bbBDprihodXLS.setEnabled(false);
             } else {
                 bbBDprihodCSV.setEnabled(true);
+                bbBDprihodXLS.setEnabled(true);
             }
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
@@ -6098,7 +6114,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД prihod \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” prihod \n");
                     taLog.append("-------------------------------------------------\n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -6137,8 +6153,8 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_tabBDprihodKeyPressed
 
     private void bbBDzakazCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbBDzakazCSVActionPerformed
-        String nameFiles = "temp\\Заказы-Csv.csv";
-        String fText = "№ пп;Дата;№ заказа;Личный Id;ФИО;Сумма;Скидка-%;QR/Нал;Чек;Исполнитель;\n";
+        String nameFiles = "temp\\Р—Р°РєР°Р·С‹-Csv.csv";
+        String fText = "в„– РїРї;Р”Р°С‚Р°;в„– Р·Р°РєР°Р·Р°;Р›РёС‡РЅС‹Р№ Id;Р¤РРћ;РЎСѓРјРјР°;РЎРєРёРґРєР°-%;QR/РќР°Р»;Р§РµРє;РСЃРїРѕР»РЅРёС‚РµР»СЊ;\n";
 
         for (int i = 0; i < tabBDzakaz.getRowCount(); i++) {
             //fText = tabBDzakaz.getValueAt(i, 0).toString()+";";
@@ -6149,9 +6165,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
             fText +="\n";
         }
-        fText += ";;;;Сумма всего;" + tfBDZakazSumma.getText() + ";\n";
-        fText += ";;;;Наличными;" + tfBDZakazNal.getText() + ";\n";
-        fText += ";;;;QR-код;" + tfBDZakazQR.getText() + ";\n";
+        fText += ";;;;РЎСѓРјРјР° РІСЃРµРіРѕ;" + tfBDZakazSumma.getText() + ";\n";
+        fText += ";;;;РќР°Р»РёС‡РЅС‹РјРё;" + tfBDZakazNal.getText() + ";\n";
+        fText += ";;;;QR-РєРѕРґ;" + tfBDZakazQR.getText() + ";\n";
 
         try {
             File file = new File(nameFiles);
@@ -6163,23 +6179,23 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 writer.close();
 
             } catch (IOException e) {
-                System.out.println("Ошибка-1 при записи в файл");
-                taLog.append("Ошибка-1 при записи в файл \n");
+                System.out.println("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+                taLog.append("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
             }
 
-            System.out.println("Текст успешно записан в файл.");
+            System.out.println("РўРµРєСЃС‚ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ РІ С„Р°Р№Р».");
         } catch (IOException e) {
-            System.out.println("Ошибка-2 при записи в файл");
-            taLog.append("Ошибка-2 при записи в файл \n");
+            System.out.println("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+            taLog.append("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
         }
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbBDzakazCSVActionPerformed
 
     private void bbBDprihodCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbBDprihodCSVActionPerformed
         // TODO add your handling code here:
         String nameFiles = "temp\\Prihod.csv";
-        String fText = "№ пп;Дата;№ прихода;№ поставщика;Поставщик;Сумма;Исполнитель;\n";
+        String fText = "в„– РїРї;Р”Р°С‚Р°;в„– РїСЂРёС…РѕРґР°;в„– РїРѕСЃС‚Р°РІС‰РёРєР°;РџРѕСЃС‚Р°РІС‰РёРє;РЎСѓРјРјР°;РСЃРїРѕР»РЅРёС‚РµР»СЊ;\n";
 
         for (int i = 0; i < tabBDprihod.getRowCount(); i++) {
             for (int k = 0; k < 7; k++) {
@@ -6201,17 +6217,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 writer.close();
 
             } catch (IOException e) {
-                System.out.println("Ошибка-1 при записи в файл");
-                taLog.append("Ошибка-1 при записи в файл \n");
+                System.out.println("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+                taLog.append("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
             }
 
-            System.out.println("Текст успешно записан в файл.");
+            System.out.println("РўРµРєСЃС‚ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ РІ С„Р°Р№Р».");
         } catch (IOException e) {
-            System.out.println("Ошибка-2 при записи в файл");
-            taLog.append("Ошибка-2 при записи в файл \n");
+            System.out.println("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+            taLog.append("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
         }
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbBDprihodCSVActionPerformed
 
     private void panBDAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_panBDAncestorAdded
@@ -6238,8 +6254,8 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             aktPolName = masNameIsp[wib];
             aktPolKKT = masNameKKT[wib];
             aktPolLogin = cbLogin.getItemAt(wib);
-            lbNameKKT.setText("Кассир ККТ: " + aktPolKKT);
-            lbIsp.setText("Исполнитель документов: " + aktPolLogin);
+            lbNameKKT.setText("РљР°СЃСЃРёСЂ РљРљРў: " + aktPolKKT);
+            lbIsp.setText("РСЃРїРѕР»РЅРёС‚РµР»СЊ РґРѕРєСѓРјРµРЅС‚РѕРІ: " + aktPolLogin);
             tfIsp.setText(aktPolName);
 
             bbFindLCod.setEnabled(true);
@@ -6258,7 +6274,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             bbKKTprintText.setEnabled(true);
 
             String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-            lbMainDateTime.setText("Вход в программу: " + sDateTimeTek);
+            lbMainDateTime.setText("Р’С…РѕРґ РІ РїСЂРѕРіСЂР°РјРјСѓ: " + sDateTimeTek);
 
         } else {
 
@@ -6279,7 +6295,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             bbKKTprintText.setEnabled(false);
 
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Пароль введен неверно!");
+            JOptionPane.showMessageDialog(jfInfo, "РџР°СЂРѕР»СЊ РІРІРµРґРµРЅ РЅРµРІРµСЂРЅРѕ!");
         }
     }//GEN-LAST:event_bbLoginActionPerformed
 
@@ -6290,7 +6306,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         
         sVersionProg = bbVerProg.getText();
         
-        // Создаем файл с номером версии для чтения программой: myServisUpdateNew.jar 
+        // РЎРѕР·РґР°РµРј С„Р°Р№Р» СЃ РЅРѕРјРµСЂРѕРј РІРµСЂСЃРёРё РґР»СЏ С‡С‚РµРЅРёСЏ РїСЂРѕРіСЂР°РјРјРѕР№: myServisUpdateNew.jar 
         try {
             Path fileName = Paths.get("myVersionProgLocal.ver");
             Files.write(fileName, sVersionProg.getBytes(), StandardOpenOption.CREATE);
@@ -6300,7 +6316,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         masSort = new int[50];
         masUsluga = new int[50];
         masPNom = new int[1000];
-        sPostavchik = "Поставщик";
+        sPostavchik = "РџРѕСЃС‚Р°РІС‰РёРє";
                 
         httpKKM = "http://localhost:50010/api.json";        
         sKKMkassirINN = "00000000000000000000";
@@ -6322,7 +6338,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         taLog.setText(null);
         taLog.append(sTire99);
         String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-        taLog.append("Дата: " + sDateTimeTek + "    Настройки программы:\n");
+        taLog.append("Р”Р°С‚Р°: " + sDateTimeTek + "    РќР°СЃС‚СЂРѕР№РєРё РїСЂРѕРіСЂР°РјРјС‹:\n");
         taLog.append(sTire99);
         
         lbMainDateTime.setText("");
@@ -6336,7 +6352,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         urlHostBD = "jdbc:MySQL://localhost";            
         String redHostBD = "";
         
-        // Читаем файл с настройками
+        // Р§РёС‚Р°РµРј С„Р°Р№Р» СЃ РЅР°СЃС‚СЂРѕР№РєР°РјРё
         try {            
             try (BufferedReader reader = new BufferedReader(new FileReader("myServisProg.ini"))) {
                 String line = reader.readLine();
@@ -6358,14 +6374,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             
         } catch (IOException e) {
         }
-        taLog.append("COM порт: "+sKKMmercComPort+"\n");
-        taLog.append("Тип ККТ: "+sKKMmercModel+"\n");
-        taLog.append("Папка для ежденевных дампов: "+sDumpDirLocal+"\n");
-        taLog.append("Папка для копирования ежденевных дампов: "+sDumpDirHost+"\n");
-        taLog.append("Папка с командой mysqldump (папка установки mySQL): "+sDumpFileExe+"\n");
-        taLog.append("Запрашивать подтверждение выхода из программы: "+sWixod+"\n");
-        taLog.append("Host БД : "+urlHostBD+"\n");
-        taLog.append("Каталог для обновления новой версии : "+sDirNewVersion+"\n");
+        taLog.append("COM РїРѕСЂС‚: "+sKKMmercComPort+"\n");
+        taLog.append("РўРёРї РљРљРў: "+sKKMmercModel+"\n");
+        taLog.append("РџР°РїРєР° РґР»СЏ РµР¶РґРµРЅРµРІРЅС‹С… РґР°РјРїРѕРІ: "+sDumpDirLocal+"\n");
+        taLog.append("РџР°РїРєР° РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ РµР¶РґРµРЅРµРІРЅС‹С… РґР°РјРїРѕРІ: "+sDumpDirHost+"\n");
+        taLog.append("РџР°РїРєР° СЃ РєРѕРјР°РЅРґРѕР№ mysqldump (РїР°РїРєР° СѓСЃС‚Р°РЅРѕРІРєРё mySQL): "+sDumpFileExe+"\n");
+        taLog.append("Р—Р°РїСЂР°С€РёРІР°С‚СЊ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РІС‹С…РѕРґР° РёР· РїСЂРѕРіСЂР°РјРјС‹: "+sWixod+"\n");
+        taLog.append("Host Р‘Р” : "+urlHostBD+"\n");
+        taLog.append("РљР°С‚Р°Р»РѕРі РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РЅРѕРІРѕР№ РІРµСЂСЃРёРё : "+sDirNewVersion+"\n");
                     
         tfKKTComPort.setText(sKKMmercComPort);
         tfKKTmodel.setText(sKKMmercModel);
@@ -6387,11 +6403,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         } catch (IOException e) {}     
         
         taLog.append(sTire99);
-        taLog.append("Версия программы Текущая : "+sVersionProg+"\n");
-        taLog.append("Версия программы на Cервере : "+sVersionServer+"\n");
+        taLog.append("Р’РµСЂСЃРёСЏ РїСЂРѕРіСЂР°РјРјС‹ РўРµРєСѓС‰Р°СЏ : "+sVersionProg+"\n");
+        taLog.append("Р’РµСЂСЃРёСЏ РїСЂРѕРіСЂР°РјРјС‹ РЅР° CРµСЂРІРµСЂРµ : "+sVersionServer+"\n");
         taLog.append(sTire99);
         
-        // Создаем файл на Сервере с логом загрузки настроек и с номером версии программы для контроля
+        // РЎРѕР·РґР°РµРј С„Р°Р№Р» РЅР° РЎРµСЂРІРµСЂРµ СЃ Р»РѕРіРѕРј Р·Р°РіСЂСѓР·РєРё РЅР°СЃС‚СЂРѕРµРє Рё СЃ РЅРѕРјРµСЂРѕРј РІРµСЂСЃРёРё РїСЂРѕРіСЂР°РјРјС‹ РґР»СЏ РєРѕРЅС‚СЂРѕР»СЏ
         try {
             Path fileName = Paths.get(sDumpDirHost+"myServisProSetupVersion.ver");
             Files.write(fileName, taLog.getText().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
@@ -6401,7 +6417,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             taLog.append(sTire99);
         }
         
-        // Копируем лог программы обновления на сервер, для контроля
+        // РљРѕРїРёСЂСѓРµРј Р»РѕРі РїСЂРѕРіСЂР°РјРјС‹ РѕР±РЅРѕРІР»РµРЅРёСЏ РЅР° СЃРµСЂРІРµСЂ, РґР»СЏ РєРѕРЅС‚СЂРѕР»СЏ
         Path sourcePath = Paths.get("temp\\myServisUpdate_log.txt");
         Path destPath = Paths.get(sDumpDirHost+"myServisUpdate_log.txt");        
         try {
@@ -6412,7 +6428,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Соединение с БД для polzovatel прошло успешно ...\n");
+            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ polzovatel РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ ...\n");
 
             stmt = conn.createStatement();
 
@@ -6434,7 +6450,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             rs.close();
             stmt.close();
                         
-            taLog.append("Запрос к polzovatel - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ Рє polzovatel - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
             
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
@@ -6442,7 +6458,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД polzovatel \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” polzovatel \n");
                     taLog.append(sTire99);
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -6463,11 +6479,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         JFrame jfInfo = new JFrame();
         jfInfo.setBounds(120, 80, 800, 480);
 
-        //JOptionPane.showMessageDialog(jfInfo, "Успешно!");
+        //JOptionPane.showMessageDialog(jfInfo, "РЈСЃРїРµС€РЅРѕ!");
         JPanel p = new JPanel();
         p.setBounds(0, 360, 750, 40);
         p.setBackground(Color.GRAY);
-        JButton b = new JButton("Сохранить в csv");
+        JButton b = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ РІ csv");
         b.setBounds(0, 0, 80, 34);
         b.setFont(new java.awt.Font("Arial", 0, 18));
 
@@ -6517,12 +6533,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         t.setVisible(true);
 
         DefaultTableModel dtm = (DefaultTableModel) t.getModel();
-        dtm.getDataVector().removeAllElements(); // удаляем все строки        
+        dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё        
 
-        dtm.addRow(new Object[]{"№пп", "Артикул", "Наименование", "Цена", "Кол-во", "Сумма"});
-        dtm.addRow(new Object[]{"1", "3001", "Пудра из серии самых пушистых пдр в РФ", "1000", "2", "2000"});
-        dtm.addRow(new Object[]{"2", "3002", "Пудра", "1500", "3", "4500"});
-        dtm.addRow(new Object[]{"3", "3003", "Пудра", "2500", "3", "4500"});
+        dtm.addRow(new Object[]{"в„–РїРї", "РђСЂС‚РёРєСѓР»", "РќР°РёРјРµРЅРѕРІР°РЅРёРµ", "Р¦РµРЅР°", "РљРѕР»-РІРѕ", "РЎСѓРјРјР°"});
+        dtm.addRow(new Object[]{"1", "3001", "РџСѓРґСЂР° РёР· СЃРµСЂРёРё СЃР°РјС‹С… РїСѓС€РёСЃС‚С‹С… РїРґСЂ РІ Р Р¤", "1000", "2", "2000"});
+        dtm.addRow(new Object[]{"2", "3002", "РџСѓРґСЂР°", "1500", "3", "4500"});
+        dtm.addRow(new Object[]{"3", "3003", "РџСѓРґСЂР°", "2500", "3", "4500"});
 
     }//GEN-LAST:event_bbNewFrameActionPerformed
 
@@ -6599,7 +6615,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbPrisePrihodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbPrisePrihodActionPerformed
         // TODO add your handling code here:
-        // Приходование товара
+        // РџСЂРёС…РѕРґРѕРІР°РЅРёРµ С‚РѕРІР°СЂР°
         bbPrisePrihod.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
@@ -6621,14 +6637,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         if (SumZakaz <= 0) {
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Необходимо сформировать приход с суммой больше 0!");
+            JOptionPane.showMessageDialog(jfInfo, "РќРµРѕР±С…РѕРґРёРјРѕ СЃС„РѕСЂРјРёСЂРѕРІР°С‚СЊ РїСЂРёС…РѕРґ СЃ СЃСѓРјРјРѕР№ Р±РѕР»СЊС€Рµ 0!");
         } else {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
                 conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-                taLog.append("Запуск соединения с БД для insert в prihod и prihod_item ... \n");
+                taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” РґР»СЏ insert РІ prihod Рё prihod_item ... \n");
 
                 stmt = conn.createStatement();
 
@@ -6640,12 +6656,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     //tfKlientZakazSC.setText(rs.getString("sc"));
                 }
                 rs.close();
-                taLog.append("Запрос select для nastroi - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ select РґР»СЏ nastroi - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 String query2 = "update myservis.nastroi set id_prih=id_prih+1";
                 stmt.executeUpdate(query2);
 
-                taLog.append("Запрос update для nastroi - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ nastroi - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 //int kod_sc=Integer.parseInt(tfKlientZakazSC.getText());
                 int id_prih = Integer.parseInt(tfPrihodID_prih.getText());
@@ -6653,25 +6669,25 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                 id_prih++;
 
-                int tip_zak = 1; // Обычный приход
+                int tip_zak = 1; // РћР±С‹С‡РЅС‹Р№ РїСЂРёС…РѕРґ
 
                 String query3 = "insert ignore into myservis.prihod (sc,id_zak,nom_zak,sum_zak,tip_zak,date_zak,fio,isp,prim) values ("
                         + kod_sc + "," + id_prih + "," + id_prih + "," + SumZakaz + "," + tip_zak + "," + sDateTimeTek + "," + sPostavchik + "," + sIspolnitel + "," + sPrim
                         + ");";
                 stmt.executeUpdate(query3);
-                taLog.append("Запрос inset для prihod - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ inset РґР»СЏ prihod - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 for (int i = 0; i < tabPrise.getRowCount(); i++) {
                     String sKol = tabPrise.getValueAt(i, 4).toString();
-                    taLog.append("Количество прихода: " + sKol + "\n");
+                    taLog.append("РљРѕР»РёС‡РµСЃС‚РІРѕ РїСЂРёС…РѕРґР°: " + sKol + "\n");
 
                     if (!"".equals(sKol)) {
                         int artikul = Integer.parseInt(tabPrise.getValueAt(i, 1).toString());
-                        taLog.append("артикул: " + artikul + "\n");
+                        taLog.append("Р°СЂС‚РёРєСѓР»: " + artikul + "\n");
                         String sTowar = "\"" + tabPrise.getValueAt(i, 2).toString() + "\"";
-                        taLog.append("товар: " + sTowar + "\n");
+                        taLog.append("С‚РѕРІР°СЂ: " + sTowar + "\n");
                         int cena = Integer.parseInt(tabPrise.getValueAt(i, 3).toString());
-                        taLog.append("Цена: " + cena + "\n");
+                        taLog.append("Р¦РµРЅР°: " + cena + "\n");
                         String query4 = "insert ignore into myservis.prihod_item (sc,id_zak,nom_zak,tip_zak,artikul,kol,cen,towar,date_zak) values ("
                                 + kod_sc + "," + id_prih + "," + id_prih + "," + tip_zak + "," + artikul + "," + sKol + "," + cena + "," + sTowar + "," + sDateTimeTek
                                 + ");";
@@ -6679,7 +6695,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     }
                 }
 
-                taLog.append("Запрос inset для prihod_item - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ inset РґР»СЏ prihod_item - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 for (int i = 0; i < tabPrise.getRowCount(); i++) {
                     String sKol = tabPrise.getValueAt(i, 4).toString();
@@ -6692,19 +6708,19 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     }
                 }
 
-                taLog.append("Запрос update для prise - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ prise - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                 stmt.close();
 
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Приход проведен успешно!");
+                JOptionPane.showMessageDialog(jfInfo, "РџСЂРёС…РѕРґ РїСЂРѕРІРµРґРµРЅ СѓСЃРїРµС€РЅРѕ!");
 
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
                 System.err.println("Cannot connect to database server");
             } finally {
                 if (conn != null) {
                     try {
-                        taLog.append("Завершение запроса к БД после оформления прихода \n");
+                        taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РїРѕСЃР»Рµ РѕС„РѕСЂРјР»РµРЅРёСЏ РїСЂРёС…РѕРґР° \n");
                         taLog.append("------------------------------------------------- \n");
                         System.out.println("n***** Let terminate the Connection *****");
                         conn.close();
@@ -6749,16 +6765,16 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbPriseSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbPriseSaveActionPerformed
         // TODO add your handling code here:
-        // Сохранение Прайс-Листа
+        // РЎРѕС…СЂР°РЅРµРЅРёРµ РџСЂР°Р№СЃ-Р›РёСЃС‚Р°
         bbPriseSave.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Запуск соединения с БД для update prise ... \n");
+            taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” РґР»СЏ update prise ... \n");
 
             stmt = conn.createStatement();
-            int rowIndex = tabPrise.getSelectedRow();  // Выделенный ряд
+            int rowIndex = tabPrise.getSelectedRow();  // Р’С‹РґРµР»РµРЅРЅС‹Р№ СЂСЏРґ
 
             int artikul = Integer.parseInt(tabPrise.getValueAt(rowIndex, 1).toString());
             String sTowarNew = "\"" + tabPrise.getValueAt(rowIndex, 2).toString() + "\"";
@@ -6769,14 +6785,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             stmt.executeUpdate(query);
             stmt.close();
 
-            taLog.append("Запрос update для Prise - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ Prise - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.err.println("Cannot connect to database server");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД update для Prise \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” update РґР»СЏ Prise \n");
                     taLog.append("------------------------------------------------- \n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -6790,17 +6806,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         bbPriseSave.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         JFrame jfInfo = new JFrame();
-        JOptionPane.showMessageDialog(jfInfo, "Сохранение Прайс-Листа прошло успешно!");
+        JOptionPane.showMessageDialog(jfInfo, "РЎРѕС…СЂР°РЅРµРЅРёРµ РџСЂР°Р№СЃ-Р›РёСЃС‚Р° РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbPriseSaveActionPerformed
 
     private void bbNewTowarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbNewTowarActionPerformed
-        // Новый товар
+        // РќРѕРІС‹Р№ С‚РѕРІР°СЂ
         bbNewTowar.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Запуск соединения с БД prise для insert ...\n");
+            taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” prise РґР»СЏ insert ...\n");
 
             String sTowarNew = "\"" + tfTowarNewName.getText() + "\"";
             int id_group = cbPriseGroup.getSelectedIndex() + 1;
@@ -6822,17 +6838,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             stmt.executeUpdate(query);
             stmt.close();
 
-            taLog.append("Запрос insert для prise - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ insert РґР»СЏ prise - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Новый товар добавлен успешно!");
+            JOptionPane.showMessageDialog(jfInfo, "РќРѕРІС‹Р№ С‚РѕРІР°СЂ РґРѕР±Р°РІР»РµРЅ СѓСЃРїРµС€РЅРѕ!");
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.err.println("Cannot connect to database server");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД для inser for client \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РґР»СЏ inser for client \n");
                     taLog.append("------------------------------------------------- \n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -6851,27 +6867,27 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_bbNewTowarActionPerformed
 
     private void bbPriseZagruzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbPriseZagruzActionPerformed
-        //Загружаем Прайс-лист для редактирования
+        //Р—Р°РіСЂСѓР¶Р°РµРј РџСЂР°Р№СЃ-Р»РёСЃС‚ РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ
         bbPriseZagruz.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-        taLog.append("Позиция-00 ...\n");
+        taLog.append("РџРѕР·РёС†РёСЏ-00 ...\n");
 
         cbPriseGroup.removeAllItems();
 
-        taLog.append("Позиция-01 ...\n");
+        taLog.append("РџРѕР·РёС†РёСЏ-01 ...\n");
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Соединение с БД для prise прошло успешно ...\n");
-            taLog.append("Позиция-02 ...\n");
+            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ prise РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ ...\n");
+            taLog.append("РџРѕР·РёС†РёСЏ-02 ...\n");
 
             stmt = conn.createStatement();
 
             DefaultTableModel dtm = (DefaultTableModel) tabPrise.getModel();
-            //dtm.removeRow(0); //  Удаляем первую  строчку
-            dtm.getDataVector().removeAllElements(); // удаляем все строки
+            //dtm.removeRow(0); //  РЈРґР°Р»СЏРµРј РїРµСЂРІСѓСЋ  СЃС‚СЂРѕС‡РєСѓ
+            dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
             String query = "select artikul,id_group,name,cenaklient,ostat,realiz,prihod,tipgroup,sort,usluga from myservis.prise order by id_group,sort;";
             rs = stmt.executeQuery(query);
@@ -6924,14 +6940,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             stmt.close();
 
             cbPriseGroupActionPerformed(evt);
-            taLog.append("Запрос к prise - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ Рє prise - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.err.println("Cannot connect to database server");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД prise \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” prise \n");
                     taLog.append("-------------------------------------------------\n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -6958,7 +6974,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             tfKKTzapros.setText(textJSON);
 
             //taKKTlog.append(sTire70);
-            taKKTlog.append("Запрос:");
+            taKKTlog.append("Р—Р°РїСЂРѕСЃ:");
             taKKTlog.append(textJSON + "\n");
             taKKTlog.append(sTire70);
 
@@ -6986,7 +7002,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                     JSONParser jsonParser = new JSONParser();
                     JSONObject jsonObject = (JSONObject) jsonParser.parse(sOtwet);
-                    // получение строки из объекта
+                    // РїРѕР»СѓС‡РµРЅРёРµ СЃС‚СЂРѕРєРё РёР· РѕР±СЉРµРєС‚Р°
                     String sSessionKey = (String) jsonObject.get("sessionKey");
                     long sLong = (long) jsonObject.get("result");
                     String sResult = Long.toString(sLong);
@@ -7002,7 +7018,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     }
                     String sDescription = (String) jsonObject.get("description");
                     taKKTlog.append("Description:" + sDescription + "\n");
-                    taKKTlog.append("Сессия:" + sSession + "\n");
+                    taKKTlog.append("РЎРµСЃСЃРёСЏ:" + sSession + "\n");
 
                     System.out.println("     key     /rezult/Description");
                     System.out.println(sSessionKey + "/" + sResult + "/" + sDescription);
@@ -7012,13 +7028,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }        
-        taKKTlog.append("Запрос на открытие сессии с ККМ - выполнен успешно!\n" + sTire70);
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ РЅР° РѕС‚РєСЂС‹С‚РёРµ СЃРµСЃСЃРёРё СЃ РљРљРњ - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ!\n" + sTire70);
         
     }//GEN-LAST:event_bbKKTsessionOpenActionPerformed
 
     private void bbKKTdraiverTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTdraiverTestActionPerformed
         // TODO add your handling code here:
-        taKKTlog.append("Запрос связи с драйвером ККМ Incerman ...\n");
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ СЃРІСЏР·Рё СЃ РґСЂР°Р№РІРµСЂРѕРј РљРљРњ Incerman ...\n");
         try {
             URL urlKKT = new URL(httpKKM);
             textJSON = "{\"command\": \"GetDriverInfo\"}";
@@ -7044,7 +7060,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }
-        taKKTlog.append("Запрос связи с драйвером ККМ Incerman - выполнен успешно!" + sTire70);
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ СЃРІСЏР·Рё СЃ РґСЂР°Р№РІРµСЂРѕРј РљРљРњ Incerman - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ!" + sTire70);
     }//GEN-LAST:event_bbKKTdraiverTestActionPerformed
 
     private void bbKKTsessionCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTsessionCloseActionPerformed
@@ -7053,7 +7069,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             textJSON = "{\"sessionKey\": \"" + sessionKey + "\",\"command\": \"CloseSession\"}";
             tfKKTzapros.setText(textJSON);
 
-            taKKTlog.append("Запрос:");
+            taKKTlog.append("Р—Р°РїСЂРѕСЃ:");
             taKKTlog.append(textJSON + "\n");
             taKKTlog.append(sTire70);
 
@@ -7080,7 +7096,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                     JSONParser jsonParser = new JSONParser();
                     JSONObject jsonObject = (JSONObject) jsonParser.parse(sOtwet);
-                    // получение строки из объекта
+                    // РїРѕР»СѓС‡РµРЅРёРµ СЃС‚СЂРѕРєРё РёР· РѕР±СЉРµРєС‚Р°
                     long sLong = (long) jsonObject.get("result");
                     String sResult = Long.toString(sLong);
                     String sDescription = (String) jsonObject.get("description");
@@ -7102,7 +7118,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (IOException e) {}
-        taKKTlog.append("Запрос на закрытие сессии с ККМ - выполнен успешно!\n");
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ РЅР° Р·Р°РєСЂС‹С‚РёРµ СЃРµСЃСЃРёРё СЃ РљРљРњ - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ!\n");
     }//GEN-LAST:event_bbKKTsessionCloseActionPerformed
 
     private void bbKKTopenSmenaTotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTopenSmenaTotActionPerformed
@@ -7115,7 +7131,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             taKKTlog.setText(null);
             taKKTlog.append(sTire99);
             String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-            taKKTlog.append("Версия программы: "+sVersionProg+" Прошло времени, сек: " + deltaTime + "   Дата: " + sDateTimeTek + " Запрос на Отрытие смены:\n");
+            taKKTlog.append("Р’РµСЂСЃРёСЏ РїСЂРѕРіСЂР°РјРјС‹: "+sVersionProg+" РџСЂРѕС€Р»Рѕ РІСЂРµРјРµРЅРё, СЃРµРє: " + deltaTime + "   Р”Р°С‚Р°: " + sDateTimeTek + " Р—Р°РїСЂРѕСЃ РЅР° РћС‚СЂС‹С‚РёРµ СЃРјРµРЅС‹:\n");
             taKKTlog.append(sTire99);
 
             bbKKTsessionOpenActionPerformed(evt);
@@ -7134,7 +7150,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             }
         } else {
-            taInfoMain.append("Между запросами должно пройти не менее 5 сек. Прошло: " + deltaTime + " сек.\n");
+            taInfoMain.append("РњРµР¶РґСѓ Р·Р°РїСЂРѕСЃР°РјРё РґРѕР»Р¶РЅРѕ РїСЂРѕР№С‚Рё РЅРµ РјРµРЅРµРµ 5 СЃРµРє. РџСЂРѕС€Р»Рѕ: " + deltaTime + " СЃРµРє.\n");
         }
         bbKKTopenSmenaTot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_bbKKTopenSmenaTotActionPerformed
@@ -7149,7 +7165,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             taKKTlog.setText(null);
             taKKTlog.append(sTire99);
             String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-            taKKTlog.append("Версия программы: "+sVersionProg+" Прошло времени, сек: " + deltaTime + "   Дата: " + sDateTimeTek + "Запрос на Закрытие смены:\n");
+            taKKTlog.append("Р’РµСЂСЃРёСЏ РїСЂРѕРіСЂР°РјРјС‹: "+sVersionProg+" РџСЂРѕС€Р»Рѕ РІСЂРµРјРµРЅРё, СЃРµРє: " + deltaTime + "   Р”Р°С‚Р°: " + sDateTimeTek + "Р—Р°РїСЂРѕСЃ РЅР° Р—Р°РєСЂС‹С‚РёРµ СЃРјРµРЅС‹:\n");
             taKKTlog.append(sTire99);
 
             bbKKTsessionOpenActionPerformed(evt);
@@ -7167,7 +7183,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 }
             }
         } else {
-            taInfoMain.append("Между запросами должно пройти не менее 5 сек. Прошло: " + deltaTime + " сек.\n");
+            taInfoMain.append("РњРµР¶РґСѓ Р·Р°РїСЂРѕСЃР°РјРё РґРѕР»Р¶РЅРѕ РїСЂРѕР№С‚Рё РЅРµ РјРµРЅРµРµ 5 СЃРµРє. РџСЂРѕС€Р»Рѕ: " + deltaTime + " СЃРµРє.\n");
         }
         bbKKTcloseSmenaTot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_bbKKTcloseSmenaTotActionPerformed
@@ -7181,7 +7197,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             taKKTlog.setText(null);
             taKKTlog.append(sTire99);
             String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-            taKKTlog.append("Прошло времени, сек: " + deltaTime + "   Дата: " + sDateTimeTek + " Запрос на проверку статуса:\n");
+            taKKTlog.append("РџСЂРѕС€Р»Рѕ РІСЂРµРјРµРЅРё, СЃРµРє: " + deltaTime + "   Р”Р°С‚Р°: " + sDateTimeTek + " Р—Р°РїСЂРѕСЃ РЅР° РїСЂРѕРІРµСЂРєСѓ СЃС‚Р°С‚СѓСЃР°:\n");
             taKKTlog.append(sTire99);
 
             bbKKTsessionOpenActionPerformed(evt);
@@ -7200,7 +7216,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 }
             }
         } else {
-            taInfoMain.append("Между запросами должно пройти не менее 5 сек. Прошло: " + deltaTime + " сек.\n");
+            taInfoMain.append("РњРµР¶РґСѓ Р·Р°РїСЂРѕСЃР°РјРё РґРѕР»Р¶РЅРѕ РїСЂРѕР№С‚Рё РЅРµ РјРµРЅРµРµ 5 СЃРµРє. РџСЂРѕС€Р»Рѕ: " + deltaTime + " СЃРµРє.\n");
         }
         bbKKTprintText.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
@@ -7216,7 +7232,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             taKKTlog.setText(null);
             taKKTlog.append(sTire99);
             String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-            taKKTlog.append("Прошло времени, сек: " + deltaTime + "   Дата: " + sDateTimeTek + " Запрос на Добрый день:\n");
+            taKKTlog.append("РџСЂРѕС€Р»Рѕ РІСЂРµРјРµРЅРё, СЃРµРє: " + deltaTime + "   Р”Р°С‚Р°: " + sDateTimeTek + " Р—Р°РїСЂРѕСЃ РЅР° Р”РѕР±СЂС‹Р№ РґРµРЅСЊ:\n");
             taKKTlog.append(sTire99);
 
             bbKKTsessionOpenActionPerformed(evt);
@@ -7236,7 +7252,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 }
             }
         } else {
-            taInfoMain.append("Между запросами должно пройти не менее 5 сек. Прошло: " + deltaTime + " сек.\n");
+            taInfoMain.append("РњРµР¶РґСѓ Р·Р°РїСЂРѕСЃР°РјРё РґРѕР»Р¶РЅРѕ РїСЂРѕР№С‚Рё РЅРµ РјРµРЅРµРµ 5 СЃРµРє. РџСЂРѕС€Р»Рѕ: " + deltaTime + " СЃРµРє.\n");
         }
         bbKKTprintText.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_bbKKTprintTextActionPerformed
@@ -7287,32 +7303,32 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             tfKKTzapros.setText(textJSON);
             taKKTlog.append(sTire70);
-            taKKTlog.append("Запрос:");
+            taKKTlog.append("Р—Р°РїСЂРѕСЃ:");
             taKKTlog.append(textJSON);
             taKKTlog.append(sTire70);
 
             try (DataOutputStream dos = new DataOutputStream(connKKT.getOutputStream())) {
-                //dos.writeBytes(textJSON2); - не работает
-                //dos.writeBytes(value);  // Без кирилиицы работает
+                //dos.writeBytes(textJSON2); - РЅРµ СЂР°Р±РѕС‚Р°РµС‚
+                //dos.writeBytes(value);  // Р‘РµР· РєРёСЂРёР»РёРёС†С‹ СЂР°Р±РѕС‚Р°РµС‚
                 //dos.writeUTF(value);
                 //dos.writeChars(textJSON);
                 //dos.writeUTF("nom_sc=1069000000&lcod=5159&text="+new String(tfKKTtext.getText().getBytes("UTF-8"), StandardCharsets.UTF_8));
-                //dos.writeUTF("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" +new String("Добрый день!".getBytes("UTF-8"), StandardCharsets.UTF_8)+ "\"}");
+                //dos.writeUTF("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" +new String("Р”РѕР±СЂС‹Р№ РґРµРЅСЊ!".getBytes("UTF-8"), StandardCharsets.UTF_8)+ "\"}");
 
-                //dos.writeUTF(value);      // - не работает
-                //dos.writeChars(value);    // - не работает                
-                //dos.writeUTF(textJSON);  // - не работает
+                //dos.writeUTF(value);      // - РЅРµ СЂР°Р±РѕС‚Р°РµС‚
+                //dos.writeChars(value);    // - РЅРµ СЂР°Р±РѕС‚Р°РµС‚                
+                //dos.writeUTF(textJSON);  // - РЅРµ СЂР°Р±РѕС‚Р°РµС‚
                 //String str = encodeURI(JSON.stringify(json));
                 //encodeURI
                 //URLDecoder.decode(title, "UTF-8")
                 //URLEncoder.encode(URL, "UTF-8");
-                //dos.writeBytes(URLEncoder.encode(textJSON,"UTF8"));  // не  работает
-                //dos.writeUTF(URLEncoder.encode(textJSON,"UTF8"));  // не  работает
+                //dos.writeBytes(URLEncoder.encode(textJSON,"UTF8"));  // РЅРµ  СЂР°Р±РѕС‚Р°РµС‚
+                //dos.writeUTF(URLEncoder.encode(textJSON,"UTF8"));  // РЅРµ  СЂР°Р±РѕС‚Р°РµС‚
                 //String str = "Privet";
                 //String str = "\\u0436\\u0430\\u0440\\u043A\\u043E";                                
                 String str2 = "";
                 String str22 = "";
-                String inString = "ПриветМир";
+                String inString = "РџСЂРёРІРµС‚РњРёСЂ";
                 for (int i = 0; i < inString.length(); i++) {
                     Integer charCode = (int) inString.charAt(i);
                     str22 = Integer.toHexString(charCode);
@@ -7321,13 +7337,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                 //str2="\\u041f\\u0440\\u0438\\u0432\\u0435\\u0442  \\u041c\\u0438\\u0440";
                 System.out.println(str2);
-                dos.writeBytes("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" + str2 + "\"}");  // Без кирилиицы работает
+                dos.writeBytes("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" + str2 + "\"}");  // Р‘РµР· РєРёСЂРёР»РёРёС†С‹ СЂР°Р±РѕС‚Р°РµС‚
 
                 //encode string into URI format
-                //String transportString = URLEncoder.encode("Добрый день", "UTF-8");
+                //String transportString = URLEncoder.encode("Р”РѕР±СЂС‹Р№ РґРµРЅСЊ", "UTF-8");
                 //String decodedString = URLDecoder.decode(transportString, "UTF-8");                
-                //dos.writeBytes("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" +decodedString+ "\"}");  // Без кирилиицы работает
-                //dos.writeByte("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" +URLDecoder.decode(tfKKTtext.getText(), "UTF-8")+ "\"}");  // Без кирилиицы работает                                
+                //dos.writeBytes("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" +decodedString+ "\"}");  // Р‘РµР· РєРёСЂРёР»РёРёС†С‹ СЂР°Р±РѕС‚Р°РµС‚
+                //dos.writeByte("{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" +URLDecoder.decode(tfKKTtext.getText(), "UTF-8")+ "\"}");  // Р‘РµР· РєРёСЂРёР»РёРёС†С‹ СЂР°Р±РѕС‚Р°РµС‚                                
             }
 
             try (BufferedReader br = new BufferedReader(new InputStreamReader(connKKT.getInputStream(), "UTF-8"))) {
@@ -7341,14 +7357,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }
-        taKKTlog.append("Запрос Добрый день - выполнен успешно!" + sTire70);
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ Р”РѕР±СЂС‹Р№ РґРµРЅСЊ - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ!" + sTire70);
 
     }//GEN-LAST:event_bbKKTdobriyTestActionPerformed
 
     private void bbZakazZakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbZakazZakActionPerformed
         // TODO add your handling code here:
         //DefaultTableModel dtm2 = (DefaultTableModel) tabZakaz.getModel();
-        //dtm2.getDataVector().removeAllElements(); // удаляем все строки
+        //dtm2.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
         tfKlientZakazLCod.setText("");
         tfKlientZakazSCod.setText("");
         tfKlientZakazFIO.setText("");
@@ -7365,7 +7381,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
 
         //DefaultTableModel dtm1 = (DefaultTableModel) tabTowar.getModel();
-        //dtm1.getDataVector().removeAllElements(); // удаляем все строки
+        //dtm1.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
         tfKlientPriseFIO.setText("");
         tfKlientPriseLCod.setText("");
         tfKlientPriseSCod.setText("");
@@ -7377,18 +7393,18 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private void panKassaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_panKassaAncestorAdded
         // TODO add your handling code here:
         cbKassaMon.removeAllItems();
-        cbKassaMon.addItem("Январь");
-        cbKassaMon.addItem("Февраль");
-        cbKassaMon.addItem("Март");
-        cbKassaMon.addItem("Апрель");
-        cbKassaMon.addItem("Май");
-        cbKassaMon.addItem("Июнь");
-        cbKassaMon.addItem("Июль");
-        cbKassaMon.addItem("Август");
-        cbKassaMon.addItem("Сентябрь");
-        cbKassaMon.addItem("Октябрь");
-        cbKassaMon.addItem("Ноябрь");
-        cbKassaMon.addItem("Декабрь");
+        cbKassaMon.addItem("РЇРЅРІР°СЂСЊ");
+        cbKassaMon.addItem("Р¤РµРІСЂР°Р»СЊ");
+        cbKassaMon.addItem("РњР°СЂС‚");
+        cbKassaMon.addItem("РђРїСЂРµР»СЊ");
+        cbKassaMon.addItem("РњР°Р№");
+        cbKassaMon.addItem("РСЋРЅСЊ");
+        cbKassaMon.addItem("РСЋР»СЊ");
+        cbKassaMon.addItem("РђРІРіСѓСЃС‚");
+        cbKassaMon.addItem("РЎРµРЅС‚СЏР±СЂСЊ");
+        cbKassaMon.addItem("РћРєС‚СЏР±СЂСЊ");
+        cbKassaMon.addItem("РќРѕСЏР±СЂСЊ");
+        cbKassaMon.addItem("Р”РµРєР°Р±СЂСЊ");
         cbKassaMon.setMaximumRowCount(12);
 
         String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
@@ -7448,19 +7464,19 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         if (God < 2023) {
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Год менее 2023!");
+            JOptionPane.showMessageDialog(jfInfo, "Р“РѕРґ РјРµРЅРµРµ 2023!");
         } else {
             if (God > 2033) {
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Год более 2033!");
+                JOptionPane.showMessageDialog(jfInfo, "Р“РѕРґ Р±РѕР»РµРµ 2033!");
             } else {
                 if (Dat < 1) {
                     JFrame jfInfo = new JFrame();
-                    JOptionPane.showMessageDialog(jfInfo, "Не правильно задана дата!");
+                    JOptionPane.showMessageDialog(jfInfo, "РќРµ РїСЂР°РІРёР»СЊРЅРѕ Р·Р°РґР°РЅР° РґР°С‚Р°!");
                 } else {
                     if (Dat > 31) {
                         JFrame jfInfo = new JFrame();
-                        JOptionPane.showMessageDialog(jfInfo, "Дата более, чем 31!");
+                        JOptionPane.showMessageDialog(jfInfo, "Р”Р°С‚Р° Р±РѕР»РµРµ, С‡РµРј 31!");
                     } else {
 
                         bbKassaOtchet.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -7468,16 +7484,16 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
                             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-                            taLog.append("Соединение с БД для касса прошло успешно ...\n");
+                            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ РєР°СЃСЃР° РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ ...\n");
 
                             int sumNalTotNal = 0;
                             int sumNalTotQr = 0;
 
                             DefaultTableModel dtm = (DefaultTableModel) tabKasPrihod.getModel();
-                            dtm.getDataVector().removeAllElements(); // удаляем все строки
+                            dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
                             DefaultTableModel dtm2 = (DefaultTableModel) tabKasRashod.getModel();
-                            dtm2.getDataVector().removeAllElements(); // удаляем все строки
+                            dtm2.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
                             String sGod = tfKassaGod.getText();
                             String sDat;
@@ -7490,27 +7506,27 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                             if (chKassaOtchetMon.isSelected()) {
                                 String sDatePred = sGod + "-" + sMon + "-01";
-                                // Приход
+                                // РџСЂРёС…РѕРґ
                                 //query1 = "select date_kas,lcod,fio,sum_nal,sum_gr,tip_chek,isp,id_zak,prim from myservis.kassa where MONTH(date_kas) = \"" + sMon + "\"     AND tip_kas=1 order by date_kas";
                                 query1 = "select date_kas,lcod,fio,sum_nal,sum_gr,tip_chek,isp,id_zak,prim from myservis.kassa where MONTH(date_kas) = \"" + sMon + "\" AND  YEAR(date_kas) = \"" + sGod + "\" AND tip_kas=1 order by date_kas";
-                                // Расход
+                                // Р Р°СЃС…РѕРґ
                                 query2 = "select date_kas,lcod,fio,sum_nal,sum_gr,tip_chek,isp,id_zak,prim from myservis.kassa where MONTH(date_kas) = \"" + sMon + "\" AND  YEAR(date_kas) = \"" + sGod + "\" AND tip_kas=2 order by date_kas";
-                                // Расчет сумм
+                                // Р Р°СЃС‡РµС‚ СЃСѓРјРј
                                 query3 = "select sum_nal,tip_kas from myservis.kassa where (date_kas < \"" + sDatePred + "\") order by date_kas";
                             } else {
                                 sDat = tfKassaDat.getText();
                                 sDateTek = sGod + "-" + sMon + "-" + sDat;
-                                // Приход
+                                // РџСЂРёС…РѕРґ
                                 query1 = "select date_kas,lcod,fio,sum_nal,sum_gr,tip_chek,isp,id_zak,prim from myservis.kassa where  date(date_kas) = \"" + sDateTek + "\" AND tip_kas=1 order by date_kas";
-                                // Расход
+                                // Р Р°СЃС…РѕРґ
                                 query2 = "select date_kas,lcod,fio,sum_nal,sum_gr,tip_chek,isp,prim from myservis.kassa where  date(date_kas) = \"" + sDateTek + "\"  AND tip_kas=2 order by date_kas";
-                                // Расчет сумм
+                                // Р Р°СЃС‡РµС‚ СЃСѓРјРј
                                 query3 = "select sum_nal,tip_kas from myservis.kassa where (date_kas < \"" + sDateTek + "\") order by date_kas";
                             }
 
                             //String query = "select date_kas,lcod,fio,sum_nal,sum_gr,tip_chek,isp,id_zak from myservis.kassa where (date_kas BETWEEN \"" + sDate1 + "\" AND \"" + sDate2 + "\") " 
                             stmt = conn.createStatement();
-                            rs = stmt.executeQuery(query1);    // Выбираем приход
+                            rs = stmt.executeQuery(query1);    // Р’С‹Р±РёСЂР°РµРј РїСЂРёС…РѕРґ
                             int i = 0;
                             while (rs.next()) {
                                 i = i + 1;
@@ -7532,7 +7548,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                                     stip_chek = "-";
                                 }
                                 if (tip_chek == 0) {
-                                    stip_chek = "в";
+                                    stip_chek = "РІ";
                                 }
 
                                 dtm.addRow(new Object[]{i, date_kas, lcod, fio, sum_nal, sum_gr, stip_chek, id_zak, isp, sPrim});
@@ -7550,7 +7566,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                             //query = "select date_kas,lcod,fio,sum_nal,sum_gr,tip_chek,isp from myservis.kassa where (date_kas BETWEEN \"" + sDate1 + "\" AND \"" + sDate2 + "\") "  
                             //+" AND tip_kas=2 order by date_kas";
                             
-                            rs = stmt.executeQuery(query2);  // Выбираем расход
+                            rs = stmt.executeQuery(query2);  // Р’С‹Р±РёСЂР°РµРј СЂР°СЃС…РѕРґ
                             int k = 0;
                             while (rs.next()) {
                                 k = k + 1;
@@ -7570,7 +7586,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                             int sumNalTotPrihod2 = 0;
                             int sumNalTotRashod2 = 0;
 
-                            rs = stmt.executeQuery(query3);  // Считае суммы
+                            rs = stmt.executeQuery(query3);  // РЎС‡РёС‚Р°Рµ СЃСѓРјРјС‹
 
                             while (rs.next()) {
                                 int tip_kas = rs.getInt("tip_kas");
@@ -7591,10 +7607,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                             tfKassaTek.setText(Integer.toString(sumNalTotPrihod2 - sumNalTotRashod2 + sumNalTotNal - sumNalTotRashod));
 
-                            taLog.append("Запрос к kassa - выполнен успешно \n");
+                            taLog.append("Р—Р°РїСЂРѕСЃ Рє kassa - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
                             if (i == 0) {
-                                dtm.getDataVector().removeAllElements(); // удаляем все строки
+                                dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
                                 dtm.addRow(new Object[]{"", "", "", "", "", "", "", "", ""});
                                 bbKassaCSV.setEnabled(false);
                                 bbKassaExcel.setEnabled(false);
@@ -7604,7 +7620,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                             }
 
                             if (k == 0) {
-                                dtm2.getDataVector().removeAllElements(); // удаляем все строки
+                                dtm2.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
                                 dtm2.addRow(new Object[]{"", "", "", "", "", "", ""});
                                 //bbBDzakazSave.setEnabled(false);
                             } else {
@@ -7612,11 +7628,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                             }
 
                             if (i == 0) {
-                                JOptionPane.showMessageDialog(new JFrame(), "Заказов за выбранный день не обнаружено!");
+                                JOptionPane.showMessageDialog(new JFrame(), "Р—Р°РєР°Р·РѕРІ Р·Р° РІС‹Р±СЂР°РЅРЅС‹Р№ РґРµРЅСЊ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅРѕ!");
                             }
 
                             if (k == 0) {
-                                JOptionPane.showMessageDialog(new JFrame(), "Расходов за выбранный день не обнаружено!");
+                                JOptionPane.showMessageDialog(new JFrame(), "Р Р°СЃС…РѕРґРѕРІ Р·Р° РІС‹Р±СЂР°РЅРЅС‹Р№ РґРµРЅСЊ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅРѕ!");
                             }
 
                         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
@@ -7624,7 +7640,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                         } finally {
                             if (conn != null) {
                                 try {
-                                    taLog.append("Завершение запроса к БД kassa \n");
+                                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” kassa \n");
                                     taLog.append("-------------------------------------------------\n");
                                     System.out.println("n***** Let terminate the Connection *****");
                                     conn.close();
@@ -7645,10 +7661,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbKassaRashodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKassaRashodActionPerformed
         // TODO add your handling code here:
-        JFrame frameRashod = new JFrame("Расход из Кассы");
+        JFrame frameRashod = new JFrame("Р Р°СЃС…РѕРґ РёР· РљР°СЃСЃС‹");
         frameRashod.setBounds(100, 170, 860, 300);
 
-        //JOptionPane.showMessageDialog(jfInfo, "Успешно!");
+        //JOptionPane.showMessageDialog(jfInfo, "РЈСЃРїРµС€РЅРѕ!");
         JPanel panRashod = new JPanel();
         panRashod.setLayout(new BorderLayout());
         panRashod.setLayout(null);
@@ -7659,7 +7675,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         tfRarhodSumma.setBounds(20, 50, 140, 38);
         tfRarhodSumma.setFont(new java.awt.Font("Segoe UI", 0, 22));
         tfRarhodSumma.setForeground(new java.awt.Color(0, 0, 153));
-        JLabel lbRarhodSumma = new JLabel("Сумма расхода");
+        JLabel lbRarhodSumma = new JLabel("РЎСѓРјРјР° СЂР°СЃС…РѕРґР°");
         lbRarhodSumma.setBounds(25, 20, 140, 34);
         lbRarhodSumma.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lbRarhodSumma.setForeground(new java.awt.Color(0, 0, 153));
@@ -7668,18 +7684,18 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         tfRashodFIO.setBounds(180, 50, 380, 38);
         tfRashodFIO.setFont(new java.awt.Font("Segoe UI", 0, 22));
         tfRashodFIO.setForeground(new java.awt.Color(0, 0, 153));
-        JLabel lbRarhodFIO = new JLabel("ФИО на кого оформить расход");
+        JLabel lbRarhodFIO = new JLabel("Р¤РРћ РЅР° РєРѕРіРѕ РѕС„РѕСЂРјРёС‚СЊ СЂР°СЃС…РѕРґ");
         lbRarhodFIO.setBounds(185, 20, 380, 34);
         lbRarhodFIO.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lbRarhodFIO.setForeground(new java.awt.Color(0, 0, 153));
 
-        JButton bbRashod = new JButton("Произвести расход");
+        JButton bbRashod = new JButton("РџСЂРѕРёР·РІРµСЃС‚Рё СЂР°СЃС…РѕРґ");
         bbRashod.setBounds(580, 50, 220, 38);
         bbRashod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbRashod.setForeground(new java.awt.Color(0, 0, 153));
         bbRashod.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        JLabel lbRarhodPrim = new JLabel("Примечание:");
+        JLabel lbRarhodPrim = new JLabel("РџСЂРёРјРµС‡Р°РЅРёРµ:");
         lbRarhodPrim.setBounds(25, 100, 140, 34);
         lbRarhodPrim.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lbRarhodPrim.setForeground(new java.awt.Color(0, 0, 153));
@@ -7709,7 +7725,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                     conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
 
-                    taLog.append("Запуск соединения с БД для insert в kassa ... \n");
+                    taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” РґР»СЏ insert РІ kassa ... \n");
 
                     stmt = conn.createStatement();
 
@@ -7725,7 +7741,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 } finally {
                     if (conn != null) {
                         try {
-                            taLog.append("Завершение запроса к БД после добавление расхода в кассу \n");
+                            taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РїРѕСЃР»Рµ РґРѕР±Р°РІР»РµРЅРёРµ СЂР°СЃС…РѕРґР° РІ РєР°СЃСЃСѓ \n");
                             taLog.append("------------------------------------------------- \n");
                             System.out.println("n***** Let terminate the Connection *****");
                             conn.close();
@@ -7735,9 +7751,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                         }
                     }
                 }
-                taLog.append("Запрос update для kassa - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ kassa - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
                 JFrame jfInfo = new JFrame();
-                JOptionPane.showMessageDialog(jfInfo, "Расход по Кассе добавлен успешно!");
+                JOptionPane.showMessageDialog(jfInfo, "Р Р°СЃС…РѕРґ РїРѕ РљР°СЃСЃРµ РґРѕР±Р°РІР»РµРЅ СѓСЃРїРµС€РЅРѕ!");
             }
 
         });
@@ -7756,10 +7772,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbKassaPrihodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKassaPrihodActionPerformed
         // TODO add your handling code here:
-        JFrame framePrihod = new JFrame("Приход в Кассу");
+        JFrame framePrihod = new JFrame("РџСЂРёС…РѕРґ РІ РљР°СЃСЃСѓ");
         framePrihod.setBounds(100, 170, 860, 300);
 
-        //JOptionPane.showMessageDialog(jfInfo, "Успешно!");
+        //JOptionPane.showMessageDialog(jfInfo, "РЈСЃРїРµС€РЅРѕ!");
         JPanel panPrihod = new JPanel();
         panPrihod.setLayout(new BorderLayout());
         panPrihod.setLayout(null);
@@ -7770,7 +7786,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         tfPrihodSumma.setBounds(20, 50, 140, 38);
         tfPrihodSumma.setFont(new java.awt.Font("Segoe UI", 0, 22));
         tfPrihodSumma.setForeground(new java.awt.Color(0, 0, 153));
-        JLabel lbPrihodSumma = new JLabel("Сумма прихода");
+        JLabel lbPrihodSumma = new JLabel("РЎСѓРјРјР° РїСЂРёС…РѕРґР°");
         lbPrihodSumma.setBounds(25, 20, 140, 34);
         lbPrihodSumma.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lbPrihodSumma.setForeground(new java.awt.Color(0, 0, 153));
@@ -7779,18 +7795,18 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         tfPrihodFIO.setBounds(180, 50, 380, 38);
         tfPrihodFIO.setFont(new java.awt.Font("Segoe UI", 0, 22));
         tfPrihodFIO.setForeground(new java.awt.Color(0, 0, 153));
-        JLabel lbPrihodFIO = new JLabel("ФИО от кого оформить приход");
+        JLabel lbPrihodFIO = new JLabel("Р¤РРћ РѕС‚ РєРѕРіРѕ РѕС„РѕСЂРјРёС‚СЊ РїСЂРёС…РѕРґ");
         lbPrihodFIO.setBounds(185, 20, 380, 34);
         lbPrihodFIO.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lbPrihodFIO.setForeground(new java.awt.Color(0, 0, 153));
 
-        JButton bbPrihod = new JButton("Произвести приход");
+        JButton bbPrihod = new JButton("РџСЂРѕРёР·РІРµСЃС‚Рё РїСЂРёС…РѕРґ");
         bbPrihod.setBounds(580, 50, 220, 38);
         bbPrihod.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         bbPrihod.setForeground(new java.awt.Color(0, 0, 153));
         bbPrihod.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        JLabel lbPrihodPrim = new JLabel("Примечание:");
+        JLabel lbPrihodPrim = new JLabel("РџСЂРёРјРµС‡Р°РЅРёРµ:");
         lbPrihodPrim.setBounds(25, 100, 140, 34);
         lbPrihodPrim.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lbPrihodPrim.setForeground(new java.awt.Color(0, 0, 153));
@@ -7820,7 +7836,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                     conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
 
-                    taLog.append("Запуск соединения с БД для insert в kassa ... \n");
+                    taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” РґР»СЏ insert РІ kassa ... \n");
 
                     stmt = conn.createStatement();
 
@@ -7836,7 +7852,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 } finally {
                     if (conn != null) {
                         try {
-                            taLog.append("Завершение запроса к БД после добавление прихода в кассу \n");
+                            taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РїРѕСЃР»Рµ РґРѕР±Р°РІР»РµРЅРёРµ РїСЂРёС…РѕРґР° РІ РєР°СЃСЃСѓ \n");
                             taLog.append("------------------------------------------------- \n");
                             System.out.println("n***** Let terminate the Connection *****");
                             conn.close();
@@ -7846,8 +7862,8 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                         }
                     }
                 }
-                taLog.append("Запрос insert для kassa - выполнен успешно \n");
-                JOptionPane.showMessageDialog(new JFrame(), "Приход по Кассе добавлен успешно!");
+                taLog.append("Р—Р°РїСЂРѕСЃ insert РґР»СЏ kassa - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
+                JOptionPane.showMessageDialog(new JFrame(), "РџСЂРёС…РѕРґ РїРѕ РљР°СЃСЃРµ РґРѕР±Р°РІР»РµРЅ СѓСЃРїРµС€РЅРѕ!");
             }
 
         });
@@ -7872,11 +7888,11 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             sDat = tfKassaGod.getText() + "_" + Integer.toString(cbKassaMon.getSelectedIndex() + 1) + "_" + tfKassaDat.getText();
         }
 
-        String nameFiles = "temp\\Кassa_" + sDat + ".csv";
+        String nameFiles = "temp\\Рљassa_" + sDat + ".csv";
 
-        String fText = "Дата;" + sDat + ";;Сумма на начало дня:;" + tfKassaOstatok.getText() + ";;;;;\n\n";
-        fText +="Приход:;;;;;;;;;\n";
-        fText +="№ пп;Дата;Личный Id;ФИО;Сумма Нал;Сумма QR-код;Чек;№ нак.;Исполнитель;Примечание;\n";
+        String fText = "Р”Р°С‚Р°;" + sDat + ";;РЎСѓРјРјР° РЅР° РЅР°С‡Р°Р»Рѕ РґРЅСЏ:;" + tfKassaOstatok.getText() + ";;;;;\n\n";
+        fText +="РџСЂРёС…РѕРґ:;;;;;;;;;\n";
+        fText +="в„– РїРї;Р”Р°С‚Р°;Р›РёС‡РЅС‹Р№ Id;Р¤РРћ;РЎСѓРјРјР° РќР°Р»;РЎСѓРјРјР° QR-РєРѕРґ;Р§РµРє;в„– РЅР°Рє.;РСЃРїРѕР»РЅРёС‚РµР»СЊ;РџСЂРёРјРµС‡Р°РЅРёРµ;\n";
 
         for (int i = 0; i < tabKasPrihod.getRowCount(); i++) {
             for (int k = 0; k < 10; k++) {
@@ -7885,7 +7901,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             fText +="\n";
         }
         fText +=";;;;" + tfKasPrihodNal.getText() + ";" + tfKasPrihodQR.getText() + ";;;;;\n\n";
-        fText +="Расход:;;;;;;;;;;\n";
+        fText +="Р Р°СЃС…РѕРґ:;;;;;;;;;;\n";
 
         for (int i = 0; i < tabKasRashod.getRowCount(); i++) {
             for (int k = 0; k < 5; k++) {
@@ -7896,7 +7912,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
         fText +=";;;;" + tfKasRashod.getText() + ";;;;;;\n\n";
 
-        fText +=";;;Сумма на конец дня:;" + tfKassaTek.getText() + ";;;;;;\n";
+        fText +=";;;РЎСѓРјРјР° РЅР° РєРѕРЅРµС† РґРЅСЏ:;" + tfKassaTek.getText() + ";;;;;;\n";
 
         try {
             File file = new File(nameFiles);
@@ -7908,17 +7924,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 writer.close();
 
             } catch (IOException e) {
-                System.out.println("Ошибка-1 при записи в файл");
-                taLog.append("Ошибка-1 при записи в файл \n");
+                System.out.println("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+                taLog.append("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
             }
 
-            System.out.println("Текст успешно записан в файл.");
+            System.out.println("РўРµРєСЃС‚ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ РІ С„Р°Р№Р».");
         } catch (IOException e) {
-            System.out.println("Ошибка-2 при записи в файл");
-            taLog.append("Ошибка-2 при записи в файл \n");
+            System.out.println("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+            taLog.append("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
         }
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");        
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");        
     }//GEN-LAST:event_bbKassaCSVActionPerformed
 
     private void chKassaOtchetMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chKassaOtchetMonActionPerformed
@@ -7926,10 +7942,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_chKassaOtchetMonActionPerformed
 
     private void bbUslugaOtchetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbUslugaOtchetActionPerformed
-        //Загружаем услуги
+        //Р—Р°РіСЂСѓР¶Р°РµРј СѓСЃР»СѓРіРё
         if ("".equals(tfUslugaLCod.getText())) {
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Необходимо обязательно выбрать Клиента");
+            JOptionPane.showMessageDialog(jfInfo, "РќРµРѕР±С…РѕРґРёРјРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РІС‹Р±СЂР°С‚СЊ РљР»РёРµРЅС‚Р°");
         } else {
 
             bbUslugaOtchet.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -7944,10 +7960,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
                 conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-                taLog.append("Соединение с БД для таблицы uslugi прошло успешно ...\n");
+                taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ С‚Р°Р±Р»РёС†С‹ uslugi РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ ...\n");
 
                 DefaultTableModel dtm = (DefaultTableModel) tabUslugi.getModel();
-                dtm.getDataVector().removeAllElements(); // удаляем все строки
+                dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
                 /*
             String sGod = tfBDZakazGod.getText();
@@ -7968,7 +7984,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 String sDat2 = Integer.toString(mDat2 + 1);
                 sDate2 = sGod + "-" + sMon + "-" + sDat2;
 
-                jTextArea1.append("(Дата) ...\n");
+                jTextArea1.append("(Р”Р°С‚Р°) ...\n");
                 jTextArea1.append("sDate1:" + sDate1 + " ...\n");
                 jTextArea1.append("sDate2:" + sDate2 + " ...\n");
 
@@ -8008,12 +8024,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 rs.close();
                 stmt.close();
 
-                taLog.append("Запрос к usligi - выполнен успешно \n");
+                taLog.append("Р—Р°РїСЂРѕСЃ Рє usligi - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
                 if (i == 0) {
-                    dtm.getDataVector().removeAllElements(); // удаляем все строки
+                    dtm.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
                     dtm.addRow(new Object[]{"", "", "", "", "", "", "", "", "", ""});
                     JFrame jfInfo = new JFrame();
-                    JOptionPane.showMessageDialog(jfInfo, "Услуг не обнаружено!");
+                    JOptionPane.showMessageDialog(jfInfo, "РЈСЃР»СѓРі РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅРѕ!");
                     bbUslugaCSV.setEnabled(false);
                     bbUslugaZak.setEnabled(false);
                     bbSaveXLS.setEnabled(false);
@@ -8028,7 +8044,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             } finally {
                 if (conn != null) {
                     try {
-                        taLog.append("Завершение запроса к таблице uslugi \n");
+                        taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє С‚Р°Р±Р»РёС†Рµ uslugi \n");
                         taLog.append("-------------------------------------------------\n");
                         System.out.println("n***** Let terminate the Connection *****");
                         conn.close();
@@ -8044,8 +8060,8 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     private void bbUslugaCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbUslugaCSVActionPerformed
         String nameFiles = "temp\\Uslugi.csv";
-        String fText = ";Личный №;" + tfUslugaLCod.getText() + ";" + tfUslugaFIO.getText() + "\n\n";
-        fText += "№ пп;Дата оплаты;Артикул;Услуга;Оплачено за услугу;Использовано;Использовано всего;Дата использования;Остаток;Исполнитель;\n";
+        String fText = ";Р›РёС‡РЅС‹Р№ в„–;" + tfUslugaLCod.getText() + ";" + tfUslugaFIO.getText() + "\n\n";
+        fText += "в„– РїРї;Р”Р°С‚Р° РѕРїР»Р°С‚С‹;РђСЂС‚РёРєСѓР»;РЈСЃР»СѓРіР°;РћРїР»Р°С‡РµРЅРѕ Р·Р° СѓСЃР»СѓРіСѓ;РСЃРїРѕР»СЊР·РѕРІР°РЅРѕ;РСЃРїРѕР»СЊР·РѕРІР°РЅРѕ РІСЃРµРіРѕ;Р”Р°С‚Р° РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ;РћСЃС‚Р°С‚РѕРє;РСЃРїРѕР»РЅРёС‚РµР»СЊ;\n";
 
         for (int i = 0; i < tabUslugi.getRowCount(); i++) {
             for (int k = 0; k < tabUslugi.getColumnCount(); k++) {
@@ -8064,16 +8080,16 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 writer.close();
 
             } catch (IOException e) {
-                System.out.println("Ошибка-1 при записи в файл");
-                taLog.append("Ошибка-1 при записи в файл \n");
+                System.out.println("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+                taLog.append("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
             }
 
-            System.out.println("Текст успешно записан в файл.");
+            System.out.println("РўРµРєСЃС‚ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ РІ С„Р°Р№Р».");
         } catch (IOException e) {
-            System.out.println("Ошибка-2 при записи в файл");
-            taLog.append("Ошибка-2 при записи в файл \n");
+            System.out.println("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+            taLog.append("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
         }
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbUslugaCSVActionPerformed
 
     private void tabUslugiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabUslugiMouseClicked
@@ -8094,7 +8110,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
         if ("".equals(sLCod)) {
             JFrame jfInfo = new JFrame();
-            JOptionPane.showMessageDialog(jfInfo, "Необходимо обязательно выбрать Клиента");
+            JOptionPane.showMessageDialog(jfInfo, "РќРµРѕР±С…РѕРґРёРјРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РІС‹Р±СЂР°С‚СЊ РљР»РёРµРЅС‚Р°");
         } else {
             tfUslugaLCod.setText(tfKlientLCod.getText());
             tfUslugaFIO.setText(tfKlientFam.getText() + ' ' + tfKlientName.getText() + ' ' + tfKlientOtch.getText());
@@ -8105,7 +8121,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             tfUslugaOstatok.setText("");
             tfUslugaIspTot.setText("");
             DefaultTableModel dtm1 = (DefaultTableModel) tabUslugi.getModel();
-            dtm1.getDataVector().removeAllElements(); // удаляем все строки
+            dtm1.getDataVector().removeAllElements(); // СѓРґР°Р»СЏРµРј РІСЃРµ СЃС‚СЂРѕРєРё
 
             tabPanMain.setSelectedIndex(8);
             bbUslugaOtchetActionPerformed(evt);
@@ -8120,9 +8136,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
-            taLog.append("Соединение с БД для client успешно ... \n");
+            taLog.append("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РґР»СЏ client СѓСЃРїРµС€РЅРѕ ... \n");
 
-            taLog.append("Запуск запроса к БД для client ... \n");
+            taLog.append("Р—Р°РїСѓСЃРє Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РґР»СЏ client ... \n");
             stmt = conn.createStatement();
             String query = "select max(lcod) from myservis.client";
             rs = stmt.executeQuery(query);
@@ -8140,17 +8156,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             } else {
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
-            System.err.println("Cannot connect to database server для client");
+            System.err.println("Cannot connect to database server РґР»СЏ client");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД для client\n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РґР»СЏ client\n");
                     taLog.append("-------------------------------------------------\n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
-                    System.out.println("Database connection terminated для client... ");
+                    System.out.println("Database connection terminated РґР»СЏ client... ");
                 } catch (SQLException ex) {
-                    System.out.println("Error in connection termination для client!");
+                    System.out.println("Error in connection termination РґР»СЏ client!");
                 }
             }
         }
@@ -8196,7 +8212,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             URL url = new URL("http://support.tentorium.ru/script/test/test_post.php");
-            //String postData = "nom_sc=1069000000&lcod=5159&text=Пример";
+            //String postData = "nom_sc=1069000000&lcod=5159&text=РџСЂРёРјРµСЂ";
 
             String postData = "nom_sc=1069000000&lcod=5159&text=" + tfKKTtext.getText();
 
@@ -8206,7 +8222,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             //String postData2 = new String(bytes);             
             //byte[] converttoBytes = postData.getBytes("UTF-16");
             //postData = new String(converttoBytes, "UTF-8");
-            System.out.println("Без преобразования:" + postData);
+            System.out.println("Р‘РµР· РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ:" + postData);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -8222,12 +8238,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             String postDateNew = "nom_sc=1069000000&lcod=5159&text=" + new String(tfKKTtext.getText().getBytes("UTF-8"), StandardCharsets.UTF_8);
             System.out.println("------------------------------------------------------------------");
-            System.out.println("После преобразования:" + postDateNew);
+            System.out.println("РџРѕСЃР»Рµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ:" + postDateNew);
             System.out.println("------------------------------------------------------------------");
 
             try (DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
                 //dos.writeBytes(bytes);
-                //dos.writeUTF(postData);   // Работает
+                //dos.writeUTF(postData);   // Р Р°Р±РѕС‚Р°РµС‚
                 dos.writeUTF("nom_sc=1069000000&lcod=5159&text=" + new String(tfKKTtext.getText().getBytes("UTF-8"), StandardCharsets.UTF_8));
             }
 
@@ -8291,7 +8307,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
             conn = DriverManager.getConnection(urlHostBD, userNameBD, passwordBD);
 
-            taLog.append("Запуск соединения с БД для update в uslugi ... \n");
+            taLog.append("Р—Р°РїСѓСЃРє СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р‘Р” РґР»СЏ update РІ uslugi ... \n");
 
             stmt = conn.createStatement();
 
@@ -8311,16 +8327,16 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             stmt.executeUpdate(query);
             stmt.close();
 
-            taLog.append("Запрос update для uslugi - выполнен успешно \n");
+            taLog.append("Р—Р°РїСЂРѕСЃ update РґР»СЏ uslugi - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ \n");
 
-            JOptionPane.showMessageDialog(new JFrame(), "Посещение оформлено успешно!");
+            JOptionPane.showMessageDialog(new JFrame(), "РџРѕСЃРµС‰РµРЅРёРµ РѕС„РѕСЂРјР»РµРЅРѕ СѓСЃРїРµС€РЅРѕ!");
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.err.println("Cannot connect to database server");
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД после погашения услуги \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” РїРѕСЃР»Рµ РїРѕРіР°С€РµРЅРёСЏ СѓСЃР»СѓРіРё \n");
                     taLog.append("------------------------------------------------- \n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -8332,7 +8348,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
         bbUslugaOtchetActionPerformed(evt);
         }else{
-            JOptionPane.showMessageDialog(new JFrame(), "Все посещения были учтены ранее!\n\nОстатка оплаченных услуг нет!");
+            JOptionPane.showMessageDialog(new JFrame(), "Р’СЃРµ РїРѕСЃРµС‰РµРЅРёСЏ Р±С‹Р»Рё СѓС‡С‚РµРЅС‹ СЂР°РЅРµРµ!\n\nРћСЃС‚Р°С‚РєР° РѕРїР»Р°С‡РµРЅРЅС‹С… СѓСЃР»СѓРі РЅРµС‚!");
         }
             
     }//GEN-LAST:event_bbUslugaZakActionPerformed
@@ -8358,12 +8374,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_tfUslugaIspTotActionPerformed
 
     private void bbSaveXLSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbSaveXLSActionPerformed
-        String nameFiles = "temp\\Учёт_услуг.xls";
+        String nameFiles = "temp\\РЈС‡С‘С‚_СѓСЃР»СѓРі.xls";
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Учёт услуг");
+        HSSFSheet sheet = workbook.createSheet("РЈС‡С‘С‚ СѓСЃР»СѓРі");
 
-        // создаем шрифт
+        // СЃРѕР·РґР°РµРј С€СЂРёС„С‚
         HSSFFont font = workbook.createFont();
         HSSFFont font2 = workbook.createFont();
 
@@ -8376,32 +8392,32 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         font2.setFontName("Arial");
         font2.setBold(true);
 
-        // создаем стиль для ячеек основной таблицы и для ячеек в заголовке таблицы
+        // СЃРѕР·РґР°РµРј СЃС‚РёР»СЊ РґР»СЏ СЏС‡РµРµРє РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ Рё РґР»СЏ СЏС‡РµРµРє РІ Р·Р°РіРѕР»РѕРІРєРµ С‚Р°Р±Р»РёС†С‹
         HSSFCellStyle style = workbook.createCellStyle();
         HSSFCellStyle style2 = workbook.createCellStyle();
         HSSFCellStyle style3 = workbook.createCellStyle();
-        // и применяем к этому стилю жирный шрифт
-        style3.setFont(font);  // Для Шапки 
-        style2.setFont(font2);  // Для заголовка таблицы
+        // Рё РїСЂРёРјРµРЅСЏРµРј Рє СЌС‚РѕРјСѓ СЃС‚РёР»СЋ Р¶РёСЂРЅС‹Р№ С€СЂРёС„С‚
+        style3.setFont(font);  // Р”Р»СЏ РЁР°РїРєРё 
+        style2.setFont(font2);  // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
-        // Настройка выравнивания стиля
-        // Для основной таблицы
+        // РќР°СЃС‚СЂРѕР№РєР° РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ СЃС‚РёР»СЏ
+        // Р”Р»СЏ РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹
         style.setAlignment(HorizontalAlignment.LEFT);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для заголовка таблицы
+        // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
         style2.setAlignment(HorizontalAlignment.CENTER);
         style2.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для шапки
+        // Р”Р»СЏ С€Р°РїРєРё
         style3.setAlignment(HorizontalAlignment.LEFT);
         style3.setVerticalAlignment(VerticalAlignment.CENTER);
 
         HSSFRow row = sheet.createRow((short) 0);
 
-        // прописываем шапку документа
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј С€Р°РїРєСѓ РґРѕРєСѓРјРµРЅС‚Р°
         row.createCell(0).setCellValue("");
-        row.createCell(1).setCellValue("Личный №");
+        row.createCell(1).setCellValue("Р›РёС‡РЅС‹Р№ в„–");
         row.createCell(2).setCellValue(tfUslugaLCod.getText());
         row.createCell(3).setCellValue(tfUslugaFIO.getText());
 
@@ -8410,41 +8426,41 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         row.getCell(3).setCellStyle(style3);
         row.setHeightInPoints(30);
 
-        // стиль для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderBottom(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
 
-        // стиль-2 для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ-2 РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style2.setBorderTop(BorderStyle.THIN);
         style2.setBorderRight(BorderStyle.THIN);
         style2.setBorderBottom(BorderStyle.THIN);
         style2.setBorderLeft(BorderStyle.THIN);
 
         style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // серый цвет фона для заголовка таблицы
+        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // СЃРµСЂС‹Р№ С†РІРµС‚ С„РѕРЅР° РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
-        // создаем строку с заголовком
+        // СЃРѕР·РґР°РµРј СЃС‚СЂРѕРєСѓ СЃ Р·Р°РіРѕР»РѕРІРєРѕРј
         row = sheet.createRow((short) 2);
-        row.createCell(0).setCellValue("№ пп");
-        row.createCell(1).setCellValue("Дата оплаты");
-        row.createCell(2).setCellValue("Артикул");
-        row.createCell(3).setCellValue("Услуга");
-        row.createCell(4).setCellValue("Оплачено за услугу");
-        row.createCell(5).setCellValue("Использовано");
-        row.createCell(6).setCellValue("Использовано всего");
-        row.createCell(7).setCellValue("Дата использования");
-        row.createCell(8).setCellValue("Остаток");
-        row.createCell(9).setCellValue("Исполнитель");
+        row.createCell(0).setCellValue("в„– РїРї");
+        row.createCell(1).setCellValue("Р”Р°С‚Р° РѕРїР»Р°С‚С‹");
+        row.createCell(2).setCellValue("РђСЂС‚РёРєСѓР»");
+        row.createCell(3).setCellValue("РЈСЃР»СѓРіР°");
+        row.createCell(4).setCellValue("РћРїР»Р°С‡РµРЅРѕ Р·Р° СѓСЃР»СѓРіСѓ");
+        row.createCell(5).setCellValue("РСЃРїРѕР»СЊР·РѕРІР°РЅРѕ");
+        row.createCell(6).setCellValue("РСЃРїРѕР»СЊР·РѕРІР°РЅРѕ РІСЃРµРіРѕ");
+        row.createCell(7).setCellValue("Р”Р°С‚Р° РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ");
+        row.createCell(8).setCellValue("РћСЃС‚Р°С‚РѕРє");
+        row.createCell(9).setCellValue("РСЃРїРѕР»РЅРёС‚РµР»СЊ");
 
-        // Устанавливаем высоту и стили для заголовка таблицы 
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹СЃРѕС‚Сѓ Рё СЃС‚РёР»Рё РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹ 
         for (int k = 0; k < tabUslugi.getColumnCount(); k++) {
             row.getCell(k).setCellStyle(style2);
             row.setHeightInPoints(22);
         }
 
-        // прописываем основную таблицу
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
         for (int i = 0; i < tabUslugi.getRowCount(); i++) {
             row = sheet.createRow((short) i + 3);
             for (int k = 0; k < tabUslugi.getColumnCount(); k++) {
@@ -8459,7 +8475,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         }
 
-        // Устанавливаем автоширину для всех колонок
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р°РІС‚РѕС€РёСЂРёРЅСѓ РґР»СЏ РІСЃРµС… РєРѕР»РѕРЅРѕРє
         for (int k = 0; k < tabUslugi.getColumnCount(); k++) {
             sheet.autoSizeColumn(k);
         }
@@ -8487,7 +8503,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
         System.out.println("Your excel file has been generated!");
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbSaveXLSActionPerformed
 
     private void tfpPasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfpPasActionPerformed
@@ -8502,12 +8518,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             sDat = tfKassaGod.getText() + "_" + Integer.toString(cbKassaMon.getSelectedIndex() + 1) + "_" + tfKassaDat.getText();
         }
 
-        String nameFiles = "temp\\Касса_" + sDat + ".xls";
+        String nameFiles = "temp\\РљР°СЃСЃР°_" + sDat + ".xls";
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Касса");
+        HSSFSheet sheet = workbook.createSheet("РљР°СЃСЃР°");
 
-        // создаем шрифт
+        // СЃРѕР·РґР°РµРј С€СЂРёС„С‚
         HSSFFont font = workbook.createFont();
         HSSFFont font2 = workbook.createFont();
 
@@ -8520,33 +8536,33 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         font2.setFontName("Arial");
         font2.setBold(true);
 
-        // создаем стиль для ячеек основной таблицы и для ячеек в заголовке таблицы
+        // СЃРѕР·РґР°РµРј СЃС‚РёР»СЊ РґР»СЏ СЏС‡РµРµРє РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ Рё РґР»СЏ СЏС‡РµРµРє РІ Р·Р°РіРѕР»РѕРІРєРµ С‚Р°Р±Р»РёС†С‹
         HSSFCellStyle style = workbook.createCellStyle();
         HSSFCellStyle style2 = workbook.createCellStyle();
         HSSFCellStyle style3 = workbook.createCellStyle();
-        // и применяем к этому стилю жирный шрифт 
-        style3.setFont(font);  // Для Шапки 
-        style2.setFont(font2);  // Для заголовка таблицы
+        // Рё РїСЂРёРјРµРЅСЏРµРј Рє СЌС‚РѕРјСѓ СЃС‚РёР»СЋ Р¶РёСЂРЅС‹Р№ С€СЂРёС„С‚ 
+        style3.setFont(font);  // Р”Р»СЏ РЁР°РїРєРё 
+        style2.setFont(font2);  // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
-        // Настройка выравнивания стиля
-        // Для основной таблицы
+        // РќР°СЃС‚СЂРѕР№РєР° РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ СЃС‚РёР»СЏ
+        // Р”Р»СЏ РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹
         style.setAlignment(HorizontalAlignment.LEFT);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для заголовка таблицы
+        // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
         style2.setAlignment(HorizontalAlignment.CENTER);
         style2.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для шапки
+        // Р”Р»СЏ С€Р°РїРєРё
         style3.setAlignment(HorizontalAlignment.LEFT);
         style3.setVerticalAlignment(VerticalAlignment.CENTER);
 
         HSSFRow row = sheet.createRow((short) 0);
 
-        // прописываем шапку документа
-        row.createCell(0).setCellValue("Дата:");
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј С€Р°РїРєСѓ РґРѕРєСѓРјРµРЅС‚Р°
+        row.createCell(0).setCellValue("Р”Р°С‚Р°:");
         row.createCell(1).setCellValue(sDat);
-        row.createCell(3).setCellValue("Сумма на начало дня:");
+        row.createCell(3).setCellValue("РЎСѓРјРјР° РЅР° РЅР°С‡Р°Р»Рѕ РґРЅСЏ:");
         row.createCell(4).setCellValue(tfKassaOstatok.getText());
 
         row.getCell(0).setCellStyle(style3);
@@ -8555,44 +8571,44 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         row.getCell(4).setCellStyle(style3);
         row.setHeightInPoints(30);
 
-        // стиль для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderBottom(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
 
-        // стиль-2 для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ-2 РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style2.setBorderTop(BorderStyle.THIN);
         style2.setBorderRight(BorderStyle.THIN);
         style2.setBorderBottom(BorderStyle.THIN);
         style2.setBorderLeft(BorderStyle.THIN);
 
         style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // серый цвет фона для заголовка таблицы
+        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // СЃРµСЂС‹Р№ С†РІРµС‚ С„РѕРЅР° РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
         row = sheet.createRow((short) 2);
-        row.createCell(0).setCellValue("Приход:");
+        row.createCell(0).setCellValue("РџСЂРёС…РѕРґ:");
         row.getCell(0).setCellStyle(style2);
 
-        // создаем строку с заголовком
+        // СЃРѕР·РґР°РµРј СЃС‚СЂРѕРєСѓ СЃ Р·Р°РіРѕР»РѕРІРєРѕРј
         row = sheet.createRow((short) 3);
-        row.createCell(0).setCellValue("№ пп");
-        row.createCell(1).setCellValue("Дата");
-        row.createCell(2).setCellValue("Id Клиента");
-        row.createCell(3).setCellValue("ФИО Клиента");
-        row.createCell(4).setCellValue("Сумма Нал");
-        row.createCell(5).setCellValue("Сумма QR-код");
-        row.createCell(6).setCellValue("Чек");
-        row.createCell(7).setCellValue("№ нак.");
-        row.createCell(8).setCellValue("Исполнитель");
-        row.createCell(9).setCellValue("Примечание");
+        row.createCell(0).setCellValue("в„– РїРї");
+        row.createCell(1).setCellValue("Р”Р°С‚Р°");
+        row.createCell(2).setCellValue("Id РљР»РёРµРЅС‚Р°");
+        row.createCell(3).setCellValue("Р¤РРћ РљР»РёРµРЅС‚Р°");
+        row.createCell(4).setCellValue("РЎСѓРјРјР° РќР°Р»");
+        row.createCell(5).setCellValue("РЎСѓРјРјР° QR-РєРѕРґ");
+        row.createCell(6).setCellValue("Р§РµРє");
+        row.createCell(7).setCellValue("в„– РЅР°Рє.");
+        row.createCell(8).setCellValue("РСЃРїРѕР»РЅРёС‚РµР»СЊ");
+        row.createCell(9).setCellValue("РџСЂРёРјРµС‡Р°РЅРёРµ");
 
-        // Устанавливаем высоту и стили для заголовка таблицы 
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹СЃРѕС‚Сѓ Рё СЃС‚РёР»Рё РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹ 
         for (int k = 0; k < tabKasPrihod.getColumnCount(); k++) {
             row.getCell(k).setCellStyle(style2);
             row.setHeightInPoints(22);
         }
-        // прописываем основную таблицу по приходу
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ РїРѕ РїСЂРёС…РѕРґСѓ
         for (int i = 0; i < tabKasPrihod.getRowCount(); i++) {
             row = sheet.createRow((short) i + 4);
             for (int k = 0; k < tabKasPrihod.getColumnCount(); k++) {
@@ -8603,28 +8619,28 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
 
         row = sheet.createRow((short) 5 + tabKasPrihod.getRowCount());
-        row.createCell(0).setCellValue("Расход:");
+        row.createCell(0).setCellValue("Р Р°СЃС…РѕРґ:");
         row.getCell(0).setCellStyle(style2);
 
         row = sheet.createRow((short) 6 + tabKasPrihod.getRowCount());
-        row.createCell(0).setCellValue("№ пп");
-        row.createCell(1).setCellValue("Дата");
-        row.createCell(2).setCellValue("Личный №");
-        row.createCell(3).setCellValue("ФИО");
-        row.createCell(4).setCellValue("Сумма Нал");
-        row.createCell(5).setCellValue("Сумма QR-код");
-        row.createCell(6).setCellValue("Чек");
-        row.createCell(7).setCellValue("№ нак.");
-        row.createCell(8).setCellValue("Исполнитель");
-        row.createCell(9).setCellValue("Примечание");
+        row.createCell(0).setCellValue("в„– РїРї");
+        row.createCell(1).setCellValue("Р”Р°С‚Р°");
+        row.createCell(2).setCellValue("Р›РёС‡РЅС‹Р№ в„–");
+        row.createCell(3).setCellValue("Р¤РРћ");
+        row.createCell(4).setCellValue("РЎСѓРјРјР° РќР°Р»");
+        row.createCell(5).setCellValue("РЎСѓРјРјР° QR-РєРѕРґ");
+        row.createCell(6).setCellValue("Р§РµРє");
+        row.createCell(7).setCellValue("в„– РЅР°Рє.");
+        row.createCell(8).setCellValue("РСЃРїРѕР»РЅРёС‚РµР»СЊ");
+        row.createCell(9).setCellValue("РџСЂРёРјРµС‡Р°РЅРёРµ");
 
-        // Устанавливаем высоту и стили для заголовка таблицы 
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹СЃРѕС‚Сѓ Рё СЃС‚РёР»Рё РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹ 
         for (int k = 0; k < tabKasPrihod.getColumnCount(); k++) {
             row.getCell(k).setCellStyle(style2);
             row.setHeightInPoints(22);
         }
 
-        // прописываем основную таблицу по расходу
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ РїРѕ СЂР°СЃС…РѕРґСѓ
         for (int i = 0; i < tabKasRashod.getRowCount(); i++) {
             row = sheet.createRow((short) i + 7 + tabKasPrihod.getRowCount());
             for (int k = 0; k < tabKasRashod.getColumnCount(); k++) {
@@ -8641,13 +8657,13 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
 
         row = sheet.createRow((short) tabKasRashod.getRowCount() + 8 + tabKasPrihod.getRowCount());
-        row.createCell(3).setCellValue("Остаток:");
+        row.createCell(3).setCellValue("РћСЃС‚Р°С‚РѕРє:");
         row.createCell(4).setCellValue(tfKassaTek.getText());
         row.getCell(3).setCellStyle(style3);
         row.getCell(4).setCellStyle(style3);
         row.setHeightInPoints(30);
 
-        // Устанавливаем автоширину для всех колонок
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р°РІС‚РѕС€РёСЂРёРЅСѓ РґР»СЏ РІСЃРµС… РєРѕР»РѕРЅРѕРє
         for (int k = 0; k < tabKasPrihod.getColumnCount(); k++) {
             sheet.autoSizeColumn(k);
         }
@@ -8675,16 +8691,16 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
         System.out.println("Your excel file has been generated!");
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbKassaExcelActionPerformed
 
     private void bbBDzakazXLSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbBDzakazXLSActionPerformed
-        String nameFiles = "temp\\Заказы-Excel.xls";
+        String nameFiles = "temp\\Р—Р°РєР°Р·С‹-Excel.xls";
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Заказы");
+        HSSFSheet sheet = workbook.createSheet("Р—Р°РєР°Р·С‹");
 
-        // создаем шрифт
+        // СЃРѕР·РґР°РµРј С€СЂРёС„С‚
         HSSFFont font = workbook.createFont();
         HSSFFont font2 = workbook.createFont();
 
@@ -8697,73 +8713,73 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         font2.setFontName("Arial");
         font2.setBold(true);
 
-        // создаем стиль для ячеек основной таблицы и для ячеек в заголовке таблицы
+        // СЃРѕР·РґР°РµРј СЃС‚РёР»СЊ РґР»СЏ СЏС‡РµРµРє РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ Рё РґР»СЏ СЏС‡РµРµРє РІ Р·Р°РіРѕР»РѕРІРєРµ С‚Р°Р±Р»РёС†С‹
         HSSFCellStyle style = workbook.createCellStyle();
         HSSFCellStyle style2 = workbook.createCellStyle();
         HSSFCellStyle style3 = workbook.createCellStyle();
-        // и применяем к этому стилю жирный шрифт
-        style3.setFont(font);  // Для Шапки 
-        style2.setFont(font2);  // Для заголовка таблицы
+        // Рё РїСЂРёРјРµРЅСЏРµРј Рє СЌС‚РѕРјСѓ СЃС‚РёР»СЋ Р¶РёСЂРЅС‹Р№ С€СЂРёС„С‚
+        style3.setFont(font);  // Р”Р»СЏ РЁР°РїРєРё 
+        style2.setFont(font2);  // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
-        // Настройка выравнивания стиля
-        // Для основной таблицы
+        // РќР°СЃС‚СЂРѕР№РєР° РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ СЃС‚РёР»СЏ
+        // Р”Р»СЏ РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹
         style.setAlignment(HorizontalAlignment.LEFT);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для заголовка таблицы
+        // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
         style2.setAlignment(HorizontalAlignment.CENTER);
         style2.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для шапки
+        // Р”Р»СЏ С€Р°РїРєРё
         style3.setAlignment(HorizontalAlignment.LEFT);
         style3.setVerticalAlignment(VerticalAlignment.CENTER);
 
         HSSFRow row = sheet.createRow((short) 0);
 
-        //прописываем шапку документа
+        //РїСЂРѕРїРёСЃС‹РІР°РµРј С€Р°РїРєСѓ РґРѕРєСѓРјРµРЅС‚Р°
         //row.createCell(0).setCellValue("");
-        //row.createCell(1).setCellValue("Личный №");
+        //row.createCell(1).setCellValue("Р›РёС‡РЅС‹Р№ в„–");
         //row.createCell(2).setCellValue(tfUslugaLCod.getText());
         //row.createCell(3).setCellValue(tfUslugaFIO.getText());
         //row.getCell(1).setCellStyle(style3);
         //row.getCell(2).setCellStyle(style3);
         //row.getCell(3).setCellStyle(style3);
         //row.setHeightInPoints(30);
-        // стиль для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderBottom(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
 
-        // стиль-2 для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ-2 РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style2.setBorderTop(BorderStyle.THIN);
         style2.setBorderRight(BorderStyle.THIN);
         style2.setBorderBottom(BorderStyle.THIN);
         style2.setBorderLeft(BorderStyle.THIN);
 
         style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // серый цвет фона для заголовка таблицы
+        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // СЃРµСЂС‹Р№ С†РІРµС‚ С„РѕРЅР° РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
-        // создаем строку с заголовком
+        // СЃРѕР·РґР°РµРј СЃС‚СЂРѕРєСѓ СЃ Р·Р°РіРѕР»РѕРІРєРѕРј
         row = sheet.createRow((short) 2);
-        row.createCell(0).setCellValue("№ пп");
-        row.createCell(1).setCellValue("Дата");
-        row.createCell(2).setCellValue("№ заказа");
-        row.createCell(3).setCellValue("Id Клиента");
-        row.createCell(4).setCellValue("ФИО Клиента");
-        row.createCell(5).setCellValue("Сумма");
-        row.createCell(6).setCellValue("Скидка-%");
-        row.createCell(7).setCellValue("Нал/QR");
-        row.createCell(8).setCellValue("Чек");
-        row.createCell(9).setCellValue("Исполнитель");
+        row.createCell(0).setCellValue("в„– РїРї");
+        row.createCell(1).setCellValue("Р”Р°С‚Р°");
+        row.createCell(2).setCellValue("в„– Р·Р°РєР°Р·Р°");
+        row.createCell(3).setCellValue("Id РљР»РёРµРЅС‚Р°");
+        row.createCell(4).setCellValue("Р¤РРћ РљР»РёРµРЅС‚Р°");
+        row.createCell(5).setCellValue("РЎСѓРјРјР°");
+        row.createCell(6).setCellValue("РЎРєРёРґРєР°-%");
+        row.createCell(7).setCellValue("РќР°Р»/QR");
+        row.createCell(8).setCellValue("Р§РµРє");
+        row.createCell(9).setCellValue("РСЃРїРѕР»РЅРёС‚РµР»СЊ");
 
-        // Устанавливаем высоту и стили для заголовка таблицы 
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹СЃРѕС‚Сѓ Рё СЃС‚РёР»Рё РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹ 
         for (int k = 0; k < tabBDzakaz.getColumnCount(); k++) {
             row.getCell(k).setCellStyle(style2);
             row.setHeightInPoints(22);
         }
 
-        // прописываем основную таблицу
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
         for (int i = 0; i < tabBDzakaz.getRowCount(); i++) {
             row = sheet.createRow((short) i + 3);
             for (int k = 0; k < tabBDzakaz.getColumnCount(); k++) {
@@ -8774,27 +8790,27 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
 
         row = sheet.createRow((short) tabBDzakaz.getRowCount() + 4);
-        row.createCell(4).setCellValue("Итого сумма:");
+        row.createCell(4).setCellValue("РС‚РѕРіРѕ СЃСѓРјРјР°:");
         row.createCell(5).setCellValue(tfBDZakazSumma.getText());
         row.getCell(4).setCellStyle(style3);
         row.getCell(5).setCellStyle(style3);
         row.setHeightInPoints(30);
         
         row = sheet.createRow((short) tabBDzakaz.getRowCount() + 5);
-        row.createCell(4).setCellValue("Сумма наличными:");
+        row.createCell(4).setCellValue("РЎСѓРјРјР° РЅР°Р»РёС‡РЅС‹РјРё:");
         row.createCell(5).setCellValue(tfBDZakazNal.getText());
         row.getCell(4).setCellStyle(style3);
         row.getCell(5).setCellStyle(style3);
         row.setHeightInPoints(30);
 
         row = sheet.createRow((short) tabBDzakaz.getRowCount() + 6);
-        row.createCell(4).setCellValue("Сумма QR-код:");
+        row.createCell(4).setCellValue("РЎСѓРјРјР° QR-РєРѕРґ:");
         row.createCell(5).setCellValue(tfBDZakazQR.getText());
         row.getCell(4).setCellStyle(style3);
         row.getCell(5).setCellStyle(style3);
         row.setHeightInPoints(30);
 
-        // Устанавливаем автоширину для всех колонок
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р°РІС‚РѕС€РёСЂРёРЅСѓ РґР»СЏ РІСЃРµС… РєРѕР»РѕРЅРѕРє
         for (int k = 0; k < tabBDzakaz.getColumnCount(); k++) {
             sheet.autoSizeColumn(k);
         }
@@ -8822,17 +8838,17 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
         System.out.println("Your excel file has been generated!");
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbBDzakazXLSActionPerformed
 
     private void bbKKTpythonTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTpythonTestActionPerformed
         // TODO add your handling code here:
         try (FileWriter writer = new FileWriter("python\\command.ini", false)) //try(FileWriter writer = new FileWriter("command.ini", false))
         {
-            // запись всей строки
+            // Р·Р°РїРёСЃСЊ РІСЃРµР№ СЃС‚СЂРѕРєРё
             String text = "OpenSession";
             writer.write(text);
-            // запись по символам
+            // Р·Р°РїРёСЃСЊ РїРѕ СЃРёРјРІРѕР»Р°Рј
             //writer.append('\n');
             //writer.append('E');             
             //writer.flush();
@@ -8899,7 +8915,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
       e.printStackTrace();
     }        
         String result = "";
-        String inString = "жарко";
+        String inString = "Р¶Р°СЂРєРѕ";
         for (int i = 0; i < inString.length(); i++) {
             Integer charCode = (int)inString.charAt(i);
             result += "\\u" + Integer.toHexString(charCode) ;
@@ -8907,7 +8923,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     System.out.println(result);
 
                 String str2 = "";
-                String inString2 = "Привет! Мир!";
+                String inString2 = "РџСЂРёРІРµС‚! РњРёСЂ!";
                 for (int i = 0; i < inString2.length(); i++) {
                     Integer charCode = (int)inString2.charAt(i);
                     str2 += "\\u0" + Integer.toHexString(charCode) ;
@@ -8916,7 +8932,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 System.out.println(str2);    
          */
         String result = null;
-        String inString = "Привет Мир!";
+        String inString = "РџСЂРёРІРµС‚ РњРёСЂ!";
         for (int i = 0; i < inString.length(); i++) {
             char charCode = inString.charAt(i);
             result += unicodeEscaped(charCode);
@@ -8924,7 +8940,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         System.out.println(result);
         System.out.println("----------------------------------------");
 
-        String inText = "Привет Мир!";
+        String inText = "РџСЂРёРІРµС‚ РњРёСЂ!";
         String result2;
         result2 = strPreobraz(inText);
         /*
@@ -8947,7 +8963,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_bbKKTpreobrazovanieTestActionPerformed
 
     private void bbKKTgetStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTgetStatusActionPerformed
-        taKKTlog.append("Запрос на проверку статуса ККТ ...\n");
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ РЅР° РїСЂРѕРІРµСЂРєСѓ СЃС‚Р°С‚СѓСЃР° РљРљРў ...\n");
         try {
             URL urlKKT = new URL(httpKKM);
             textJSON = "{\"sessionKey\": \"" + sessionKey + "\",\"command\": \"GetStatus\"}";
@@ -8994,20 +9010,20 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                         taKKTlog.setText("isOpen: "+sRezultNew2+ "\n");
                      
                         if ("fals".equals(sRezultNew2)) {
-                            sSmena = "Закрыта";
+                            sSmena = "Р—Р°РєСЂС‹С‚Р°";
                         } else {
-                            sSmena = "Открыта";
+                            sSmena = "РћС‚РєСЂС‹С‚Р°";
                         }
                         
                     }else{
                         sSmena="------";
                         index1 = line.indexOf("description");
-                        taKKTlog.append("Начало description index1: "+index1+ "\n");
+                        taKKTlog.append("РќР°С‡Р°Р»Рѕ description index1: "+index1+ "\n");
                         int kDlin=line.length();
-                        taKKTlog.append("Общая длина kDlin: "+kDlin+ "\n");
+                        taKKTlog.append("РћР±С‰Р°СЏ РґР»РёРЅР° kDlin: "+kDlin+ "\n");
                         index1 = index1 + 14;
-                        taKKTlog.append("Начало значения description (+14) index1: "+index1+ "\n");                        
-                        taKKTlog.append("Предполагаемый финишь description (kDlin): "+kDlin+ "\n");
+                        taKKTlog.append("РќР°С‡Р°Р»Рѕ Р·РЅР°С‡РµРЅРёСЏ description (+14) index1: "+index1+ "\n");                        
+                        taKKTlog.append("РџСЂРµРґРїРѕР»Р°РіР°РµРјС‹Р№ С„РёРЅРёС€СЊ description (kDlin): "+kDlin+ "\n");
                         
                         String sPredDescription = line.substring(index1, kDlin);
                         sDescription = sParsingDescription(sPredDescription);
@@ -9035,9 +9051,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     //---------------------------------------------------------    
                     
                     if (false == sIsOpen) {
-                        sSmena = "Закрыта";
+                        sSmena = "Р—Р°РєСЂС‹С‚Р°";
                     } else {
-                        sSmena = "Открыта";
+                        sSmena = "РћС‚РєСЂС‹С‚Р°";
                     }
                      */
                     
@@ -9046,10 +9062,10 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     //System.out.println(sIsOpen + "/" + sResult + "/" + sDescription);
                    
                     lbKKTsmena.setText(sSmena);
-                    System.out.println("Смена: " + sSmena);
-                    taKKTlog.append("Смена: " + sSmena + "\n");
-                    //taInfoMain.append("Смена: " + sSmena + "\n");
-                    taInfoMain.append("Смена: " + sSmena + "\n");
+                    System.out.println("РЎРјРµРЅР°: " + sSmena);
+                    taKKTlog.append("РЎРјРµРЅР°: " + sSmena + "\n");
+                    //taInfoMain.append("РЎРјРµРЅР°: " + sSmena + "\n");
+                    taInfoMain.append("РЎРјРµРЅР°: " + sSmena + "\n");
                 }
            } 
             //catch (ParseException ex) 
@@ -9058,14 +9074,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
            // }
         } catch (IOException e) {
         }
-        taKKTlog.append("Проверка статуса ККТ произведено успешно!\n" + sTire70);
+        taKKTlog.append("РџСЂРѕРІРµСЂРєР° СЃС‚Р°С‚СѓСЃР° РљРљРў РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ!\n" + sTire70);
     }//GEN-LAST:event_bbKKTgetStatusActionPerformed
 
     private void bbKKTdobriyDenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTdobriyDenActionPerformed
         // TODO add your handling code here:
         try {
             URL urlKKT = new URL(httpKKM);
-            textJSON = "{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" + strPreobraz("Добрый день!  Смена: " + sSmena) + "\"}";
+            textJSON = "{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"PrintText\", \"text\": \"" + strPreobraz("Р”РѕР±СЂС‹Р№ РґРµРЅСЊ!  РЎРјРµРЅР°: " + sSmena) + "\"}";
 
             HttpURLConnection connKKT = (HttpURLConnection) urlKKT.openConnection();
             connKKT.setRequestMethod("POST");
@@ -9094,12 +9110,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }
-        taKKTlog.append("Запрос Добрый день - выполнен успешно!\n" + sTire70);
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ Р”РѕР±СЂС‹Р№ РґРµРЅСЊ - РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ!\n" + sTire70);
     }//GEN-LAST:event_bbKKTdobriyDenActionPerformed
 
     private void bbKKTsmenaOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTsmenaOpenActionPerformed
         // TODO add your handling code here:
-        taKKTlog.append("Запрос на открытие смены ...\n");
+        taKKTlog.append("Р—Р°РїСЂРѕСЃ РЅР° РѕС‚РєСЂС‹С‚РёРµ СЃРјРµРЅС‹ ...\n");
         if ("open".equals(sSession)) {
             try {
                 URL urlKKT = new URL(httpKKM);
@@ -9134,28 +9150,28 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     } catch (ParseException ex) {
                         Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    // получение строки из объекта
+                    // РїРѕР»СѓС‡РµРЅРёРµ СЃС‚СЂРѕРєРё РёР· РѕР±СЉРµРєС‚Р°
                     long sLong = (long) jsonObject.get("result");
                     System.out.println("rezult:" + sLong);
 
                     if (sLong == 0) {
-                        sSmena = "Открыта";
+                        sSmena = "РћС‚РєСЂС‹С‚Р°";
                     } else {
-                        sSmena = "Закрыта";
+                        sSmena = "Р—Р°РєСЂС‹С‚Р°";
                     }
                     lbKKTsmena.setText(sSmena);
-                    System.out.println("Смена: " + sSmena);
-                    taKKTlog.append("Смена: " + sSmena + "\n");
-                    taInfoMain.append("Смена: " + sSmena + "\n");
+                    System.out.println("РЎРјРµРЅР°: " + sSmena);
+                    taKKTlog.append("РЎРјРµРЅР°: " + sSmena + "\n");
+                    taInfoMain.append("РЎРјРµРЅР°: " + sSmena + "\n");
 
                     String sDescription = (String) jsonObject.get("description");
                     taKKTlog.append("Description:" + sDescription + "\n");
                 }
             } catch (IOException e) {
             }
-            taKKTlog.append("Открытие смены произведено успешно!\n" + sTire70);
+            taKKTlog.append("РћС‚РєСЂС‹С‚РёРµ СЃРјРµРЅС‹ РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ!\n" + sTire70);
         } else {
-            taKKTlog.append("Открытие смены не произведено успешно! Т.к. не открыта сессия.\n" + sTire70);
+            taKKTlog.append("РћС‚РєСЂС‹С‚РёРµ СЃРјРµРЅС‹ РЅРµ РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ! Рў.Рє. РЅРµ РѕС‚РєСЂС‹С‚Р° СЃРµСЃСЃРёСЏ.\n" + sTire70);
         }
 
     }//GEN-LAST:event_bbKKTsmenaOpenActionPerformed
@@ -9193,19 +9209,19 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                     } catch (ParseException ex) {
                         Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    // получение строки из объекта
+                    // РїРѕР»СѓС‡РµРЅРёРµ СЃС‚СЂРѕРєРё РёР· РѕР±СЉРµРєС‚Р°
                     long sLong = (long) jsonObject.get("result");
                     System.out.println("rezult:" + sLong);
 
                     if (sLong == 0) {
-                        sSmena = "Закрыта";
+                        sSmena = "Р—Р°РєСЂС‹С‚Р°";
                     } else {
-                        sSmena = "Открыта";
+                        sSmena = "РћС‚РєСЂС‹С‚Р°";
                     }
                     lbKKTsmena.setText(sSmena);
-                    System.out.println("Смена: " + sSmena);
-                    taKKTlog.append("Смена: " + sSmena + "\n");
-                    taInfoMain.append("Смена: " + sSmena + "\n");
+                    System.out.println("РЎРјРµРЅР°: " + sSmena);
+                    taKKTlog.append("РЎРјРµРЅР°: " + sSmena + "\n");
+                    taInfoMain.append("РЎРјРµРЅР°: " + sSmena + "\n");
 
                     String sDescription = (String) jsonObject.get("description");
                     taKKTlog.append("Description:" + sDescription + "\n");
@@ -9213,7 +9229,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }
-        taKKTlog.append("Закрытие смены произведено успешно!\n" + sTire70);
+        taKKTlog.append("Р—Р°РєСЂС‹С‚РёРµ СЃРјРµРЅС‹ РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ!\n" + sTire70);
 
     }//GEN-LAST:event_bbKKTsmenaCloseActionPerformed
 
@@ -9221,8 +9237,8 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             URL urlKKT = new URL(httpKKM);
-            // checkType: 0-Приход, 1-Возврат прихода
-            // taxSystem: 0-Общая, 1- Упрощенная доходы
+            // checkType: 0-РџСЂРёС…РѕРґ, 1-Р’РѕР·РІСЂР°С‚ РїСЂРёС…РѕРґР°
+            // taxSystem: 0-РћР±С‰Р°СЏ, 1- РЈРїСЂРѕС‰РµРЅРЅР°СЏ РґРѕС…РѕРґС‹
             textJSON = "{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"OpenCheck\", \"checkType\": 0, \"printDoc\": true, \"taxSystem\": 1 ,\"cashierInfo\": {\"+cashierName+\": \"" + strPreobraz(aktPolKKT) + "\", \"cashierINN\": \"" + sKKMkassirINN + "\"} }";
 
             HttpURLConnection connKKT = (HttpURLConnection) urlKKT.openConnection();
@@ -9255,9 +9271,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                     long lRezult = (long) jsonObject.get("result");
                     if (lRezult == 0) {
-                        taKKTlog.append("Открытие Чека произведено успешно!\n");
+                        taKKTlog.append("РћС‚РєСЂС‹С‚РёРµ Р§РµРєР° РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ!\n");
                     } else {
-                        taKKTlog.append("Открытие Чека не произведено.\n");
+                        taKKTlog.append("РћС‚РєСЂС‹С‚РёРµ Р§РµРєР° РЅРµ РїСЂРѕРёР·РІРµРґРµРЅРѕ.\n");
                     }
 
                     String sDescription = (String) jsonObject.get("description");
@@ -9266,20 +9282,20 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }
-        taKKTlog.append("Операция Открытие Чека завершена!\n" + sTire70);
+        taKKTlog.append("РћРїРµСЂР°С†РёСЏ РћС‚РєСЂС‹С‚РёРµ Р§РµРєР° Р·Р°РІРµСЂС€РµРЅР°!\n" + sTire70);
     }//GEN-LAST:event_bbKKTopenCheckActionPerformed
 
     private void bbKKTaddGoodsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTaddGoodsActionPerformed
-        // Выводим для контроля в ТекстАрия(textArie)
+        // Р’С‹РІРѕРґРёРј РґР»СЏ РєРѕРЅС‚СЂРѕР»СЏ РІ РўРµРєСЃС‚РђСЂРёСЏ(textArie)
         taKKTtowar.setText(null);
         taKKTtowar.append(sTire180);
-        taKKTtowar.append("Итоговый JSON, подготовленный для команды AddGoods:\n");
+        taKKTtowar.append("РС‚РѕРіРѕРІС‹Р№ JSON, РїРѕРґРіРѕС‚РѕРІР»РµРЅРЅС‹Р№ РґР»СЏ РєРѕРјР°РЅРґС‹ AddGoods:\n");
         taKKTtowar.append(sTire180);
         for (int i = 0; i < tabZakaz.getRowCount(); i++) {
             textJSON = "{\"sessionKey\": \"" + sessionKey + "\", \"command\": \"AddGoods\"," + masTowarKKT[i] + "}";
             taKKTtowar.append(textJSON + "\n");
         }
-        // Создаем файл лога:
+        // РЎРѕР·РґР°РµРј С„Р°Р№Р» Р»РѕРіР°:
         try {
             Path fileName = Paths.get("temp\\log_kkt_merkuriy_towar.txt");
             Files.write(fileName, taKKTtowar.getText().getBytes(), StandardOpenOption.CREATE);
@@ -9287,7 +9303,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             e.printStackTrace();
         }
 
-        // Основная часть:
+        // РћСЃРЅРѕРІРЅР°СЏ С‡Р°СЃС‚СЊ:
         try {            
             for (int i = 0; i < tabZakaz.getRowCount(); i++) {
                 URL urlKKT = new URL(httpKKM);            
@@ -9323,9 +9339,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                         long lRezult = (long) jsonObject.get("result");
                         if (lRezult == 0) {
-                            taKKTlog.append("Добавления товара произведено успешно.\n");
+                            taKKTlog.append("Р”РѕР±Р°РІР»РµРЅРёСЏ С‚РѕРІР°СЂР° РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ.\n");
                         } else {
-                            taKKTlog.append("Добавления товара не произведено!!!\n");
+                            taKKTlog.append("Р”РѕР±Р°РІР»РµРЅРёСЏ С‚РѕРІР°СЂР° РЅРµ РїСЂРѕРёР·РІРµРґРµРЅРѕ!!!\n");
                         }
 
                         String sDescription = (String) jsonObject.get("description");
@@ -9335,7 +9351,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }
-        taKKTlog.append("Операция добавления товара завершена!\n" + sTire70);
+        taKKTlog.append("РћРїРµСЂР°С†РёСЏ РґРѕР±Р°РІР»РµРЅРёСЏ С‚РѕРІР°СЂР° Р·Р°РІРµСЂС€РµРЅР°!\n" + sTire70);
     }//GEN-LAST:event_bbKKTaddGoodsActionPerformed
 
     private void bbKKTcloseCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTcloseCheckActionPerformed
@@ -9389,9 +9405,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
                     long lRezult = (long) jsonObject.get("result");
                     if (lRezult == 0) {
-                        taKKTlog.append("Закрытие Чека произведено успешно!\n");
+                        taKKTlog.append("Р—Р°РєСЂС‹С‚РёРµ Р§РµРєР° РїСЂРѕРёР·РІРµРґРµРЅРѕ СѓСЃРїРµС€РЅРѕ!\n");
                     } else {
-                        taKKTlog.append("Закрытие Чека не произведено.\n");
+                        taKKTlog.append("Р—Р°РєСЂС‹С‚РёРµ Р§РµРєР° РЅРµ РїСЂРѕРёР·РІРµРґРµРЅРѕ.\n");
                     }
 
                     String sDescription = (String) jsonObject.get("description");
@@ -9400,7 +9416,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         } catch (IOException e) {
         }
-        taKKTlog.append("Операция Закрытие Чека произведена!\n" + sTire70);
+        taKKTlog.append("РћРїРµСЂР°С†РёСЏ Р—Р°РєСЂС‹С‚РёРµ Р§РµРєР° РїСЂРѕРёР·РІРµРґРµРЅР°!\n" + sTire70);
     }//GEN-LAST:event_bbKKTcloseCheckActionPerformed
 
     private void bbKKTtowarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKKTtowarActionPerformed
@@ -9410,20 +9426,20 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         taKKTlog.setText(null);
         taKKTlog.append(sTire99);
         String sDateTimeTek = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
-        taKKTlog.append("Дата: " + sDateTimeTek + " Запрос на Обслуживание товара:\n");
+        taKKTlog.append("Р”Р°С‚Р°: " + sDateTimeTek + " Р—Р°РїСЂРѕСЃ РЅР° РћР±СЃР»СѓР¶РёРІР°РЅРёРµ С‚РѕРІР°СЂР°:\n");
         taKKTlog.append(sTire99);
 
-        // тестируем Добавляем товар  
+        // С‚РµСЃС‚РёСЂСѓРµРј Р”РѕР±Р°РІР»СЏРµРј С‚РѕРІР°СЂ  
         //bbKKTaddGoodsActionPerformed(evt);
-        bbKKTsessionOpenActionPerformed(evt);     // Открываем Сессию
+        bbKKTsessionOpenActionPerformed(evt);     // РћС‚РєСЂС‹РІР°РµРј РЎРµСЃСЃРёСЋ
 
         if ("open".equals(sSession)) {
 
-            bbKKTopenCheckActionPerformed(evt);   // Открываем Чек
-            bbKKTaddGoodsActionPerformed(evt);    // Добавляем товар
-            bbKKTcloseCheckActionPerformed(evt);  // Закрываем Чек
+            bbKKTopenCheckActionPerformed(evt);   // РћС‚РєСЂС‹РІР°РµРј Р§РµРє
+            bbKKTaddGoodsActionPerformed(evt);    // Р”РѕР±Р°РІР»СЏРµРј С‚РѕРІР°СЂ
+            bbKKTcloseCheckActionPerformed(evt);  // Р—Р°РєСЂС‹РІР°РµРј Р§РµРє
 
-            bbKKTsessionCloseActionPerformed(evt); // Закрываем Сессию
+            bbKKTsessionCloseActionPerformed(evt); // Р—Р°РєСЂС‹РІР°РµРј РЎРµСЃСЃРёСЋ
 
             starTime1 = System.currentTimeMillis();
 
@@ -9550,9 +9566,9 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }//GEN-LAST:event_chKlientTotActionPerformed
 
     private void bbKlientCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKlientCSVActionPerformed
-        String nameFiles = "temp\\Клиенты.csv";
+        String nameFiles = "temp\\РљР»РёРµРЅС‚С‹.csv";
         String fText;
-        fText = "Фамилия;Имя;Отчество;Телефон;Номер id;Город;\n";
+        fText = "Р¤Р°РјРёР»РёСЏ;РРјСЏ;РћС‚С‡РµСЃС‚РІРѕ;РўРµР»РµС„РѕРЅ;РќРѕРјРµСЂ id;Р“РѕСЂРѕРґ;\n";
 
         for (int i = 0; i < tabFIO.getRowCount(); i++) {
             for (int k = 0; k < tabFIO.getColumnCount(); k++) {
@@ -9571,26 +9587,26 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 writer.close();
 
             } catch (IOException e) {
-                System.out.println("Ошибка-1 при записи в файл");
-                taLog.append("Ошибка-1 при записи в файл \n");
+                System.out.println("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+                taLog.append("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
                 //e.printStackTrace();
             }
 
-            System.out.println("Текст успешно записан в файл.");
+            System.out.println("РўРµРєСЃС‚ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ РІ С„Р°Р№Р».");
         } catch (IOException e) {
-            System.out.println("Ошибка-2 при записи в файл");
-            taLog.append("Ошибка-2 при записи в файл \n");
+            System.out.println("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
+            taLog.append("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р» \n");
             //e.printStackTrace();
         }
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbKlientCSVActionPerformed
 
     private void bbKlientCSVtotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKlientCSVtotActionPerformed
                 bbKlientCSVtot.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        String nameFiles = "temp\\Клиенты csv.csv";
+        String nameFiles = "temp\\РљР»РёРµРЅС‚С‹ csv.csv";
         String fText;
-        fText = "Номер id;id учета;Фамилия;Имя;Отчество;Телефон;E-mail;Индекс;Город;Адрес;Дата рождения;\n";
+        fText = "РќРѕРјРµСЂ id;id СѓС‡РµС‚Р°;Р¤Р°РјРёР»РёСЏ;РРјСЏ;РћС‚С‡РµСЃС‚РІРѕ;РўРµР»РµС„РѕРЅ;E-mail;РРЅРґРµРєСЃ;Р“РѕСЂРѕРґ;РђРґСЂРµСЃ;Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ;\n";
         
         conn = null;
         
@@ -9628,7 +9644,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД cleent ... \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” cleent ... \n");
                     taLog.append("------------------------------------------------- \n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -9649,25 +9665,25 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 writer.close();
 
             } catch (IOException e) {
-                System.out.println("Ошибка-1 при записи в файл");
+                System.out.println("РћС€РёР±РєР°-1 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
             }
 
-            System.out.println("Текст успешно записан в файл.");
+            System.out.println("РўРµРєСЃС‚ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ РІ С„Р°Р№Р».");
         } catch (IOException e) {
-            System.out.println("Ошибка-2 при записи в файл");
+            System.out.println("РћС€РёР±РєР°-2 РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»");
         }
         
         bbKlientCSVtot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbKlientCSVtotActionPerformed
 
     private void bbKlientExcelTotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbKlientExcelTotActionPerformed
-        String nameFiles = "temp\\Клиенты Excel.xls";
+        String nameFiles = "temp\\РљР»РёРµРЅС‚С‹ Excel.xls";
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Клиенты");
+        HSSFSheet sheet = workbook.createSheet("РљР»РёРµРЅС‚С‹");
 
-        // создаем шрифт
+        // СЃРѕР·РґР°РµРј С€СЂРёС„С‚
         HSSFFont font = workbook.createFont();
         HSSFFont font2 = workbook.createFont();
 
@@ -9680,32 +9696,32 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         font2.setFontName("Arial");
         font2.setBold(true);
 
-        // создаем стиль для ячеек основной таблицы и для ячеек в заголовке таблицы
+        // СЃРѕР·РґР°РµРј СЃС‚РёР»СЊ РґР»СЏ СЏС‡РµРµРє РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ Рё РґР»СЏ СЏС‡РµРµРє РІ Р·Р°РіРѕР»РѕРІРєРµ С‚Р°Р±Р»РёС†С‹
         HSSFCellStyle style = workbook.createCellStyle();
         HSSFCellStyle style2 = workbook.createCellStyle();
         HSSFCellStyle style3 = workbook.createCellStyle();
-        // и применяем к этому стилю жирный шрифт
-        style3.setFont(font);  // Для Шапки 
-        style2.setFont(font2);  // Для заголовка таблицы
+        // Рё РїСЂРёРјРµРЅСЏРµРј Рє СЌС‚РѕРјСѓ СЃС‚РёР»СЋ Р¶РёСЂРЅС‹Р№ С€СЂРёС„С‚
+        style3.setFont(font);  // Р”Р»СЏ РЁР°РїРєРё 
+        style2.setFont(font2);  // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
-        // Настройка выравнивания стиля
-        // Для основной таблицы
+        // РќР°СЃС‚СЂРѕР№РєР° РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ СЃС‚РёР»СЏ
+        // Р”Р»СЏ РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹
         style.setAlignment(HorizontalAlignment.LEFT);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для заголовка таблицы
+        // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
         style2.setAlignment(HorizontalAlignment.CENTER);
         style2.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        // Для шапки
+        // Р”Р»СЏ С€Р°РїРєРё
         style3.setAlignment(HorizontalAlignment.LEFT);
         style3.setVerticalAlignment(VerticalAlignment.CENTER);
 
         HSSFRow row = sheet.createRow((short) 0);
 
-        // прописываем шапку документа
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј С€Р°РїРєСѓ РґРѕРєСѓРјРµРЅС‚Р°
         //row.createCell(0).setCellValue("");
-        //row.createCell(1).setCellValue("Личный №");
+        //row.createCell(1).setCellValue("Р›РёС‡РЅС‹Р№ в„–");
         //row.createCell(2).setCellValue(tfUslugaLCod.getText());
         //row.createCell(3).setCellValue(tfUslugaFIO.getText());
 
@@ -9714,42 +9730,42 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         //row.getCell(3).setCellStyle(style3);
         //row.setHeightInPoints(30);
 
-        // стиль для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderBottom(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
 
-        // стиль-2 для выделения ячейки со всех сторон
+        // СЃС‚РёР»СЊ-2 РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
         style2.setBorderTop(BorderStyle.THIN);
         style2.setBorderRight(BorderStyle.THIN);
         style2.setBorderBottom(BorderStyle.THIN);
         style2.setBorderLeft(BorderStyle.THIN);
 
         style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // серый цвет фона для заголовка таблицы
+        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // СЃРµСЂС‹Р№ С†РІРµС‚ С„РѕРЅР° РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
 
-        // создаем строку с заголовком
+        // СЃРѕР·РґР°РµРј СЃС‚СЂРѕРєСѓ СЃ Р·Р°РіРѕР»РѕРІРєРѕРј
         row = sheet.createRow((short) 1);
-        row.createCell(0).setCellValue("Номер id");
-        row.createCell(1).setCellValue("id учета");
-        row.createCell(2).setCellValue("Фамилия");
-        row.createCell(3).setCellValue("Имя");
-        row.createCell(4).setCellValue("Отчество");
-        row.createCell(5).setCellValue("Телефон");
+        row.createCell(0).setCellValue("РќРѕРјРµСЂ id");
+        row.createCell(1).setCellValue("id СѓС‡РµС‚Р°");
+        row.createCell(2).setCellValue("Р¤Р°РјРёР»РёСЏ");
+        row.createCell(3).setCellValue("РРјСЏ");
+        row.createCell(4).setCellValue("РћС‚С‡РµСЃС‚РІРѕ");
+        row.createCell(5).setCellValue("РўРµР»РµС„РѕРЅ");
         row.createCell(6).setCellValue("E-mail");
-        row.createCell(7).setCellValue("Индекс");
-        row.createCell(8).setCellValue("Город");
-        row.createCell(9).setCellValue("Адрес");
-        row.createCell(10).setCellValue("Дата рождения");
+        row.createCell(7).setCellValue("РРЅРґРµРєСЃ");
+        row.createCell(8).setCellValue("Р“РѕСЂРѕРґ");
+        row.createCell(9).setCellValue("РђРґСЂРµСЃ");
+        row.createCell(10).setCellValue("Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ");
 
-        // Устанавливаем высоту и стили для заголовка таблицы 
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹СЃРѕС‚Сѓ Рё СЃС‚РёР»Рё РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹ 
         for (int k = 0; k < 11; k++) {
             row.getCell(k).setCellStyle(style2);
             row.setHeightInPoints(22);
         }
 
-        // прописываем основную таблицу
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
         /*
         for (int i = 0; i < tabUslugi.getRowCount(); i++) {
             row = sheet.createRow((short) i + 3);
@@ -9823,7 +9839,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         } finally {
             if (conn != null) {
                 try {
-                    taLog.append("Завершение запроса к БД cleent ... \n");
+                    taLog.append("Р—Р°РІРµСЂС€РµРЅРёРµ Р·Р°РїСЂРѕСЃР° Рє Р‘Р” cleent ... \n");
                     taLog.append("------------------------------------------------- \n");
                     System.out.println("n***** Let terminate the Connection *****");
                     conn.close();
@@ -9834,7 +9850,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             }
         }
                 
-        // Устанавливаем автоширину для всех колонок
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р°РІС‚РѕС€РёСЂРёРЅСѓ РґР»СЏ РІСЃРµС… РєРѕР»РѕРЅРѕРє
         for (int k = 0; k < 11; k++) {
             sheet.autoSizeColumn(k);
         }
@@ -9862,7 +9878,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         }
         System.out.println("Your excel file has been generated!");
 
-        JOptionPane.showMessageDialog(new JFrame(), "Файл:\n\n" + progDir + nameFiles + "\n\nCоздан успешно!");
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
     }//GEN-LAST:event_bbKlientExcelTotActionPerformed
 
     private void tfBDZakazNalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfBDZakazNalActionPerformed
@@ -9876,12 +9892,12 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private void bbVerProgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbVerProgActionPerformed
         String ObjButtons[] = {"Yes", "No"};
         int PromptResult = JOptionPane.showOptionDialog(null,
-                "Текущая версия программы: "+sVersionProg+"\nВерсия для обновления на Сервере: "+sVersionServer+"\n\nОбновить версию программу?", "Информация о версии программы",
+                "РўРµРєСѓС‰Р°СЏ РІРµСЂСЃРёСЏ РїСЂРѕРіСЂР°РјРјС‹: "+sVersionProg+"\nР’РµСЂСЃРёСЏ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РЅР° РЎРµСЂРІРµСЂРµ: "+sVersionServer+"\n\nРћР±РЅРѕРІРёС‚СЊ РІРµСЂСЃРёСЋ РїСЂРѕРіСЂР°РјРјСѓ?", "РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РІРµСЂСЃРёРё РїСЂРѕРіСЂР°РјРјС‹",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
                 ObjButtons, ObjButtons[1]);
         if (PromptResult == 0) {
          
-            // копируем новую версию программы    
+            // РєРѕРїРёСЂСѓРµРј РЅРѕРІСѓСЋ РІРµСЂСЃРёСЋ РїСЂРѕРіСЂР°РјРјС‹    
             Path sourcePath = Paths.get(sDirNewVersion+"myServisProg.jar");
             Path destPath = Paths.get("myServisProg_New.jar");         
         
@@ -9889,20 +9905,20 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
                 Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {e.printStackTrace();}
             
-            // создаем ват фал для обновления:
+            // СЃРѕР·РґР°РµРј РІР°С‚ С„Р°Р» РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ:
             
             String sNameFileBat1 = "temp\\update_prog.bat";
             String sTextFileBat1;
             sTextFileBat1 = "cd "+progDir+"\n";
-            sTextFileBat1 += "TIMEOUT /T 4 /NOBREAK\n";                                     // Устанавливаем временную задержку
-            sTextFileBat1 += "del "+progDir+"myServisProg_Old.jar\n";                       // Удаляем предыдущий временный файл старой версии
-            sTextFileBat1 += "TIMEOUT /T 2 /NOBREAK\n";                                     // Устанавливаем временную задержку
-            sTextFileBat1 += "rename "+progDir+"myServisProg.jar myServisProg_Old.jar\n";   // Переименовываем текущую программу 
-            sTextFileBat1 += "TIMEOUT /T 2 /NOBREAK\n";                                     // Устанавливаем временную задержку
-            sTextFileBat1 += "copy "+progDir+"myServisProg_New.jar "+progDir+"myServisProg.jar\n";  // Копируем новую программу
-            sTextFileBat1 += "TIMEOUT /T 2 /NOBREAK\n";                                     // Устанавливаем временную задержку
+            sTextFileBat1 += "TIMEOUT /T 4 /NOBREAK\n";                                     // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІСЂРµРјРµРЅРЅСѓСЋ Р·Р°РґРµСЂР¶РєСѓ
+            sTextFileBat1 += "del "+progDir+"myServisProg_Old.jar\n";                       // РЈРґР°Р»СЏРµРј РїСЂРµРґС‹РґСѓС‰РёР№ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» СЃС‚Р°СЂРѕР№ РІРµСЂСЃРёРё
+            sTextFileBat1 += "TIMEOUT /T 2 /NOBREAK\n";                                     // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІСЂРµРјРµРЅРЅСѓСЋ Р·Р°РґРµСЂР¶РєСѓ
+            sTextFileBat1 += "rename "+progDir+"myServisProg.jar myServisProg_Old.jar\n";   // РџРµСЂРµРёРјРµРЅРѕРІС‹РІР°РµРј С‚РµРєСѓС‰СѓСЋ РїСЂРѕРіСЂР°РјРјСѓ 
+            sTextFileBat1 += "TIMEOUT /T 2 /NOBREAK\n";                                     // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІСЂРµРјРµРЅРЅСѓСЋ Р·Р°РґРµСЂР¶РєСѓ
+            sTextFileBat1 += "copy "+progDir+"myServisProg_New.jar "+progDir+"myServisProg.jar\n";  // РљРѕРїРёСЂСѓРµРј РЅРѕРІСѓСЋ РїСЂРѕРіСЂР°РјРјСѓ
+            sTextFileBat1 += "TIMEOUT /T 2 /NOBREAK\n";                                     // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІСЂРµРјРµРЅРЅСѓСЋ Р·Р°РґРµСЂР¶РєСѓ
             sTextFileBat1 += "@echo off \n";                                                // 
-            sTextFileBat1 += "Start "+progDir+"myServisProg.jar\n";                         // Запускаем новую программу
+            sTextFileBat1 += "Start "+progDir+"myServisProg.jar\n";                         // Р—Р°РїСѓСЃРєР°РµРј РЅРѕРІСѓСЋ РїСЂРѕРіСЂР°РјРјСѓ
             
             try {
                 Path fileName = Paths.get(sNameFileBat1);
@@ -9910,14 +9926,14 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
             } catch (IOException e) {e.printStackTrace();}
                         
             JFrame jfInfo = new JFrame();
-            jfInfo.setLocation(0,0);            // Пока не работает
-            JOptionPane.showMessageDialog(jfInfo, "Сейчас произойдет запуск обновления программы!\n\nДля перезапуска программы нажмите Ок!");
+            jfInfo.setLocation(0,0);            // РџРѕРєР° РЅРµ СЂР°Р±РѕС‚Р°РµС‚
+            JOptionPane.showMessageDialog(jfInfo, "РЎРµР№С‡Р°СЃ РїСЂРѕРёР·РѕР№РґРµС‚ Р·Р°РїСѓСЃРє РѕР±РЅРѕРІР»РµРЅРёСЏ РїСЂРѕРіСЂР°РјРјС‹!\n\nР”Р»СЏ РїРµСЂРµР·Р°РїСѓСЃРєР° РїСЂРѕРіСЂР°РјРјС‹ РЅР°Р¶РјРёС‚Рµ РћРє!");
             
-            // Запускаем ват файл:
+            // Р—Р°РїСѓСЃРєР°РµРј РІР°С‚ С„Р°Р№Р»:
             try {Process child = Runtime.getRuntime().exec(sNameFileBat1);}
             catch (IOException ex) {Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);}
             
-            // Закрываем программу:
+            // Р—Р°РєСЂС‹РІР°РµРј РїСЂРѕРіСЂР°РјРјСѓ:
             System.exit(0);
         }
     }//GEN-LAST:event_bbVerProgActionPerformed
@@ -9939,6 +9955,138 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private void chBDzakazLCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chBDzakazLCodActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chBDzakazLCodActionPerformed
+
+    private void bbBDprihodXLSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbBDprihodXLSActionPerformed
+        String nameFiles = "temp\\РџСЂРёС…РѕРґ-Excel.xls";
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("РџСЂРёС…РѕРґ");
+
+        // СЃРѕР·РґР°РµРј С€СЂРёС„С‚
+        HSSFFont font = workbook.createFont();
+        HSSFFont font2 = workbook.createFont();
+
+        font.setFontHeightInPoints((short) 14);
+        //font.setFontName("Courier New");
+        font.setFontName("Arial");
+        font.setBold(true);
+
+        font2.setFontHeightInPoints((short) 11);
+        font2.setFontName("Arial");
+        font2.setBold(true);
+
+        // СЃРѕР·РґР°РµРј СЃС‚РёР»СЊ РґР»СЏ СЏС‡РµРµРє РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ Рё РґР»СЏ СЏС‡РµРµРє РІ Р·Р°РіРѕР»РѕРІРєРµ С‚Р°Р±Р»РёС†С‹
+        HSSFCellStyle style = workbook.createCellStyle();
+        HSSFCellStyle style2 = workbook.createCellStyle();
+        HSSFCellStyle style3 = workbook.createCellStyle();
+        // Рё РїСЂРёРјРµРЅСЏРµРј Рє СЌС‚РѕРјСѓ СЃС‚РёР»СЋ Р¶РёСЂРЅС‹Р№ С€СЂРёС„С‚
+        style3.setFont(font);  // Р”Р»СЏ РЁР°РїРєРё 
+        style2.setFont(font2);  // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
+
+        // РќР°СЃС‚СЂРѕР№РєР° РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ СЃС‚РёР»СЏ
+        // Р”Р»СЏ РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†С‹
+        style.setAlignment(HorizontalAlignment.LEFT);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        // Р”Р»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
+        style2.setAlignment(HorizontalAlignment.CENTER);
+        style2.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        // Р”Р»СЏ С€Р°РїРєРё
+        style3.setAlignment(HorizontalAlignment.LEFT);
+        style3.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        HSSFRow row = sheet.createRow((short) 0);
+
+        //РїСЂРѕРїРёСЃС‹РІР°РµРј С€Р°РїРєСѓ РґРѕРєСѓРјРµРЅС‚Р°
+        //row.createCell(0).setCellValue("");
+        //row.createCell(1).setCellValue("Р›РёС‡РЅС‹Р№ в„–");
+        //row.createCell(2).setCellValue(tfUslugaLCod.getText());
+        //row.createCell(3).setCellValue(tfUslugaFIO.getText());
+        //row.getCell(1).setCellStyle(style3);
+        //row.getCell(2).setCellStyle(style3);
+        //row.getCell(3).setCellStyle(style3);
+        //row.setHeightInPoints(30);
+        // СЃС‚РёР»СЊ РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+
+        // СЃС‚РёР»СЊ-2 РґР»СЏ РІС‹РґРµР»РµРЅРёСЏ СЏС‡РµР№РєРё СЃРѕ РІСЃРµС… СЃС‚РѕСЂРѕРЅ
+        style2.setBorderTop(BorderStyle.THIN);
+        style2.setBorderRight(BorderStyle.THIN);
+        style2.setBorderBottom(BorderStyle.THIN);
+        style2.setBorderLeft(BorderStyle.THIN);
+
+        style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  // СЃРµСЂС‹Р№ С†РІРµС‚ С„РѕРЅР° РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹
+
+        // СЃРѕР·РґР°РµРј СЃС‚СЂРѕРєСѓ СЃ Р·Р°РіРѕР»РѕРІРєРѕРј
+        row = sheet.createRow((short) 2);
+        row.createCell(0).setCellValue("в„– РїРї");
+        row.createCell(1).setCellValue("Р”Р°С‚Р°");
+        row.createCell(2).setCellValue("в„– РїСЂРёС…РѕРґР°");
+        row.createCell(3).setCellValue("Id РџРѕСЃС‚Р°РІС‰РёРєР°");
+        row.createCell(4).setCellValue("РџРѕСЃС‚Р°РІС‰РёРє");
+        row.createCell(5).setCellValue("РЎСѓРјРјР°");
+        row.createCell(6).setCellValue("РСЃРїРѕР»РЅРёС‚РµР»СЊ");
+        row.createCell(7).setCellValue("РџСЂРёРјРµС‡Р°РЅРёРµ");
+
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹СЃРѕС‚Сѓ Рё СЃС‚РёР»Рё РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° С‚Р°Р±Р»РёС†С‹ 
+        for (int k = 0; k < tabBDprihod.getColumnCount(); k++) {
+            row.getCell(k).setCellStyle(style2);
+            row.setHeightInPoints(22);
+        }
+
+        // РїСЂРѕРїРёСЃС‹РІР°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+        for (int i = 0; i < tabBDprihod.getRowCount(); i++) {
+            row = sheet.createRow((short) i + 3);
+            for (int k = 0; k < tabBDprihod.getColumnCount(); k++) {
+                row.createCell(k).setCellValue(tabBDprihod.getValueAt(i, k).toString());
+                row.getCell(k).setCellStyle(style);
+                row.setHeightInPoints(18);
+            }
+        }
+
+        row = sheet.createRow((short) tabBDprihod.getRowCount() + 4);
+        row.createCell(4).setCellValue("РС‚РѕРіРѕ СЃСѓРјРјР°:");
+        row.createCell(5).setCellValue(tfBDprihodSumma.getText());
+        row.getCell(4).setCellStyle(style3);
+        row.getCell(5).setCellStyle(style3);
+        row.setHeightInPoints(30);
+        
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р°РІС‚РѕС€РёСЂРёРЅСѓ РґР»СЏ РІСЃРµС… РєРѕР»РѕРЅРѕРє
+        for (int k = 0; k < tabBDprihod.getColumnCount(); k++) {
+            sheet.autoSizeColumn(k);
+        }
+
+        FileOutputStream fileOut = null;
+        try {
+            fileOut = new FileOutputStream(nameFiles);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            workbook.write(fileOut);
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            fileOut.close();
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            workbook.close();
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrameMainMyservisProg.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Your excel file has been generated!");
+
+        JOptionPane.showMessageDialog(new JFrame(), "Р¤Р°Р№Р»:\n\n" + progDir + nameFiles + "\n\nCРѕР·РґР°РЅ СѓСЃРїРµС€РЅРѕ!");
+        
+    }//GEN-LAST:event_bbBDprihodXLSActionPerformed
 
     /**
      * @param args the command line arguments
@@ -9962,7 +10110,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
 
     }
 
-    // Оставил для примера не использую
+    // РћСЃС‚Р°РІРёР» РґР»СЏ РїСЂРёРјРµСЂР° РЅРµ РёСЃРїРѕР»СЊР·СѓСЋ
     static public String strlenFix(String str) {
         while (str.length() < 4) {
             str = "0" + str;
@@ -9970,7 +10118,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         return str;
     }
 
-    // Оставил для примера не использую
+    // РћСЃС‚Р°РІРёР» РґР»СЏ РїСЂРёРјРµСЂР° РЅРµ РёСЃРїРѕР»СЊР·СѓСЋ
     static String unicodeEscaped(char ch) {
         if (ch < 0x10) {
             return "\\u000" + Integer.toHexString(ch);
@@ -9983,8 +10131,8 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     }
 
     static public String strKiril(char ch) {
-        if ((ch == 'А') || (ch == 'Б') || (ch == 'В') || (ch == 'Г') || (ch == 'Д') || (ch == 'Е') || (ch == 'Ё') || (ch == 'Ж') || (ch == 'З') || (ch == 'И') || (ch == 'К') || (ch == 'Л') || (ch == 'М') || (ch == 'Н') || (ch == 'О') || (ch == 'П') || (ch == 'Р') || (ch == 'С') || (ch == 'Т') || (ch == 'У') || (ch == 'Ф') || (ch == 'Х') || (ch == 'Ц') || (ch == 'Ч') || (ch == 'Ш') || (ch == 'Щ') || (ch == 'Ь') || (ch == 'Ы') || (ch == 'Ъ') || (ch == 'Э') || (ch == 'Ю') || (ch == 'Я') || (ch == 'Й')
-                || (ch == 'а') || (ch == 'б') || (ch == 'в') || (ch == 'г') || (ch == 'д') || (ch == 'е') || (ch == 'ё') || (ch == 'ж') || (ch == 'з') || (ch == 'и') || (ch == 'к') || (ch == 'л') || (ch == 'м') || (ch == 'н') || (ch == 'о') || (ch == 'п') || (ch == 'р') || (ch == 'с') || (ch == 'т') || (ch == 'у') || (ch == 'ф') || (ch == 'х') || (ch == 'ц') || (ch == 'ч') || (ch == 'ш') || (ch == 'щ') || (ch == 'ь') || (ch == 'ы') || (ch == 'ъ') || (ch == 'э') || (ch == 'ю') || (ch == 'я') || (ch == 'й')) {
+        if ((ch == 'Рђ') || (ch == 'Р‘') || (ch == 'Р’') || (ch == 'Р“') || (ch == 'Р”') || (ch == 'Р•') || (ch == 'РЃ') || (ch == 'Р–') || (ch == 'Р—') || (ch == 'Р') || (ch == 'Рљ') || (ch == 'Р›') || (ch == 'Рњ') || (ch == 'Рќ') || (ch == 'Рћ') || (ch == 'Рџ') || (ch == 'Р ') || (ch == 'РЎ') || (ch == 'Рў') || (ch == 'РЈ') || (ch == 'Р¤') || (ch == 'РҐ') || (ch == 'Р¦') || (ch == 'Р§') || (ch == 'РЁ') || (ch == 'Р©') || (ch == 'Р¬') || (ch == 'Р«') || (ch == 'РЄ') || (ch == 'Р­') || (ch == 'Р®') || (ch == 'РЇ') || (ch == 'Р™')
+                || (ch == 'Р°') || (ch == 'Р±') || (ch == 'РІ') || (ch == 'Рі') || (ch == 'Рґ') || (ch == 'Рµ') || (ch == 'С‘') || (ch == 'Р¶') || (ch == 'Р·') || (ch == 'Рё') || (ch == 'Рє') || (ch == 'Р»') || (ch == 'Рј') || (ch == 'РЅ') || (ch == 'Рѕ') || (ch == 'Рї') || (ch == 'СЂ') || (ch == 'СЃ') || (ch == 'С‚') || (ch == 'Сѓ') || (ch == 'С„') || (ch == 'С…') || (ch == 'С†') || (ch == 'С‡') || (ch == 'С€') || (ch == 'С‰') || (ch == 'СЊ') || (ch == 'С‹') || (ch == 'СЉ') || (ch == 'СЌ') || (ch == 'СЋ') || (ch == 'СЏ') || (ch == 'Р№')) {
             return "1";
         } else {
             return "";
@@ -10023,7 +10171,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
         return resTek;
     }
     
-// простой и удобный метод копирования файла в Java 7
+// РїСЂРѕСЃС‚РѕР№ Рё СѓРґРѕР±РЅС‹Р№ РјРµС‚РѕРґ РєРѕРїРёСЂРѕРІР°РЅРёСЏ С„Р°Р№Р»Р° РІ Java 7
 
     
         
@@ -10036,6 +10184,7 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     private javax.swing.JScrollPane ScrollPanKlientTab;
     private javax.swing.JButton bbBDprihod;
     private javax.swing.JButton bbBDprihodCSV;
+    private javax.swing.JButton bbBDprihodXLS;
     private javax.swing.JButton bbBDzakaz;
     private javax.swing.JButton bbBDzakazCSV;
     private javax.swing.JButton bbBDzakazXLS;
@@ -10336,29 +10485,29 @@ public class NewJFrameMainMyservisProg extends javax.swing.JFrame {
     //}
 }
 /*
-Integer.toString() - преобразование числа в строку
-int result = Integer.parseInt(givenString); - преобразование строки в Число
+Integer.toString() - РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ С‡РёСЃР»Р° РІ СЃС‚СЂРѕРєСѓ
+int result = Integer.parseInt(givenString); - РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РІ Р§РёСЃР»Рѕ
 
-Работа с таблицей
-TabTowar.setRowHeight(TabTowar.getRowHeight() + 40);   // Высота строки в таблице
-int rowIndex = table.getSelectedRow();                 // Выделенный ряд
-Integer rowCount = TabTowar.getRowCount();             // Количество Строк 
-Integer colCount = tabTowar.getColumnCount();          // Количество Рядов
-String strValue = model.getValueAt(0, 1).toString();   // Получение значения ячейки
+Р Р°Р±РѕС‚Р° СЃ С‚Р°Р±Р»РёС†РµР№
+TabTowar.setRowHeight(TabTowar.getRowHeight() + 40);   // Р’С‹СЃРѕС‚Р° СЃС‚СЂРѕРєРё РІ С‚Р°Р±Р»РёС†Рµ
+int rowIndex = table.getSelectedRow();                 // Р’С‹РґРµР»РµРЅРЅС‹Р№ СЂСЏРґ
+Integer rowCount = TabTowar.getRowCount();             // РљРѕР»РёС‡РµСЃС‚РІРѕ РЎС‚СЂРѕРє 
+Integer colCount = tabTowar.getColumnCount();          // РљРѕР»РёС‡РµСЃС‚РІРѕ Р СЏРґРѕРІ
+String strValue = model.getValueAt(0, 1).toString();   // РџРѕР»СѓС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ СЏС‡РµР№РєРё
 
-Работа с comboBox
-jPB1.setValue((jCB1.getSelectedIndex()+1)*10);         // прогресс Бар Index из combobox
-String b=jCB1.getItemAt(jCB1.getSelectedIndex());      // Значение из combobox
+Р Р°Р±РѕС‚Р° СЃ comboBox
+jPB1.setValue((jCB1.getSelectedIndex()+1)*10);         // РїСЂРѕРіСЂРµСЃСЃ Р‘Р°СЂ Index РёР· combobox
+String b=jCB1.getItemAt(jCB1.getSelectedIndex());      // Р—РЅР°С‡РµРЅРёРµ РёР· combobox
 
 
 && - AND
 || - OR
 
 try {
-    // Возьмите файл
+    // Р’РѕР·СЊРјРёС‚Рµ С„Р°Р№Р»
     File f = new File("D:\\example.txt");
-    //Создайте новый файл
-    // Убедитесь, что он не существует 
+    //РЎРѕР·РґР°Р№С‚Рµ РЅРѕРІС‹Р№ С„Р°Р№Р»
+    // РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РѕРЅ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ 
     if (f.createNewFile())
         System.out.println("File created");
     else
@@ -10366,14 +10515,14 @@ try {
     }
     catch (Exception e) {
     System.err.println(e);
-        System.exit(0);  // Выход из программы
+        System.exit(0);  // Р’С‹С…РѕРґ РёР· РїСЂРѕРіСЂР°РјРјС‹
 }
 
-// кракозябры в post ответе
+// РєСЂР°РєРѕР·СЏР±СЂС‹ РІ post РѕС‚РІРµС‚Рµ
 1)outputStream.writeBytes(URLEncoder.encode(text2, "UTF-8"));
-2)// вместо строки DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-// пишем нижеприведенные две.
-// OutputStreamWriter будет преобразовывать строку в UTF-8.
+2)// РІРјРµСЃС‚Рѕ СЃС‚СЂРѕРєРё DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+// РїРёС€РµРј РЅРёР¶РµРїСЂРёРІРµРґРµРЅРЅС‹Рµ РґРІРµ.
+// OutputStreamWriter Р±СѓРґРµС‚ РїСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°С‚СЊ СЃС‚СЂРѕРєСѓ РІ UTF-8.
 
 DataOutputStream tmpStream = new DataOutputStream(connection.getOutputStream());
 BufferedWriter outputStream = new BufferedWriter(new OutputStreamWriter(tmpStream, "UTF-8"));
